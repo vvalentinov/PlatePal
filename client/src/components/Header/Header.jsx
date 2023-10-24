@@ -7,6 +7,8 @@ import { NavLink } from 'react-router-dom';
 
 import styles from './Header.module.css';
 
+import * as paths from '../../constants/pathNames';
+
 const Header = () => {
     return (
         <header className={styles.header}>
@@ -18,19 +20,19 @@ const Header = () => {
                             <img className="logoImg" src="/logo.png" alt="" />
                             <NavLink
                                 className={({ isActive }) => isActive ? styles.activeLink : ''}
-                                to="/">
+                                to={paths.homePath}>
                                 PlatePal
                             </NavLink>
                         </Nav>
                         <Nav>
                             <NavLink
                                 className={({ isActive }) => isActive ? styles.activeLink : ''}
-                                to="/login">
+                                to={paths.loginPath}>
                                 Login
                             </NavLink>
                             <NavLink
                                 className={({ isActive }) => isActive ? styles.activeLink : ''}
-                                to="/register">
+                                to={paths.registerPath}>
                                 Register
                             </NavLink>
                         </Nav>
