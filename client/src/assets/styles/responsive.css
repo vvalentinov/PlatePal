@@ -1,0 +1,13 @@
+@media only screen and (max-width: 992px) {
+    .navbar-nav a {
+        margin: 0 !important;
+    }
+
+    .navbar-collapse .navbar-nav:nth-child(1) {
+        align-items: normal !important;
+    }
+
+    .logoImg {
+        display: none;
+    }
+}

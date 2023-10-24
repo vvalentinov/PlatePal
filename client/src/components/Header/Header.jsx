@@ -10,11 +10,12 @@ import styles from './Header.module.css';
 const Header = () => {
     return (
         <header className={styles.header}>
-            <Navbar collapseOnSelect expand="lg" className={`py-4 fs-4 ${styles.navbar}`}>
+            <Navbar collapseOnSelect expand="lg" className={`py-2 fs-4 ${styles.navbar}`}>
                 <Container>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" className="custom-toggler" />
                     <Navbar.Collapse id="responsive-navbar-nav" >
                         <Nav className="me-auto">
+                            <img className="logoImg" src="/logo.png" alt="" />
                             <NavLink
                                 className={({ isActive }) => isActive ? styles.activeLink : ''}
                                 to="/">
