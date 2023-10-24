@@ -1,5 +1,7 @@
 import styles from './Navigation.module.css';
 
+import Logo from '../Logo/Logo';
+
 // Bootstrap components
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
@@ -16,7 +18,7 @@ const Navigation = () => {
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" className="custom-toggler" />
                 <Navbar.Collapse id="responsive-navbar-nav" >
                     <Nav className={styles.navbarNav}>
-                        <img className="logoImg" src="/logo.png" alt="" />
+                        <Logo />
                         <NavLink
                             className={({ isActive }) => isActive ? styles.activeLink : ''}
                             to={paths.homePath}>

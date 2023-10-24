@@ -17,9 +17,3 @@ body {
 .custom-toggler.navbar-toggler {
     border-color: white;
 }
-
-@media only screen and (max-width: 992px) {
-    .logoImg {
-        display: none;
-    }
-}

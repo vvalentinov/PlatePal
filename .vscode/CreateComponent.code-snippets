@@ -1,7 +1,0 @@
-{
-	"Create Component": {
-	  "prefix": ["cmt"],
-	  "body": ["const ${0:ComponentName} = () => {\n    return ();\n};\n\nexport default ${0:ComponentName};"],
-	  "description": "A for loop."
-	}
-}
