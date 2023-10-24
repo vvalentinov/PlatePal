@@ -3,6 +3,8 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 
+import { NavLink } from 'react-router-dom';
+
 import styles from './Header.module.css';
 
 const Header = () => {
@@ -13,9 +15,10 @@ const Header = () => {
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav" >
                         <Nav className="me-auto">
-                            <Nav.Link>
+                            <NavLink className={({ isActive }) => isActive && styles.activeLink}
+                                to="/">
                                 PlatePal
-                            </Nav.Link>
+                            </NavLink>
                         </Nav>
                         <Nav>
                             <Nav.Link>
