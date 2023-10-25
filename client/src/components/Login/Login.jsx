@@ -10,10 +10,14 @@ import { Link } from 'react-router-dom';
 
 import * as errorMessages from '../../constants/errorMessages';
 
+// Custom useForm hook
+import useForm from '../../hooks/useForm';
+
 const Login = () => {
-    // Inputs state
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    const { formValues, onChangeHandler } = useForm({
+        username: '',
+        password: '',
+    });
 
     // Inputs errors state
     const [usernameError, setUsernameError] = useState('');
@@ -23,18 +27,10 @@ const Login = () => {
         e.preventDefault();
     };
 
-    const onUsernameChange = (e) => {
-        setUsername(e.target.value);
-    }
-
-    const onPasswordChange = (e) => {
-        setPassword(e.target.value);
-    }
-
     const onUsernameBlur = () => {
-        if (!username) {
+        if (!formValues.username) {
             setUsernameError(errorMessages.usernameEmptyError);
-        } else if (username.length < 3 || username.length > 30) {
+        } else if (formValues.username.length < 3 || formValues.username.length > 30) {
             setUsernameError(errorMessages.usernameLengthError);
         } else {
             setUsernameError('');
@@ -42,7 +38,7 @@ const Login = () => {
     };
 
     const onPasswordBlur = () => {
-        if (!password) {
+        if (!formValues.password) {
             setPasswordError(errorMessages.passwordEmptyError);
         } else {
             setPasswordError('');
@@ -63,9 +59,9 @@ const Login = () => {
                         <Form.Control
                             type="text"
                             name="username"
-                            onChange={onUsernameChange}
+                            onChange={onChangeHandler}
                             onBlur={onUsernameBlur}
-                            value={username}
+                            value={formValues.username}
                             placeholder="username"
                             className={`border-2 ${usernameError ? 'border-danger' : 'border-dark'}`} />
                         {usernameError && <p className="text-start text-danger">{usernameError}</p>}
@@ -74,9 +70,9 @@ const Login = () => {
                         <Form.Control
                             type="password"
                             name="password"
-                            onChange={onPasswordChange}
+                            onChange={onChangeHandler}
                             onBlur={onPasswordBlur}
-                            value={password}
+                            value={formValues.password}
                             placeholder="Password"
                             className={`border-2 ${passwordError ? 'border-danger' : 'border-dark'}`} />
                         {passwordError && <p className="text-start text-danger">{passwordError}</p>}

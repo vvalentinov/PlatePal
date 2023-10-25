@@ -12,11 +12,15 @@ import { Link } from 'react-router-dom';
 // Error messages constants
 import * as errorMessages from '../../constants/errorMessages';
 
+// Custom useForm hook
+import useForm from '../../hooks/useForm';
+
 const Register = () => {
-    // Inputs state
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [repeatPassword, setRepeatPassword] = useState('');
+    const { formValues, onChangeHandler } = useForm({
+        username: '',
+        password: '',
+        repeatPassword: '',
+    });
 
     // Inputs errors state
     const [usernameError, setUsernameError] = useState('');
@@ -27,22 +31,10 @@ const Register = () => {
         e.preventDefault();
     };
 
-    const onUsernameChange = (e) => {
-        setUsername(e.target.value);
-    }
-
-    const onPasswordChange = (e) => {
-        setPassword(e.target.value);
-    }
-
-    const onRepeatPasswordChange = (e) => {
-        setRepeatPassword(e.target.value);
-    }
-
     const onUsernameBlur = () => {
-        if (!username) {
+        if (!formValues.username) {
             setUsernameError(errorMessages.usernameEmptyError);
-        } else if (username.length < 3 || username.length > 30) {
+        } else if (formValues.username.length < 3 || formValues.username.length > 30) {
             setUsernameError(errorMessages.usernameLengthError);
         } else {
             setUsernameError('');
@@ -50,9 +42,9 @@ const Register = () => {
     };
 
     const onPasswordBlur = () => {
-        if (!password) {
+        if (!formValues.password) {
             setPasswordError(errorMessages.passwordEmptyError);
-        } else if (password !== repeatPassword) {
+        } else if (formValues.password !== formValues.repeatPassword) {
             setPasswordError(errorMessages.passwordsMismatchError);
             setRepeatPasswordError(errorMessages.passwordsMismatchError);
         } else {
@@ -64,9 +56,9 @@ const Register = () => {
     };
 
     const onRepeatPasswordBlur = () => {
-        if (!repeatPassword) {
+        if (!formValues.repeatPassword) {
             setRepeatPasswordError(errorMessages.repeatPasswordEmptyError);
-        } else if (password !== repeatPassword) {
+        } else if (formValues.password !== formValues.repeatPassword) {
             setPasswordError(errorMessages.passwordsMismatchError);
             setRepeatPasswordError(errorMessages.passwordsMismatchError);
         } else {
@@ -94,9 +86,9 @@ const Register = () => {
                             type="text"
                             placeholder="username"
                             className={`border-2 ${usernameError ? 'border-danger' : 'border-dark'}`}
-                            onChange={onUsernameChange}
+                            onChange={onChangeHandler}
                             onBlur={onUsernameBlur}
-                            value={username}
+                            value={formValues.username}
                         />
                         {usernameError && <p className="text-start text-danger">{usernameError}</p>}
                     </FloatingLabel>
@@ -104,8 +96,8 @@ const Register = () => {
                         {/* Password */}
                         <Form.Control
                             name="password"
-                            onChange={onPasswordChange}
-                            value={password}
+                            onChange={onChangeHandler}
+                            value={formValues.password}
                             onBlur={onPasswordBlur}
                             type="password"
                             placeholder="Password"
@@ -118,9 +110,9 @@ const Register = () => {
                         <Form.Control
                             type="password"
                             name="repeatPassword"
-                            onChange={onRepeatPasswordChange}
+                            onChange={onChangeHandler}
                             onBlur={onRepeatPasswordBlur}
-                            value={repeatPassword}
+                            value={formValues.repeatPassword}
                             placeholder="RepeatPassword"
                             className={`border-2 ${repeatPasswordError ? 'border-danger' : 'border-dark'}`}
                         />
