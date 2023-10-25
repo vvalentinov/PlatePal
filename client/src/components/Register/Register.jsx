@@ -15,6 +15,8 @@ import * as errorMessages from '../../constants/errorMessages';
 // Custom useForm hook
 import useForm from '../../hooks/useForm';
 
+import * as validatorService from '../../services/validatorService';
+
 const Register = () => {
     const { formValues, onChangeHandler } = useForm({
         username: '',
@@ -31,41 +33,23 @@ const Register = () => {
         e.preventDefault();
     };
 
-    const onUsernameBlur = () => {
-        if (!formValues.username) {
-            setUsernameError(errorMessages.usernameEmptyError);
-        } else if (formValues.username.length < 3 || formValues.username.length > 30) {
-            setUsernameError(errorMessages.usernameLengthError);
-        } else {
-            setUsernameError('');
-        }
-    };
+    const onUsernameBlur = () => setUsernameError(validatorService.usernameValidator(formValues.username));
 
     const onPasswordBlur = () => {
-        if (!formValues.password) {
-            setPasswordError(errorMessages.passwordEmptyError);
-        } else if (formValues.password !== formValues.repeatPassword) {
-            setPasswordError(errorMessages.passwordsMismatchError);
-            setRepeatPasswordError(errorMessages.passwordsMismatchError);
-        } else {
-            if (repeatPasswordError === errorMessages.passwordsMismatchError) {
-                setRepeatPasswordError('');
-            }
-            setPasswordError('');
+        const error = validatorService.passwordValidator(formValues.password, formValues.repeatPassword);
+        setPasswordError(error);
+        if (error === errorMessages.passwordsMismatchError ||
+            repeatPasswordError === errorMessages.passwordsMismatchError) {
+            setRepeatPasswordError(error);
         }
     };
 
     const onRepeatPasswordBlur = () => {
-        if (!formValues.repeatPassword) {
-            setRepeatPasswordError(errorMessages.repeatPasswordEmptyError);
-        } else if (formValues.password !== formValues.repeatPassword) {
-            setPasswordError(errorMessages.passwordsMismatchError);
-            setRepeatPasswordError(errorMessages.passwordsMismatchError);
-        } else {
-            if (passwordError === errorMessages.passwordsMismatchError) {
-                setPasswordError('');
-            }
-            setRepeatPasswordError('');
+        const error = validatorService.repeatPasswordValidator(formValues.password, formValues.repeatPassword);
+        setRepeatPasswordError(error);
+        if (error === errorMessages.passwordsMismatchError ||
+            passwordError === errorMessages.passwordsMismatchError) {
+            setPasswordError(error);
         }
     };
 

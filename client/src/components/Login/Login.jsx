@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+// Bootstrap components
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
@@ -8,7 +9,11 @@ import Row from 'react-bootstrap/Row';
 
 import { Link } from 'react-router-dom';
 
+// Error Message
 import * as errorMessages from '../../constants/errorMessages';
+
+// Validator Service
+import * as validatorService from '../../services/validatorService';
 
 // Custom useForm hook
 import useForm from '../../hooks/useForm';
@@ -27,15 +32,7 @@ const Login = () => {
         e.preventDefault();
     };
 
-    const onUsernameBlur = () => {
-        if (!formValues.username) {
-            setUsernameError(errorMessages.usernameEmptyError);
-        } else if (formValues.username.length < 3 || formValues.username.length > 30) {
-            setUsernameError(errorMessages.usernameLengthError);
-        } else {
-            setUsernameError('');
-        }
-    };
+    const onUsernameBlur = () => setUsernameError(validatorService.usernameValidator(formValues.username));
 
     const onPasswordBlur = () => {
         if (!formValues.password) {
@@ -44,7 +41,6 @@ const Login = () => {
             setPasswordError('');
         }
     };
-
 
     return (
         <Container className="my-4 border border-3 border-dark col-6 rounded-4">
