@@ -18,6 +18,9 @@ import * as validatorService from '../../services/validatorService';
 // Custom useForm hook
 import useForm from '../../hooks/useForm';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faRightToBracket } from '@fortawesome/free-solid-svg-icons';
+
 const Login = () => {
     const { formValues, onChangeHandler } = useForm({
         username: '',
@@ -77,7 +80,7 @@ const Login = () => {
                         <Link to="/register">You don't have an account? Register here!</Link>
                     </div>
                     <Button type="submit" className="button btn-lg my-4 px-4 py-2 border-2 border-dark">
-                        Login
+                        Login<FontAwesomeIcon className="ms-1" icon={faRightToBracket} />
                     </Button>
                 </Form>
             </Row>

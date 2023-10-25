@@ -17,6 +17,9 @@ import useForm from '../../hooks/useForm';
 
 import * as validatorService from '../../services/validatorService';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
+
 const Register = () => {
     const { formValues, onChangeHandler } = useForm({
         username: '',
@@ -106,7 +109,7 @@ const Register = () => {
                         <Link to="/login">You already have an account? Go to Login!</Link>
                     </div>
                     <Button type="submit" className="button btn-lg my-4 px-4 py-2 border-2 border-dark">
-                        Register
+                        Register<FontAwesomeIcon className="ms-1" icon={faUser} />
                     </Button>
                 </Form>
             </Row>
