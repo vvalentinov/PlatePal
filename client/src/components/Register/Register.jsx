@@ -53,10 +53,10 @@ const Register = () => {
         if (!password) {
             setPasswordError(errorMessages.passwordEmptyError);
         } else if (password !== repeatPassword) {
-            setPasswordError(errorMessages.passwordMismatchError);
-            setRepeatPasswordError(errorMessages.passwordMismatchError);
+            setPasswordError(errorMessages.passwordsMismatchError);
+            setRepeatPasswordError(errorMessages.passwordsMismatchError);
         } else {
-            if (repeatPasswordError === errorMessages.passwordMismatchError) {
+            if (repeatPasswordError === errorMessages.passwordsMismatchError) {
                 setRepeatPasswordError('');
             }
             setPasswordError('');
@@ -67,10 +67,10 @@ const Register = () => {
         if (!repeatPassword) {
             setRepeatPasswordError(errorMessages.repeatPasswordEmptyError);
         } else if (password !== repeatPassword) {
-            setPasswordError(errorMessages.passwordMismatchError);
-            setRepeatPasswordError(errorMessages.passwordMismatchError);
+            setPasswordError(errorMessages.passwordsMismatchError);
+            setRepeatPasswordError(errorMessages.passwordsMismatchError);
         } else {
-            if (passwordError === errorMessages.passwordMismatchError) {
+            if (passwordError === errorMessages.passwordsMismatchError) {
                 setPasswordError('');
             }
             setRepeatPasswordError('');
@@ -78,7 +78,7 @@ const Register = () => {
     };
 
     return (
-        <Container className="my-5 border border-3 border-dark col-6 rounded-4">
+        <Container className="my-4 border border-3 border-dark col-6 rounded-4">
             <Row className="text-center">
                 <h2 className="my-4">Register</h2>
                 <Form onSubmit={onSubmit}>
@@ -129,7 +129,7 @@ const Register = () => {
                     <div className="text-start mt-4">
                         <Link to="/login">You already have an account? Go to Login!</Link>
                     </div>
-                    <Button type="submit" className="button btn-lg my-4 px-4 py-2 text-dark border-2 border-dark">
+                    <Button type="submit" className="button btn-lg my-4 px-4 py-2 border-2 border-dark">
                         Register
                     </Button>
                 </Form>

@@ -17,3 +17,14 @@ body {
 .custom-toggler.navbar-toggler {
     border-color: white;
 }
+
+.button {
+    background-color: #93DC80;
+    color: black;
+}
+
+.button:hover,
+.button:active {
+    background-color: #93DC80 !important;
+    color: white !important;
+}

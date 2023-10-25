@@ -3,4 +3,4 @@ export const usernameLengthError = 'Username must be between 3 and 30 characters
 
 export const passwordEmptyError = 'Password must not be empty!';
 export const repeatPasswordEmptyError = 'Repeat Password must not be empty!';
-export const passwordMismatchError = 'Password and Repeat Password must be the same!';
+export const passwordsMismatchError = 'Password and Repeat Password must be the same!';
