@@ -1,0 +1,37 @@
+const mongoose = require('mongoose');
+
+const { generateHash } = require('../utils/bcryptUtil');
+
+const userErrors = require('../constants/errorMessages/userErrors');
+
+const { UserModelName } = require('../constants/dbModelsNames');
+
+const userSchema = new mongoose.Schema({
+    username: {
+        type: String,
+        required: [true, userErrors.usernameRequiredError],
+        unique: [true, userErrors.usernameUniqueError],
+        minLength: [2, userErrors.usernameMinLengthError(2)],
+        maxLength: [30, userErrors.usernameMaxLengthError(30)],
+    },
+    password: {
+        type: String,
+        required: [true, userErrors.passwordRequiredError],
+    },
+});
+
+userSchema.virtual('repeatPassword').set(function (value) {
+    if (value !== this.password) {
+        throw new Error(userErrors.passwordsMismatchError);
+    }
+});
+
+userSchema.pre('save', async function () {
+    const hash = await generateHash(this.password, 10);
+
+    this.password = hash;
+});
+
+const User = mongoose.model(UserModelName, userSchema);
+
+module.exports = User;
