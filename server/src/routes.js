@@ -1,5 +1,7 @@
 const router = require('express').Router();
 
-// TODO: add controllers to router
+const userController = require('./controllers/userController');
+
+router.use('/user', userController);
 
 module.exports = router;

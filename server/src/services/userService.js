@@ -5,6 +5,8 @@ const { validateUserPassword } = require('../utils/bcryptUtil');
 
 const userErrors = require('../constants/errorMessages/userErrors');
 
+const { createSession } = require('../services/createSession');
+
 exports.register = async (userData) => {
     const userWithUsername = await User.findOne({ username: userData.username });
     if (userWithUsername) {
@@ -15,7 +17,9 @@ exports.register = async (userData) => {
 
     const token = await generateToken(createdUser._id, createdUser.username);
 
-    return token;
+    const result = createSession(createdUser, token);
+
+    return result;
 };
 
 exports.login = async (username, password) => {
@@ -31,5 +35,7 @@ exports.login = async (username, password) => {
 
     const token = await generateToken(user._id, user.username);
 
-    return token;
+    const result = createSession(user, token);
+
+    return result;
 };

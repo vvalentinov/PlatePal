@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 
 // Bootstrap components
 import Button from 'react-bootstrap/Button';
@@ -20,21 +20,27 @@ import * as validatorService from '../../services/validatorService';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 
+import { AuthContext } from '../../contexts/AuthContext';
+
+const RegisterFormKeys = {
+    Username: 'username',
+    Password: 'password',
+    RepeatPassword: 'repeatPassword',
+};
+
 const Register = () => {
-    const { formValues, onChangeHandler } = useForm({
-        username: '',
-        password: '',
-        repeatPassword: '',
-    });
+    const { onRegisterSubmit } = useContext(AuthContext);
+
+    const { formValues, onChangeHandler, onSubmit } = useForm({
+        [RegisterFormKeys.Username]: '',
+        [RegisterFormKeys.Password]: '',
+        [RegisterFormKeys.RepeatPassword]: '',
+    }, onRegisterSubmit);
 
     // Inputs errors state
     const [usernameError, setUsernameError] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const [repeatPasswordError, setRepeatPasswordError] = useState('');
-
-    const onSubmit = (e) => {
-        e.preventDefault();
-    };
 
     const onUsernameBlur = () => setUsernameError(validatorService.usernameValidator(formValues.username));
 
@@ -69,22 +75,22 @@ const Register = () => {
                         {/* Username */}
                         <Form.Control
                             autoComplete="on"
-                            name="username"
+                            name={RegisterFormKeys.Username}
                             type="text"
                             placeholder="username"
                             className={`border-2 ${usernameError ? 'border-danger' : 'border-dark'}`}
                             onChange={onChangeHandler}
                             onBlur={onUsernameBlur}
-                            value={formValues.username}
+                            value={formValues[RegisterFormKeys.Username]}
                         />
                         {usernameError && <p className="text-start text-danger">{usernameError}</p>}
                     </FloatingLabel>
                     <FloatingLabel controlId="floatingPassword" label="Password" className="mb-4">
                         {/* Password */}
                         <Form.Control
-                            name="password"
+                            name={RegisterFormKeys.Password}
                             onChange={onChangeHandler}
-                            value={formValues.password}
+                            value={formValues[RegisterFormKeys.Password]}
                             onBlur={onPasswordBlur}
                             type="password"
                             placeholder="Password"
@@ -96,10 +102,10 @@ const Register = () => {
                         {/* Repeat Password */}
                         <Form.Control
                             type="password"
-                            name="repeatPassword"
+                            name={RegisterFormKeys.RepeatPassword}
                             onChange={onChangeHandler}
                             onBlur={onRepeatPasswordBlur}
-                            value={formValues.repeatPassword}
+                            value={formValues[RegisterFormKeys.RepeatPassword]}
                             placeholder="RepeatPassword"
                             className={`border-2 ${repeatPasswordError ? 'border-danger' : 'border-dark'}`}
                         />

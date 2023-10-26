@@ -6,6 +6,7 @@ const { dbConfig } = require('./config/dbConfig');
 const { expressConfig } = require('./config/expressConfig');
 
 const { authenticate } = require('./middlewares/authMiddleware');
+const { corsMiddleware } = require('./middlewares/corsMiddleware');
 
 const routes = require('./routes');
 
@@ -14,6 +15,7 @@ const app = express();
 dbConfig();
 expressConfig(app);
 
+app.use(corsMiddleware());
 app.use(authenticate);
 app.use(routes);
 

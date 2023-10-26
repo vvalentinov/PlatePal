@@ -7,6 +7,7 @@ import Register from '../Register/Register';
 import * as paths from '../../constants/pathNames';
 
 const Main = () => {
+
     return (
         <main>
             <Routes>
