@@ -1,10 +1,9 @@
 const jwt = require('../lib/jwt');
 
-// const { JWT_SECRET } = require('../constants/constants');
-const JWT_SECRET = 'Some-Secret-Here';
+const { JWT_SECRET } = require('../constants/jwtConstants');
 
-exports.generateToken = async (_id, username, email) => {
-    const payload = { _id, username, email };
+exports.generateToken = async (_id, username) => {
+    const payload = { _id, username };
 
     const token = await jwt.sign(payload, JWT_SECRET, { expiresIn: '2d' });
 
