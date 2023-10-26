@@ -7,3 +7,6 @@ exports.usernameMaxLengthError = (characters) => `Username must not be longer th
 // Password errors
 exports.passwordRequiredError = 'Password is required!';
 exports.passwordsMismatchError = 'Password and Repeat Password must be the same!';
+
+// Login error
+exports.loginError = 'Invalid username or password!';
