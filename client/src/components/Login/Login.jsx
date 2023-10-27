@@ -1,11 +1,13 @@
+import styles from './Login.module.css';
+
 import { useState, useContext } from 'react';
 
 // Bootstrap components
-import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
+import Button from 'react-bootstrap/Button';
 
 import { Link } from 'react-router-dom';
 
@@ -88,8 +90,8 @@ const Login = () => {
                     <div className="text-start mt-4">
                         <Link to="/register">You don't have an account? Register here!</Link>
                     </div>
-                    <Button type="submit" className="button btn-lg my-4 px-4 py-2 border-2 border-dark">
-                        Login<FontAwesomeIcon className="ms-1" icon={faRightToBracket} />
+                    <Button type='submit' bsPrefix={styles.loginButton} className="my-3 border-3 px-3 py-1">
+                        Login<FontAwesomeIcon icon={faRightToBracket} className="ms-2" />
                     </Button>
                 </Form>
             </Row>

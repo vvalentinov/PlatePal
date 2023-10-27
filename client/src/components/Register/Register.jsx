@@ -1,11 +1,13 @@
+import styles from './Register.module.css';
+
 import { useState, useContext } from 'react';
 
 // Bootstrap components
-import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
+import Button from 'react-bootstrap/Button';
 
 import { Link } from 'react-router-dom';
 
@@ -114,9 +116,8 @@ const Register = () => {
                     <div className="text-start mt-4">
                         <Link to="/login">You already have an account? Go to Login!</Link>
                     </div>
-                    <Button type="submit" className="button btn-lg my-4 px-4 py-2 border-2 border-dark">
-                        Register<FontAwesomeIcon className="ms-1" icon={faUser} />
-                    </Button>
+
+                    <Button type="submit" bsPrefix={styles.registerButton} className="my-4 px-4 py-1 border-3">Register<FontAwesomeIcon icon={faUser} className="ms-2" /></Button>
                 </Form>
             </Row>
         </Container>
