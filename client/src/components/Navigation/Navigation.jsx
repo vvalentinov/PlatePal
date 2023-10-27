@@ -7,7 +7,7 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 
-import { NavLink } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 
 import * as paths from '../../constants/pathNames';
 
@@ -32,9 +32,14 @@ const Navigation = () => {
                     </Nav>
                     {/* For Logged In Users */}
                     {isAuthenticated && (
-                        <Navbar.Text className="text-white">
-                            Logged in as: <a href="#login">{username}</a>
-                        </Navbar.Text>
+                        <Nav>
+                            <Navbar.Text className="text-white">
+                                Logged in as: <a href="#login">{username}</a>
+                            </Navbar.Text>
+                            <Link to={paths.logoutPath} className={`btn btn-lg border border-3 ${styles.logoutButton}`}>
+                                Logout
+                            </Link>
+                        </Nav>
                     )}
                     {/* For Guests */}
                     {!isAuthenticated && (

@@ -23,6 +23,10 @@
     color: #93DC80 !important;
 }
 
+.logoutButton:hover {
+    border-color: #93DC80 !important;
+}
+
 @media only screen and (max-width: 992px) {
     .navbar a {
         margin: 0 !important;

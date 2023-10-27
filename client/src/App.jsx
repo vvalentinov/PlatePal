@@ -28,6 +28,10 @@ const App = () => {
     };
 
     const onRegisterSubmit = async (data) => {
+        if (data.repeatPassword !== data.password) {
+            return;
+        }
+
         try {
             const result = await authService.register(data);
             setAuth(result);
@@ -37,9 +41,15 @@ const App = () => {
         }
     };
 
+    const onLogout = () => {
+        // await authService.logout();
+        setAuth({});
+    };
+
     const contextValue = {
         onLoginSubmit,
         onRegisterSubmit,
+        onLogout,
         userId: auth._id,
         username: auth.username,
         token: auth.token,
