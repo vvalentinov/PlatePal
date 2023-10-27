@@ -9,6 +9,15 @@
     margin-right: auto;
 }
 
+.navbarToggler {
+    border-color: white;
+}
+
+.toggle {
+    color: white;
+    border-color: white;
+}
+
 .collapse div:nth-child(2) {
     align-items: center;
 }

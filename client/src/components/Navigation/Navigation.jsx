@@ -14,13 +14,18 @@ import { AuthContext } from '../../contexts/AuthContext';
 
 import { useContext } from 'react';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
+
 const Navigation = () => {
     const { username, isAuthenticated } = useContext(AuthContext);
 
     return (
         <Navbar collapseOnSelect expand="lg" className={`py-2 fs-4 ${styles.navbar}`}>
             <Container>
-                <Navbar.Toggle aria-controls="responsive-navbar-nav" className="custom-toggler" />
+                <Navbar.Toggle aria-controls="responsive-navbar-nav" className={styles.navbarToggler}>
+                    <FontAwesomeIcon icon={faBars} className={styles.toggle} />
+                </Navbar.Toggle>
                 <Navbar.Collapse id="responsive-navbar-nav" className={styles.collapse} >
                     <Nav>
                         <img className={styles.logoImg} src="/logo.png" alt="Logo image..." />

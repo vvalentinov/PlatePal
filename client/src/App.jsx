@@ -11,66 +11,18 @@ import Navigation from './components/Navigation/Navigation';
 import Footer from './components/Footer/Footer';
 
 // Import AuthContext
-import { AuthContext } from './contexts/AuthContext';
+import { AuthProvider } from './contexts/AuthContext';
 
-// Import useState hook from react
-import { useState } from 'react';
-
-// Import authentication service
-import * as authService from './services/authService';
-
-// Import React-Router specific things
-import { useNavigate, Route, Routes } from 'react-router-dom';
+// Import Routes
+import { Route, Routes } from 'react-router-dom';
 
 // Import path names
 import * as paths from './constants/pathNames';
 
 const App = () => {
-    const navigate = useNavigate();
-    const [auth, setAuth] = useState({});
-
-    const onLoginSubmit = async (data) => {
-        try {
-            const result = await authService.login(data);
-            setAuth(result);
-            navigate(paths.homePath);
-        } catch (error) {
-            console.log(error.message);
-        }
-    };
-
-    const onRegisterSubmit = async (data) => {
-        if (data.repeatPassword !== data.password) {
-            return;
-        }
-
-        try {
-            const result = await authService.register(data);
-            setAuth(result);
-            navigate(paths.homePath);
-        } catch (error) {
-            console.log(error.message);
-        }
-    };
-
-    const onLogout = () => {
-        // await authService.logout();
-        setAuth({});
-    };
-
-    const contextValue = {
-        onLoginSubmit,
-        onRegisterSubmit,
-        onLogout,
-        userId: auth._id,
-        username: auth.username,
-        token: auth.token,
-        isAuthenticated: !!auth.token,
-    };
-
     return (
         <>
-            <AuthContext.Provider value={contextValue}>
+            <AuthProvider>
                 <header>
                     <Navigation />
                 </header>
@@ -83,7 +35,7 @@ const App = () => {
                     </Routes>
                 </main>
                 <Footer />
-            </AuthContext.Provider>
+            </AuthProvider>
         </>
     );
 }
