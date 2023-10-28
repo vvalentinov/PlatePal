@@ -1,9 +1,31 @@
-import * as request from './requester';
+import { requestFactory } from './requester';
 
 const baseUrl = 'http://localhost:3000/user';
 
-export const login = (loginData) => request.post(`${baseUrl}/login`, loginData);
+export const authServiceFactory = (token) => {
+    const request = requestFactory(token);
 
-export const register = (registerData) => request.post(`${baseUrl}/register`, registerData);
+    return {
+        login: (data) => request.post(`${baseUrl}/login`, data),
+        register: (data) => request.post(`${baseUrl}/register`, data),
+        logout: () => request.get(`${baseUrl}/logout`),
+    }
+};
 
-export const logout = () => request.get(`${baseUrl}/logout`);
+// export const login = (loginData) => request.post(`${baseUrl}/login`, loginData);
+
+// export const register = (registerData) => request.post(`${baseUrl}/register`, registerData);
+
+// export const logout = async (token) => {
+//     const response = await fetch(`${baseUrl}/logout`, {
+//         headers: {
+//             'X-Authorization': token,
+//         }
+//     });
+
+
+//     const result = await response.json();
+
+//     return result;
+// };
+

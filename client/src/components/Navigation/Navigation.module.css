@@ -51,7 +51,7 @@
 .logoutButton {
     background-color: #93DC80;
     border-radius: 5px;
-    border: solid 2.5px white;
+    border: solid 2.5px #18A392;
 }
 
 .logoutButton:hover {
@@ -60,11 +60,11 @@
 
 .logoutButton a {
     text-decoration: none;
-    color: white;
+    color: black;
 }
 
 .logoutButton:hover a {
-    color: black;
+    color: white;
 }
 
 @media only screen and (max-width: 992px) {

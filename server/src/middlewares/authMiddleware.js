@@ -1,23 +1,22 @@
-const jwt = require('../lib/jwt');
-
-const { JWT_KEY, JWT_SECRET } = require('../constants/jwtConstants');
+const { validateToken } = require('../services/userService');
 
 exports.authenticate = async (req, res, next) => {
-    const token = req.headers[JWT_KEY];
+    const token = req.get('X-Authorization');
 
     if (token) {
         try {
-            const decodedToken = await jwt.verify(token, JWT_SECRET);
+            const decodedToken = await validateToken(token);
 
-            req.user = decodedToken;
-
-            next();
+            req.user = {
+                ...decodedToken,
+                token
+            };
         } catch (error) {
-            return res.status(401).json({ message: 'Invalid token!' });
+            return res.status(401).json({ message: error.message });
         }
-    } else {
-        next();
     }
+
+    next();
 };
 
 exports.isAuthenticated = (req, res, next) => {
@@ -26,4 +25,4 @@ exports.isAuthenticated = (req, res, next) => {
     }
 
     next();
-}
+};

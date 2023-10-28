@@ -5,7 +5,12 @@ const { validateUserPassword } = require('../utils/bcryptUtil');
 
 const userErrors = require('../constants/errorMessages/userErrors');
 
-const { createSession } = require('../services/createSession');
+const { createSession } = require('../services/createSessionService');
+
+const jwt = require('../lib/jwt');
+const { JWT_SECRET } = require('../constants/jwtConstants');
+
+const revokedTokens = new Set();
 
 exports.register = async (userData) => {
     const userWithUsername = await User.findOne({ username: userData.username });
@@ -39,3 +44,14 @@ exports.login = async (username, password) => {
 
     return result;
 };
+
+
+exports.validateToken = async (token) => {
+    if (revokedTokens.has(token)) {
+        throw new Error('Invalid token!');
+    }
+
+    return await jwt.verify(token, JWT_SECRET);
+};
+
+exports.logout = (token) => revokedTokens.add(token);

@@ -4,4 +4,4 @@ exports.corsMiddleware = () => (req, res, next) => {
     res.setHeader('Access-Control-Allow-Headers', "Content-Type, X-Authorization");
 
     next();
-}
+};
