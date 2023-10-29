@@ -2,6 +2,8 @@ const router = require('express').Router();
 
 const { isAuthenticated } = require('../middlewares/authMiddleware');
 
+const { getErrorMessage } = require('../utils/errorMessageUtil');
+
 const {
     loginRoute,
     registerRoute,
@@ -16,7 +18,7 @@ router.post(loginRoute, async (req, res) => {
         const session = await userService.login(username, password);
         res.status(200).json(session);
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(400).json({ message: getErrorMessage(error) });
     }
 });
 
@@ -26,7 +28,7 @@ router.post(registerRoute, async (req, res) => {
         const session = await userService.register(userData);
         res.status(201).json(session);
     } catch (error) {
-        res.status(400).json({ message: error.message });
+        res.status(400).json({ message: getErrorMessage(error) });
     }
 });
 

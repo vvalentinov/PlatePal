@@ -5,8 +5,6 @@ import { useState, useContext } from 'react';
 // Bootstrap components
 import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 
 import { Link } from 'react-router-dom';
@@ -30,6 +28,8 @@ import * as paths from '../../constants/pathNames';
 
 import { authServiceFactory } from '../../services/authService';
 
+import ToastNotification from '../Toast/ToastNotification';
+
 const RegisterFormKeys = {
     Username: 'username',
     Password: 'password',
@@ -37,13 +37,31 @@ const RegisterFormKeys = {
 };
 
 const Register = () => {
+    const [toast, setToast] = useState('');
+
     const navigate = useNavigate();
+
     const authService = authServiceFactory();
 
     const { userLogin } = useContext(AuthContext);
 
     const onRegisterSubmit = async (data) => {
+        setToast('');
+
+        if (usernameError || passwordError || repeatPasswordError) {
+            return;
+        }
+
+        if (data.username === '' && data.password === '' && data.repeatPassword === '') {
+            setUsernameError('Username is required!');
+            setPasswordError("Password is required!");
+            setRepeatPasswordError("Repeat Password is required!");
+            return;
+        }
+
         if (data.repeatPassword !== data.password) {
+            setPasswordError("Password and Repeat Password must be the same!");
+            setRepeatPasswordError("Password and Repeat Password must be the same!");
             return;
         }
 
@@ -52,7 +70,7 @@ const Register = () => {
             userLogin(result);
             navigate(paths.homePath);
         } catch (error) {
-            console.log(error.message);
+            setToast(error.message);
         }
     };
 
@@ -88,10 +106,12 @@ const Register = () => {
     };
 
     return (
-        <Container className="my-4 border border-3 border-dark col-6 rounded-4">
-            <Row className="text-center">
-                <h2 className="my-4">Register</h2>
-                <Form onSubmit={onSubmit}>
+        <>
+            {toast && <ToastNotification message={toast} />}
+            <div className={styles.container}>
+                <img className={styles.registerImg} src="https://res.cloudinary.com/web-project-softuni/image/upload/v1698070763/Register-Login/register_walfov.jpg" alt="" />
+                <Form onSubmit={onSubmit} className={styles.form}>
+                    <h2 className="my-4">Register</h2>
                     <FloatingLabel
                         controlId="floatingUsernameInput"
                         label="Username"
@@ -141,8 +161,8 @@ const Register = () => {
                     </div>
                     <Button type="submit" bsPrefix={styles.registerButton} className="my-4 px-4 py-1 border-3">Register<FontAwesomeIcon icon={faUser} className="ms-2" /></Button>
                 </Form>
-            </Row>
-        </Container>
+            </div>
+        </>
     );
 };
 

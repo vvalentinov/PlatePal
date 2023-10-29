@@ -7,3 +7,56 @@
 .registerButton:hover {
     color: white;
 }
+
+/* Container Styles */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 2rem 1rem;
+    gap: 2rem;
+}
+
+.container form {
+    flex-basis: 50%;
+}
+
+/* Register Image */
+.registerImg {
+    height: 30rem;
+    border: solid 2px black;
+    border-radius: 10px;
+}
+
+/* Form Styles */
+.form {
+    background-color: #2C3E50;
+    border-color: #93DC80;
+    border: 4px solid #93DC80;
+    text-align: center;
+    padding: 0 2rem;
+    border-radius: 10px;
+}
+
+.form h2 {
+    color: white;
+}
+
+.form a {
+    color: white;
+    font-size: 1.1rem;
+}
+
+.formControl:focus {
+    box-shadow: 0 0 0 0.2rem #93DC80;
+}
+
+@media only screen and (max-width: 992px) {
+    .registerImg {
+        display: none;
+    }
+
+    .container form {
+        flex-basis: 90%;
+    }
+}
