@@ -25,14 +25,33 @@ import { faRightToBracket } from '@fortawesome/free-solid-svg-icons';
 
 import { AuthContext } from '../../contexts/AuthContext';
 
+import { authServiceFactory } from '../../services/authService';
+
+import { useNavigate } from 'react-router-dom';
+
+import * as paths from '../../constants/pathNames';
+
 const LoginFormKeys = {
     Username: 'username',
     Password: 'password',
 };
 
 const Login = () => {
-    // onLoginSubmit Handler
-    const { onLoginSubmit } = useContext(AuthContext);
+    const navigate = useNavigate();
+
+    const { userLogin } = useContext(AuthContext);
+
+    const authService = authServiceFactory();
+
+    const onLoginSubmit = async (data) => {
+        try {
+            const result = await authService.login(data);
+            userLogin(result);
+            navigate(paths.homePath);
+        } catch (error) {
+            console.log(error.message);
+        }
+    };
 
     // Custom useForm Hook for managing form state
     const { formValues, onChangeHandler, onSubmit } = useForm({

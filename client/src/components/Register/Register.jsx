@@ -24,6 +24,12 @@ import { faUser } from '@fortawesome/free-solid-svg-icons';
 
 import { AuthContext } from '../../contexts/AuthContext';
 
+import { useNavigate } from 'react-router-dom';
+
+import * as paths from '../../constants/pathNames';
+
+import { authServiceFactory } from '../../services/authService';
+
 const RegisterFormKeys = {
     Username: 'username',
     Password: 'password',
@@ -31,7 +37,24 @@ const RegisterFormKeys = {
 };
 
 const Register = () => {
-    const { onRegisterSubmit } = useContext(AuthContext);
+    const navigate = useNavigate();
+    const authService = authServiceFactory();
+
+    const { userLogin } = useContext(AuthContext);
+
+    const onRegisterSubmit = async (data) => {
+        if (data.repeatPassword !== data.password) {
+            return;
+        }
+
+        try {
+            const result = await authService.register(data);
+            userLogin(result);
+            navigate(paths.homePath);
+        } catch (error) {
+            console.log(error.message);
+        }
+    };
 
     const { formValues, onChangeHandler, onSubmit } = useForm({
         [RegisterFormKeys.Username]: '',
@@ -116,7 +139,6 @@ const Register = () => {
                     <div className="text-start mt-4">
                         <Link to="/login">You already have an account? Go to Login!</Link>
                     </div>
-
                     <Button type="submit" bsPrefix={styles.registerButton} className="my-4 px-4 py-1 border-3">Register<FontAwesomeIcon icon={faUser} className="ms-2" /></Button>
                 </Form>
             </Row>
