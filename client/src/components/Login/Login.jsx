@@ -43,9 +43,9 @@ const Login = () => {
 
     const navigate = useNavigate();
 
-    const { userLogin } = useContext(AuthContext);
+    const { userLogin, token } = useContext(AuthContext);
 
-    const authService = authServiceFactory();
+    const authService = authServiceFactory(token);
 
     const onLoginSubmit = async (data) => {
         setToast('');

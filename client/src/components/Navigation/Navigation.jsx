@@ -57,7 +57,7 @@ const Navigation = () => {
                     )}
                     {/* For Guests */}
                     {!isAuthenticated && (
-                        <Nav>
+                        <Nav className="fs-4">
                             <NavLink
                                 className={({ isActive }) => isActive ? styles.activeLink : styles.link}
                                 to={paths.loginPath}>
