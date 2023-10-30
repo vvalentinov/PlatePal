@@ -21,7 +21,7 @@ exports.create = async (data, categoryImage) => {
 
     const category = await Category.create({
         name: data.categoryName,
-        description: data.description,
+        description: data.categoryDescription,
         image: {
             publicId: public_id,
             url: secure_url,
