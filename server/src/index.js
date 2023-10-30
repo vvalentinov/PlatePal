@@ -4,6 +4,7 @@ const { PORT } = require('./constants/main');
 
 const { dbConfig } = require('./config/dbConfig');
 const { expressConfig } = require('./config/expressConfig');
+const { cloudinaryConfig } = require('./config/cloudinaryConfig');
 
 const { authenticate } = require('./middlewares/authMiddleware');
 const { corsMiddleware } = require('./middlewares/corsMiddleware');
@@ -14,6 +15,7 @@ const app = express();
 
 dbConfig();
 expressConfig(app);
+cloudinaryConfig();
 
 app.use(corsMiddleware());
 app.use(authenticate);
