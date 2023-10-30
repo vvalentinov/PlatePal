@@ -7,7 +7,7 @@ import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Button from 'react-bootstrap/Button';
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 // Error Message
 import * as errorMessages from '../../constants/errorMessages';
@@ -24,8 +24,6 @@ import { faRightToBracket } from '@fortawesome/free-solid-svg-icons';
 import { AuthContext } from '../../contexts/AuthContext';
 
 import { authServiceFactory } from '../../services/authService';
-
-import { useNavigate } from 'react-router-dom';
 
 import * as paths from '../../constants/pathNames';
 
@@ -56,6 +54,12 @@ const Login = () => {
             setUsernameError('Username must not be empty!');
             setPasswordError('Password must not be empty!');
             return;
+        } else if (data.username === '') {
+            setUsernameError('Username must not be empty!');
+            return;
+        } else if (data.password === '') {
+            setPasswordError('Password must not be empty!');
+            return;
         }
 
         if (usernameError || passwordError) {
@@ -71,7 +75,6 @@ const Login = () => {
         }
     };
 
-    // Custom useForm Hook for managing form state
     const { formValues, onChangeHandler, onSubmit } = useForm({
         [LoginFormKeys.Username]: '',
         [LoginFormKeys.Password]: '',
@@ -112,7 +115,6 @@ const Login = () => {
                     </FloatingLabel>
                     <FloatingLabel controlId="floatingPassword" label="Password">
                         <Form.Control
-                            autoComplete="on"
                             type="password"
                             name={LoginFormKeys.Password}
                             onChange={onChangeHandler}

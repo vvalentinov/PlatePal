@@ -11,7 +11,7 @@ export const usernameValidator = (username) => {
 export const passwordValidator = (password, repeatPassword) => {
     if (!password) {
         return errorMessages.passwordEmptyError;
-    } else if (password !== repeatPassword) {
+    } else if (repeatPassword && password !== repeatPassword) {
         return errorMessages.passwordsMismatchError;
     } else {
         return '';

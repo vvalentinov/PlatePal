@@ -18,6 +18,7 @@ export const AuthProvider = ({ children }) => {
         username: auth.username,
         token: auth.token,
         isAuthenticated: !!auth.token,
+        isAdmin: auth.isAdmin && !!auth.token,
     };
 
     return (

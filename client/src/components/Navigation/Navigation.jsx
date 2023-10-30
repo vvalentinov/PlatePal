@@ -18,26 +18,33 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 const Navigation = () => {
-    const { username, isAuthenticated } = useContext(AuthContext);
+    const { username, isAuthenticated, isAdmin } = useContext(AuthContext);
 
     return (
-        <Navbar collapseOnSelect expand="lg" className={`py-2 fs-4 ${styles.navbar}`}>
+        <Navbar collapseOnSelect expand="lg" className={styles.navbar}>
             <Container>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" className={styles.navbarToggler}>
                     <FontAwesomeIcon icon={faBars} className={styles.toggle} />
                 </Navbar.Toggle>
                 <Navbar.Collapse id="responsive-navbar-nav" className={styles.collapse} >
-                    <Nav>
+                    <Nav className="fs-5">
                         <img className={styles.logoImg} src="/logo.png" alt="Logo image..." />
                         <NavLink
                             className={({ isActive }) => isActive ? styles.activeLink : styles.link}
                             to={paths.homePath}>
                             PlatePal
                         </NavLink>
+                        {isAdmin && (
+                            <NavLink
+                                className={({ isActive }) => isActive ? styles.activeLink : styles.link}
+                                to={paths.createCategoryPath}>
+                                Create Category
+                            </NavLink>
+                        )}
                     </Nav>
                     {/* For Logged In Users */}
                     {isAuthenticated && (
-                        <Nav>
+                        <Nav className="fs-4">
                             <Navbar.Text bsPrefix={styles.navbarText}>
                                 Logged in as: <Link className={styles.link}>{username}</Link>
                             </Navbar.Text>

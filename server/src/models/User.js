@@ -18,6 +18,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: [true, userErrors.passwordRequiredError],
     },
+    isAdmin: {
+        type: Boolean,
+        required: true,
+    },
 });
 
 userSchema.virtual('repeatPassword').set(function (value) {

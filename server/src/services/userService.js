@@ -18,7 +18,7 @@ exports.register = async (userData) => {
         throw new Error(userErrors.usernameUniqueError);
     }
 
-    const createdUser = await User.create(userData);
+    const createdUser = await User.create({ ...userData, isAdmin: false });
 
     const token = await generateToken(createdUser._id, createdUser.username);
 
