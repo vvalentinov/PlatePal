@@ -2,44 +2,38 @@ import styles from './Login.module.css';
 
 import { useState, useContext } from 'react';
 
-// Bootstrap components
 import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Button from 'react-bootstrap/Button';
 
 import { Link, useNavigate } from 'react-router-dom';
 
-// Error Message
-import * as errorMessages from '../../constants/errorMessages';
-
-// Validator Service
-import * as validatorService from '../../services/validatorService';
-
-// Custom useForm hook
-import useForm from '../../hooks/useForm';
+import { useForm, Controller } from "react-hook-form";
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRightToBracket } from '@fortawesome/free-solid-svg-icons';
 
 import { AuthContext } from '../../contexts/AuthContext';
-
 import { authServiceFactory } from '../../services/authService';
 
 import * as paths from '../../constants/pathNames';
+import * as errorMessages from '../../constants/errorMessages';
 
 import ToastNotification from '../Toast/ToastNotification';
 
-const LoginFormKeys = {
+const LoginKeys = {
     Username: 'username',
     Password: 'password',
 };
 
 const Login = () => {
-    const [toast, setToast] = useState('');
+    const {
+        handleSubmit,
+        control,
+        formState: { errors },
+    } = useForm({ mode: "onBlur" });
 
-    // Inputs errors state
-    const [usernameError, setUsernameError] = useState('');
-    const [passwordError, setPasswordError] = useState('');
+    const [toast, setToast] = useState('');
 
     const navigate = useNavigate();
 
@@ -50,22 +44,6 @@ const Login = () => {
     const onLoginSubmit = async (data) => {
         setToast('');
 
-        if (data.username === '' && data.password === '') {
-            setUsernameError('Username must not be empty!');
-            setPasswordError('Password must not be empty!');
-            return;
-        } else if (data.username === '') {
-            setUsernameError('Username must not be empty!');
-            return;
-        } else if (data.password === '') {
-            setPasswordError('Password must not be empty!');
-            return;
-        }
-
-        if (usernameError || passwordError) {
-            return;
-        }
-
         try {
             const result = await authService.login(data);
             userLogin(result);
@@ -75,54 +53,55 @@ const Login = () => {
         }
     };
 
-    const { formValues, onChangeHandler, onSubmit } = useForm({
-        [LoginFormKeys.Username]: '',
-        [LoginFormKeys.Password]: '',
-    }, onLoginSubmit);
-
-    const onUsernameBlur = () => setUsernameError(validatorService.usernameValidator(formValues.username));
-
-    const onPasswordBlur = () => {
-        if (!formValues.password) {
-            setPasswordError(errorMessages.passwordEmptyError);
-        } else {
-            setPasswordError('');
-        }
-    };
-
     return (
         <>
             {toast && <ToastNotification message={toast} />}
             <div className={`${styles.container}`}>
                 <img className={styles.loginImg} src="https://res.cloudinary.com/web-project-softuni/image/upload/v1698070763/Register-Login/register_walfov.jpg" alt="Logo Image..." />
-                <Form method="POST" onSubmit={onSubmit} className={styles.form}>
+                <Form method="POST" onSubmit={handleSubmit(onLoginSubmit)} className={styles.form}>
                     <h2 className="my-3">Login</h2>
                     <FloatingLabel
                         controlId="floatingInput"
                         label="Username"
                         className="mb-4"
                     >
-                        <Form.Control
-                            autoComplete="on"
-                            type="text"
-                            name={LoginFormKeys.Username}
-                            onChange={onChangeHandler}
-                            onBlur={onUsernameBlur}
-                            value={formValues[LoginFormKeys.Username]}
-                            placeholder="username"
-                            className={`border-2 ${styles.formControl} ${usernameError ? 'border-danger' : 'border-dark'}`} />
-                        {usernameError && <p className="text-start text-danger">{usernameError}</p>}
+                        <Controller
+                            control={control}
+                            name={LoginKeys.Username}
+                            rules={{
+                                required: errorMessages.usernameEmptyError,
+                                minLength: { value: 3, message: errorMessages.usernameLengthError },
+                                maxLength: { value: 30, message: errorMessages.usernameLengthError },
+                            }}
+                            render={({ field: { onChange, onBlur } }) => (
+                                <Form.Control
+                                    autoComplete="on"
+                                    type="text"
+                                    onChange={onChange}
+                                    onBlur={onBlur}
+                                    placeholder="username"
+                                    className={`border-2 ${styles.formControl} ${errors[LoginKeys.Username] ? 'border-danger' : 'border-dark'}`}
+                                />
+                            )}
+                        />
+                        {errors[LoginKeys.Username] && <p className="text-start text-danger">{errors[LoginKeys.Username].message}</p>}
                     </FloatingLabel>
                     <FloatingLabel controlId="floatingPassword" label="Password">
-                        <Form.Control
-                            type="password"
-                            name={LoginFormKeys.Password}
-                            onChange={onChangeHandler}
-                            onBlur={onPasswordBlur}
-                            value={formValues[LoginFormKeys.Password]}
-                            placeholder="Password"
-                            className={`border-2 ${styles.formControl} ${passwordError ? 'border-danger' : 'border-dark'}`} />
-                        {passwordError && <p className="text-start text-danger">{passwordError}</p>}
+                        <Controller
+                            control={control}
+                            name={LoginKeys.Password}
+                            rules={{ required: errorMessages.passwordEmptyError }}
+                            render={({ field: { onChange, onBlur } }) => (
+                                <Form.Control
+                                    type="password"
+                                    onChange={onChange}
+                                    onBlur={onBlur}
+                                    placeholder="Password"
+                                    className={`border-2 ${styles.formControl} ${errors[LoginKeys.Password] ? 'border-danger' : 'border-dark'}`}
+                                />
+                            )}
+                        />
+                        {errors[LoginKeys.Password] && <p className="text-start text-danger">{errors[LoginKeys.Password].message}</p>}
                     </FloatingLabel>
                     <div className="text-start mt-4">
                         <Link to="/register">You don't have an account? Register here!</Link>

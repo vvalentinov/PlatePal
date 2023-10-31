@@ -2,20 +2,11 @@ import styles from './Register.module.css';
 
 import { useState, useContext } from 'react';
 
-// Bootstrap components
 import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Button from 'react-bootstrap/Button';
 
 import { Link } from 'react-router-dom';
-
-// Error messages constants
-import * as errorMessages from '../../constants/errorMessages';
-
-// Custom useForm hook
-import useForm from '../../hooks/useForm';
-
-import * as validatorService from '../../services/validatorService';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
@@ -25,18 +16,30 @@ import { AuthContext } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 import * as paths from '../../constants/pathNames';
+import * as errorMessages from '../../constants/errorMessages';
 
 import { authServiceFactory } from '../../services/authService';
 
 import ToastNotification from '../Toast/ToastNotification';
 
-const RegisterFormKeys = {
+import { useForm, Controller } from "react-hook-form";
+
+const RegisterKeys = {
     Username: 'username',
     Password: 'password',
-    RepeatPassword: 'repeatPassword',
+    RepeatPassword: 'repeatPassword'
 };
 
 const Register = () => {
+    const {
+        handleSubmit,
+        control,
+        formState: { errors },
+        getValues,
+        setError,
+        clearErrors,
+    } = useForm({ mode: "onBlur" });
+
     const [toast, setToast] = useState('');
 
     const navigate = useNavigate();
@@ -48,23 +51,6 @@ const Register = () => {
     const onRegisterSubmit = async (data) => {
         setToast('');
 
-        if (usernameError || passwordError || repeatPasswordError) {
-            return;
-        }
-
-        if (data.username === '' && data.password === '' && data.repeatPassword === '') {
-            setUsernameError('Username is required!');
-            setPasswordError("Password is required!");
-            setRepeatPasswordError("Repeat Password is required!");
-            return;
-        }
-
-        if (data.repeatPassword !== data.password) {
-            setPasswordError("Password and Repeat Password must be the same!");
-            setRepeatPasswordError("Password and Repeat Password must be the same!");
-            return;
-        }
-
         try {
             const result = await authService.register(data);
             userLogin(result);
@@ -74,92 +60,110 @@ const Register = () => {
         }
     };
 
-    const { formValues, onChangeHandler, onSubmit } = useForm({
-        [RegisterFormKeys.Username]: '',
-        [RegisterFormKeys.Password]: '',
-        [RegisterFormKeys.RepeatPassword]: '',
-    }, onRegisterSubmit);
-
-    // Inputs errors state
-    const [usernameError, setUsernameError] = useState('');
-    const [passwordError, setPasswordError] = useState('');
-    const [repeatPasswordError, setRepeatPasswordError] = useState('');
-
-    const onUsernameBlur = () => setUsernameError(validatorService.usernameValidator(formValues.username));
-
-    const onPasswordBlur = () => {
-        const error = validatorService.passwordValidator(formValues.password, formValues.repeatPassword);
-        setPasswordError(error);
-        if (error === errorMessages.passwordsMismatchError ||
-            repeatPasswordError === errorMessages.passwordsMismatchError) {
-            setRepeatPasswordError(error);
-        }
-    };
-
-    const onRepeatPasswordBlur = () => {
-        const error = validatorService.repeatPasswordValidator(formValues.password, formValues.repeatPassword);
-        setRepeatPasswordError(error);
-        if (error === errorMessages.passwordsMismatchError ||
-            passwordError === errorMessages.passwordsMismatchError) {
-            setPasswordError(error);
-        }
-    };
-
     return (
         <>
             {toast && <ToastNotification message={toast} />}
             <div className={styles.container}>
                 <img className={styles.registerImg} src="https://res.cloudinary.com/web-project-softuni/image/upload/v1698070763/Register-Login/register_walfov.jpg" alt="" />
-                <Form onSubmit={onSubmit} className={styles.form}>
+                <Form onSubmit={handleSubmit(onRegisterSubmit)} className={styles.form}>
                     <h2 className="my-4">Register</h2>
                     <FloatingLabel
                         controlId="floatingUsernameInput"
                         label="Username"
                         className="mb-4"
                     >
-                        {/* Username */}
-                        <Form.Control
-                            autoComplete="on"
-                            name={RegisterFormKeys.Username}
-                            type="text"
-                            placeholder="username"
-                            className={`border-2 ${usernameError ? 'border-danger' : 'border-dark'}`}
-                            onChange={onChangeHandler}
-                            onBlur={onUsernameBlur}
-                            value={formValues[RegisterFormKeys.Username]}
+                        <Controller
+                            control={control}
+                            name={RegisterKeys.Username}
+                            rules={{
+                                required: errorMessages.usernameEmptyError,
+                                minLength: { value: 3, message: errorMessages.usernameLengthError },
+                                maxLength: { value: 30, message: errorMessages.usernameLengthError },
+                            }}
+                            render={({ field: { onChange, onBlur } }) => (
+                                <Form.Control
+                                    autoComplete="on"
+                                    type="text"
+                                    placeholder="username"
+                                    className={`border-2 ${errors[RegisterKeys.Username] ? 'border-danger' : 'border-dark'}`}
+                                    onChange={onChange}
+                                    onBlur={onBlur}
+                                />
+                            )}
                         />
-                        {usernameError && <p className="text-start text-danger">{usernameError}</p>}
+                        {errors[RegisterKeys.Username] && (
+                            <p className="text-start text-danger">
+                                {errors[RegisterKeys.Username].message}
+                            </p>)}
                     </FloatingLabel>
                     <FloatingLabel controlId="floatingPassword" label="Password" className="mb-4">
-                        {/* Password */}
-                        <Form.Control
-                            name={RegisterFormKeys.Password}
-                            onChange={onChangeHandler}
-                            value={formValues[RegisterFormKeys.Password]}
-                            onBlur={onPasswordBlur}
-                            type="password"
-                            placeholder="Password"
-                            className={`border-2 ${passwordError ? 'border-danger' : 'border-dark'}`}
+                        <Controller
+                            control={control}
+                            name={RegisterKeys.Password}
+                            rules={{
+                                required: errorMessages.passwordEmptyError,
+                                validate: (value) => {
+                                    if (value !== getValues(RegisterKeys.RepeatPassword)) {
+                                        setError(RegisterKeys.RepeatPassword, {
+                                            type: 'validate',
+                                            message: errorMessages.passwordsMismatchError
+                                        });
+                                        return errorMessages.passwordsMismatchError;
+                                    }
+                                    clearErrors(RegisterKeys.RepeatPassword);
+                                    return true;
+                                }
+                            }}
+                            render={({ field: { onChange, onBlur } }) => (
+                                <Form.Control
+                                    type="password"
+                                    onChange={onChange}
+                                    onBlur={onBlur}
+                                    placeholder="Password"
+                                    className={`border-2 ${styles.formControl} ${errors[RegisterKeys.Password] ? 'border-danger' : 'border-dark'}`}
+                                />
+                            )}
                         />
-                        {passwordError && <p className="text-start text-danger">{passwordError}</p>}
+                        {errors[RegisterKeys.Password] && (
+                            <p className="text-start text-danger">
+                                {errors[RegisterKeys.Password].message}
+                            </p>)}
                     </FloatingLabel>
                     <FloatingLabel controlId="floatingRepeatPassword" label="Repeat Password">
-                        {/* Repeat Password */}
-                        <Form.Control
-                            type="password"
-                            name={RegisterFormKeys.RepeatPassword}
-                            onChange={onChangeHandler}
-                            onBlur={onRepeatPasswordBlur}
-                            value={formValues[RegisterFormKeys.RepeatPassword]}
-                            placeholder="RepeatPassword"
-                            className={`border-2 ${repeatPasswordError ? 'border-danger' : 'border-dark'}`}
+                        <Controller
+                            control={control}
+                            name={RegisterKeys.RepeatPassword}
+                            rules={{
+                                required: errorMessages.repeatPasswordEmptyError,
+                                validate: (value) => {
+                                    if (value !== getValues(RegisterKeys.Password)) {
+                                        setError(RegisterKeys.Password, { type: 'validate', message: errorMessages.passwordsMismatchError });
+                                        return errorMessages.passwordsMismatchError;
+                                    }
+                                    clearErrors(RegisterKeys.Password);
+                                    return true;
+                                }
+                            }}
+                            render={({ field: { onChange, onBlur } }) => (
+                                <Form.Control
+                                    type="password"
+                                    onChange={onChange}
+                                    onBlur={onBlur}
+                                    placeholder="Repeat Password"
+                                    className={`border-2 ${styles.formControl} ${errors[RegisterKeys.RepeatPassword] ? 'border-danger' : 'border-dark'}`}
+                                />
+                            )}
                         />
-                        {repeatPasswordError && <p className="text-start text-danger">{repeatPasswordError}</p>}
+                        {errors[RegisterKeys.RepeatPassword] && (
+                            <p className="text-start text-danger">
+                                {errors[RegisterKeys.RepeatPassword].message}
+                            </p>)}
                     </FloatingLabel>
                     <div className="text-start mt-4">
                         <Link to="/login">You already have an account? Go to Login!</Link>
                     </div>
-                    <Button type="submit" bsPrefix={styles.registerButton} className="my-4 px-4 py-1 border-3">Register<FontAwesomeIcon icon={faUser} className="ms-2" /></Button>
+                    <Button type="submit" bsPrefix={styles.registerButton} className="my-4 px-4 py-1 border-3">Register<FontAwesomeIcon icon={faUser} className="ms-2" />
+                    </Button>
                 </Form>
             </div>
         </>
