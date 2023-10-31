@@ -1,9 +1,28 @@
 .container {
     display: flex;
     justify-content: center;
-    margin: 2rem 0;
+    margin: 1rem 0;
 }
 
 .container form {
     flex-basis: 70%;
+    background-color: #2C3E50;
+}
+
+.container form h2 {
+    color: white;
+}
+
+.error {
+    color: red;
+}
+
+.formButton,
+.formButton:hover,
+.formButton:active {
+    background-color: #93DC80;
+}
+
+.formButton:hover {
+    color: white;
 }

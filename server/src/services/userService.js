@@ -20,7 +20,7 @@ exports.register = async (userData) => {
 
     const createdUser = await User.create({ ...userData, isAdmin: false });
 
-    const token = await generateToken(createdUser._id, createdUser.username);
+    const token = await generateToken(createdUser._id, createdUser.username, createdUser.isAdmin);
 
     const result = createSession(createdUser, token);
 
@@ -38,7 +38,7 @@ exports.login = async (username, password) => {
         throw new Error(userErrors.loginError);
     }
 
-    const token = await generateToken(user._id, user.username);
+    const token = await generateToken(user._id, user.username, user.isAdmin);
 
     const result = createSession(user, token);
 

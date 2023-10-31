@@ -4,9 +4,13 @@ const request = async (method, token, url, data) => {
     if (method !== 'GET') {
         options.method = method;
 
-        if (data) {
+        const isFormData = data instanceof FormData;
+
+        if (!isFormData) {
             options.headers = { 'Content-Type': 'application/json' };
             options.body = JSON.stringify(data);
+        } else {
+            options.body = data;
         }
     }
 
