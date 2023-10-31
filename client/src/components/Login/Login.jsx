@@ -14,6 +14,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRightToBracket } from '@fortawesome/free-solid-svg-icons';
 
 import { AuthContext } from '../../contexts/AuthContext';
+import { useService } from '../../hooks/useService';
 import { authServiceFactory } from '../../services/authService';
 
 import * as paths from '../../constants/pathNames';
@@ -37,9 +38,9 @@ const Login = () => {
 
     const navigate = useNavigate();
 
-    const { userLogin, token } = useContext(AuthContext);
+    const { userLogin } = useContext(AuthContext);
 
-    const authService = authServiceFactory(token);
+    const authService = useService(authServiceFactory);
 
     const onLoginSubmit = async (data) => {
         setToast('');
@@ -57,8 +58,16 @@ const Login = () => {
         <>
             {toast && <ToastNotification message={toast} />}
             <div className={`${styles.container}`}>
-                <img className={styles.loginImg} src="https://res.cloudinary.com/web-project-softuni/image/upload/v1698070763/Register-Login/register_walfov.jpg" alt="Logo Image..." />
-                <Form method="POST" onSubmit={handleSubmit(onLoginSubmit)} className={styles.form}>
+                <img
+                    className={styles.loginImg}
+                    src="https://res.cloudinary.com/web-project-softuni/image/upload/v1698070763/Register-Login/register_walfov.jpg"
+                    alt="Logo Image..."
+                />
+                <Form
+                    method="POST"
+                    onSubmit={handleSubmit(onLoginSubmit)}
+                    className={styles.form}
+                >
                     <h2 className="my-3">Login</h2>
                     <FloatingLabel
                         controlId="floatingInput"
@@ -80,11 +89,18 @@ const Login = () => {
                                     onChange={onChange}
                                     onBlur={onBlur}
                                     placeholder="username"
-                                    className={`border-2 ${styles.formControl} ${errors[LoginKeys.Username] ? 'border-danger' : 'border-dark'}`}
+                                    className={`
+                                        border-2
+                                        ${styles.formControl}
+                                        ${errors[LoginKeys.Username] ? 'border-danger' : 'border-dark'}`}
                                 />
                             )}
                         />
-                        {errors[LoginKeys.Username] && <p className="text-start text-danger">{errors[LoginKeys.Username].message}</p>}
+                        {errors[LoginKeys.Username] && (
+                            <p className="text-start text-danger">
+                                {errors[LoginKeys.Username].message}
+                            </p>
+                        )}
                     </FloatingLabel>
                     <FloatingLabel controlId="floatingPassword" label="Password">
                         <Controller
@@ -97,11 +113,19 @@ const Login = () => {
                                     onChange={onChange}
                                     onBlur={onBlur}
                                     placeholder="Password"
-                                    className={`border-2 ${styles.formControl} ${errors[LoginKeys.Password] ? 'border-danger' : 'border-dark'}`}
+                                    className={`
+                                    border-2
+                                    ${styles.formControl}
+                                    ${errors[LoginKeys.Password] ? 'border-danger' : 'border-dark'}`
+                                    }
                                 />
                             )}
                         />
-                        {errors[LoginKeys.Password] && <p className="text-start text-danger">{errors[LoginKeys.Password].message}</p>}
+                        {errors[LoginKeys.Password] && (
+                            <p className="text-start text-danger">
+                                {errors[LoginKeys.Password].message}
+                            </p>
+                        )}
                     </FloatingLabel>
                     <div className="text-start mt-4">
                         <Link to="/register">You don't have an account? Register here!</Link>

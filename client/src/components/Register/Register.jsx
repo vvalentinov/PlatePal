@@ -13,6 +13,8 @@ import { faUser } from '@fortawesome/free-solid-svg-icons';
 
 import { AuthContext } from '../../contexts/AuthContext';
 
+import { useService } from '../../hooks/useService';
+
 import { useNavigate } from 'react-router-dom';
 
 import * as paths from '../../constants/pathNames';
@@ -44,7 +46,7 @@ const Register = () => {
 
     const navigate = useNavigate();
 
-    const authService = authServiceFactory();
+    const authService = useService(authServiceFactory);
 
     const { userLogin } = useContext(AuthContext);
 
@@ -64,7 +66,11 @@ const Register = () => {
         <>
             {toast && <ToastNotification message={toast} />}
             <div className={styles.container}>
-                <img className={styles.registerImg} src="https://res.cloudinary.com/web-project-softuni/image/upload/v1698070763/Register-Login/register_walfov.jpg" alt="" />
+                <img
+                    className={styles.registerImg}
+                    src="https://res.cloudinary.com/web-project-softuni/image/upload/v1698070763/Register-Login/register_walfov.jpg"
+                    alt="Register Image..."
+                />
                 <Form onSubmit={handleSubmit(onRegisterSubmit)} className={styles.form}>
                     <h2 className="my-4">Register</h2>
                     <FloatingLabel
@@ -85,7 +91,10 @@ const Register = () => {
                                     autoComplete="on"
                                     type="text"
                                     placeholder="username"
-                                    className={`border-2 ${errors[RegisterKeys.Username] ? 'border-danger' : 'border-dark'}`}
+                                    className={`
+                                        border-2
+                                        ${styles.formControl}
+                                        ${errors[RegisterKeys.Username] ? 'border-danger' : 'border-dark'}`}
                                     onChange={onChange}
                                     onBlur={onBlur}
                                 />
@@ -94,7 +103,8 @@ const Register = () => {
                         {errors[RegisterKeys.Username] && (
                             <p className="text-start text-danger">
                                 {errors[RegisterKeys.Username].message}
-                            </p>)}
+                            </p>
+                        )}
                     </FloatingLabel>
                     <FloatingLabel controlId="floatingPassword" label="Password" className="mb-4">
                         <Controller
@@ -120,14 +130,18 @@ const Register = () => {
                                     onChange={onChange}
                                     onBlur={onBlur}
                                     placeholder="Password"
-                                    className={`border-2 ${styles.formControl} ${errors[RegisterKeys.Password] ? 'border-danger' : 'border-dark'}`}
+                                    className={`
+                                        border-2
+                                        ${styles.formControl}
+                                        ${errors[RegisterKeys.Password] ? 'border-danger' : 'border-dark'}`}
                                 />
                             )}
                         />
                         {errors[RegisterKeys.Password] && (
                             <p className="text-start text-danger">
                                 {errors[RegisterKeys.Password].message}
-                            </p>)}
+                            </p>
+                        )}
                     </FloatingLabel>
                     <FloatingLabel controlId="floatingRepeatPassword" label="Repeat Password">
                         <Controller
@@ -150,19 +164,28 @@ const Register = () => {
                                     onChange={onChange}
                                     onBlur={onBlur}
                                     placeholder="Repeat Password"
-                                    className={`border-2 ${styles.formControl} ${errors[RegisterKeys.RepeatPassword] ? 'border-danger' : 'border-dark'}`}
+                                    className={`
+                                        border-2
+                                        ${styles.formControl}
+                                        ${errors[RegisterKeys.RepeatPassword] ? 'border-danger' : 'border-dark'}`}
                                 />
                             )}
                         />
                         {errors[RegisterKeys.RepeatPassword] && (
                             <p className="text-start text-danger">
                                 {errors[RegisterKeys.RepeatPassword].message}
-                            </p>)}
+                            </p>
+                        )}
                     </FloatingLabel>
                     <div className="text-start mt-4">
                         <Link to="/login">You already have an account? Go to Login!</Link>
                     </div>
-                    <Button type="submit" bsPrefix={styles.registerButton} className="my-4 px-4 py-1 border-3">Register<FontAwesomeIcon icon={faUser} className="ms-2" />
+                    <Button
+                        type="submit"
+                        bsPrefix={styles.registerButton}
+                        className="my-4 px-4 py-1 border-3"
+                    >
+                        Register<FontAwesomeIcon icon={faUser} className="ms-2" />
                     </Button>
                 </Form>
             </div>

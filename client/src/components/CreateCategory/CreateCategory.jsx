@@ -6,21 +6,25 @@ import styles from './CreateCategory.module.css';
 
 import { useForm, Controller } from "react-hook-form";
 
-import { AuthContext } from '../../contexts/AuthContext';
-
-import { useContext } from 'react';
+import { useService } from '../../hooks/useService';
 
 import { categoryServiceFactory } from '../../services/categoryService';
 
 import { useNavigate } from 'react-router-dom';
 
 import * as paths from '../../constants/pathNames';
+import * as errorMessages from '../../constants/errorMessages';
+
+const CreateCategoryKeys = {
+    Name: 'categoryName',
+    Description: 'categoryDescription',
+    File: 'categoryFile'
+};
 
 const CreateCategory = () => {
     const navigate = useNavigate();
-    const { token } = useContext(AuthContext);
 
-    const categoryService = categoryServiceFactory(token);
+    const categoryService = useService(categoryServiceFactory);
 
     const {
         handleSubmit,
@@ -31,13 +35,13 @@ const CreateCategory = () => {
     const onFormSubmit = async (data) => {
         const file = data.categoryFile;
 
-        const dataToBeSent = new FormData();
-        dataToBeSent.append('file', file);
-        dataToBeSent.append('categoryName', data.categoryName);
-        dataToBeSent.append('categoryDescription', data.categoryDescription);
+        const formData = new FormData();
+        formData.append(CreateCategoryKeys.File, file);
+        formData.append(CreateCategoryKeys.Name, data.categoryName);
+        formData.append(CreateCategoryKeys.Description, data.categoryDescription);
 
         try {
-            const result = await categoryService.create(dataToBeSent);
+            await categoryService.create(formData);
             navigate(paths.homePath);
         } catch (error) {
             console.log(error.message);
@@ -46,19 +50,21 @@ const CreateCategory = () => {
 
     return (
         <div className={styles.container}>
-            <Form encType="multipart/form-data" className="border border-2 border-dark rounded-4 p-4" onSubmit={handleSubmit(onFormSubmit)}>
+            <Form
+                encType="multipart/form-data"
+                className="border border-2 border-dark rounded-4 p-4"
+                onSubmit={handleSubmit(onFormSubmit)}>
                 <h2 className='text-center mb-3'>Create Recipe Category</h2>
                 <FloatingLabel
                     controlId="floatingInput"
                     label="Category Name"
                     className="my-4"
                 >
-                    {/* Category Name */}
                     <Controller
                         control={control}
-                        name="categoryName"
-                        rules={{ required: 'Category Name is required!' }}
-                        render={({ field: { onChange, onBlur, value, ref } }) => (
+                        name={CreateCategoryKeys.Name}
+                        rules={{ required: errorMessages.categoryNameEmptyError }}
+                        render={({ field: { onChange, onBlur } }) => (
                             <Form.Control
                                 autoComplete="on"
                                 type="text"
@@ -66,23 +72,29 @@ const CreateCategory = () => {
                                 className="border border-dark"
                                 onChange={onChange}
                                 onBlur={onBlur}
-                                ref={ref}
                             />
                         )}
                     />
-                    {errors.categoryName && <p className={styles.error}>{errors.categoryName.message}</p>}
+                    {errors[CreateCategoryKeys.Name] && (
+                        <p className={styles.error}>
+                            {errors[CreateCategoryKeys.Name].message}
+                        </p>)
+                    }
                 </FloatingLabel>
                 <FloatingLabel
                     controlId="floatingTextarea2"
                     label="Category Description"
                     className="mb-4"
                 >
-                    {/* Category Description */}
                     <Controller
                         control={control}
-                        name="categoryDescription"
-                        rules={{ required: 'Category Description is required!' }}
-                        render={({ field: { onChange, onBlur, value, ref } }) => (
+                        name={CreateCategoryKeys.Description}
+                        rules={{
+                            required: errorMessages.categoryDescriptionEmptyError,
+                            minLength: { value: 10, message: errorMessages.categoryDescriptionLengthError },
+                            maxLength: { value: 300, message: errorMessages.categoryDescriptionLengthError }
+                        }}
+                        render={({ field: { onChange, onBlur } }) => (
                             <Form.Control
                                 as="textarea"
                                 placeholder="Leave a comment here"
@@ -90,22 +102,23 @@ const CreateCategory = () => {
                                 className='border border-dark'
                                 onChange={onChange}
                                 onBlur={onBlur}
-                                ref={ref}
                             />
                         )}
                     />
-                    {errors.categoryDescription && <p className={styles.error}>{errors.categoryDescription.message}</p>}
+                    {errors[CreateCategoryKeys.Description] && (
+                        <p className={styles.error}>
+                            {errors[CreateCategoryKeys.Description].message}
+                        </p>)
+                    }
                 </FloatingLabel>
                 <Form.Group controlId="formFile" className="mb-4">
-                    {/* Category File */}
                     <Controller
                         control={control}
-                        name="categoryFile"
+                        name={CreateCategoryKeys.File}
                         rules={{ required: true }}
                         render={({ field: { onChange, onBlur, ref } }) => (
                             <Form.Control
                                 accept=".jpg, .jpeg, .png"
-                                name='categoryFile'
                                 type="file"
                                 size='lg'
                                 className='border border-dark'
@@ -115,11 +128,15 @@ const CreateCategory = () => {
                             />
                         )}
                     />
-                    {errors.categoryFile && <p className={styles.error}>{errors.categoryFile.message}</p>}
+                    {errors[CreateCategoryKeys.File] && (
+                        <p className={styles.error}>
+                            {errors[CreateCategoryKeys.File].message}
+                        </p>
+                    )}
                 </Form.Group>
                 <div className="d-grid">
                     <Button bsPrefix={styles.formButton} className='rounded-3 py-2 fs-5' size="lg" type="submit">
-                        Create Recipe
+                        Create
                     </Button>
                 </div>
             </Form>

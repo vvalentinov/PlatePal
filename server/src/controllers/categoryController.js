@@ -13,7 +13,7 @@ const multer = require('multer');
 router.post(
     createRoute,
     isAdmin,
-    multer().single('file'),
+    multer().single('categoryFile'),
     async (req, res) => {
         const image = req.file;
         const data = { ...req.body };
