@@ -28,3 +28,5 @@ exports.create = async (data, categoryImage) => {
         },
     });
 };
+
+exports.getAll = () => Category.find({});

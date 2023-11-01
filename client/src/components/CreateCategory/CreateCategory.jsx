@@ -52,7 +52,7 @@ const CreateCategory = () => {
         <div className={styles.container}>
             <Form
                 encType="multipart/form-data"
-                className="border border-2 border-dark rounded-4 p-4"
+                className=" rounded-4 p-4"
                 onSubmit={handleSubmit(onFormSubmit)}>
                 <h2 className='text-center mb-3'>Create Recipe Category</h2>
                 <FloatingLabel
@@ -92,7 +92,7 @@ const CreateCategory = () => {
                         rules={{
                             required: errorMessages.categoryDescriptionEmptyError,
                             minLength: { value: 10, message: errorMessages.categoryDescriptionLengthError },
-                            maxLength: { value: 300, message: errorMessages.categoryDescriptionLengthError }
+                            maxLength: { value: 750, message: errorMessages.categoryDescriptionLengthError }
                         }}
                         render={({ field: { onChange, onBlur } }) => (
                             <Form.Control

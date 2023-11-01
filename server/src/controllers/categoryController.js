@@ -1,6 +1,9 @@
 const router = require('express').Router();
 
-const { createRoute } = require('../constants/routeNames/categoryRoutes');
+const {
+    createRoute,
+    getAllRoute,
+} = require('../constants/routeNames/categoryRoutes');
 
 const categoryService = require('../services/categoryService');
 
@@ -24,5 +27,15 @@ router.post(
             res.status(400).json({ message: getErrorMessage(error) });
         }
     });
+
+router.get(getAllRoute, async (req, res) => {
+    try {
+        const result = await categoryService.getAll().lean();
+        console.log(result);
+        res.status(200).json(result);
+    } catch (error) {
+        res.status(400).json({ message: getErrorMessage(error) });
+    }
+});
 
 module.exports = router;

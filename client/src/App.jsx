@@ -1,6 +1,7 @@
 // Import CSS
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
+import './App.css';
 
 // Import Components
 import Home from './components/Home/Home';
@@ -9,6 +10,7 @@ import Register from './components/Register/Register';
 import Logout from './components/Logout/Logout';
 import Navigation from './components/Navigation/Navigation';
 import CreateCategory from './components/CreateCategory/CreateCategory';
+import Categories from './components/Categories/Categories';
 import Footer from './components/Footer/Footer';
 
 // Import AuthContext
@@ -33,6 +35,7 @@ const App = () => {
                         <Route path={paths.loginPath} element={<Login />} />
                         <Route path={paths.registerPath} element={<Register />} />
                         <Route path={paths.createCategoryPath} element={<CreateCategory />} />
+                        <Route path={paths.categoriesListPath} element={<Categories />} />
                         <Route path={paths.logoutPath} element={<Logout />} />
                     </Routes>
                 </main>

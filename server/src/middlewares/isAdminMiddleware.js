@@ -3,8 +3,6 @@ exports.isAdmin = (req, res, next) => {
         return res.status(401).json({ message: 'Log in!' });
     }
 
-    console.log(req.user);
-
     if (!req.user.isAdmin) {
         return res.status(401).json({ message: 'Unauthorized!' });
     }

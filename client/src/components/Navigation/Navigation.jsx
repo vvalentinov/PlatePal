@@ -15,7 +15,7 @@ import { AuthContext } from '../../contexts/AuthContext';
 import { useContext } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 
 const Navigation = () => {
     const { username, isAuthenticated, isAdmin } = useContext(AuthContext);
@@ -34,6 +34,11 @@ const Navigation = () => {
                             to={paths.homePath}>
                             PlatePal
                         </NavLink>
+                        <NavLink
+                            className={({ isActive }) => isActive ? styles.activeLink : styles.link}
+                            to={paths.categoriesListPath}>
+                            Categories
+                        </NavLink>
                         {isAdmin && (
                             <NavLink
                                 className={({ isActive }) => isActive ? styles.activeLink : styles.link}
@@ -50,7 +55,7 @@ const Navigation = () => {
                             </Navbar.Text>
                             <Button bsPrefix={styles.logoutButton} className="px-3 py-1">
                                 <Link to={paths.logoutPath}>
-                                    Logout
+                                    Logout<FontAwesomeIcon icon={faRightFromBracket} className="ms-1" />
                                 </Link>
                             </Button>
                         </Nav>

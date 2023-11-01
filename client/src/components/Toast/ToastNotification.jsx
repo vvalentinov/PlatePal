@@ -13,7 +13,13 @@ function ToastNotification({ message }) {
 
     return (
         <ToastContainer position='top-end'>
-            <Toast className={`${styles.toast} border-2 border-black`} show={show} onClose={toggleShowA} delay={7000} autohide bg='danger'>
+            <Toast
+                className={`${styles.toast} border-2 border-black`}
+                show={show}
+                onClose={toggleShowA}
+                delay={7000}
+                autohide
+                bg='danger'>
                 <Toast.Header className='border-bottom border-2 border-black'>
                     <FontAwesomeIcon icon={faTriangleExclamation} className='me-2' />
                     <strong className="me-auto">Ooops! Something went wrong!</strong>
