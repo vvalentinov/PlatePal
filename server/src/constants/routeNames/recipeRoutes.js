@@ -1,0 +1,1 @@
+exports.createRecipeRoute = '/create';
