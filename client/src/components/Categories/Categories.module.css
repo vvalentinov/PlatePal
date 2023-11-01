@@ -22,6 +22,18 @@
     border-bottom: solid 2px black;
 }
 
+.spinnerContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 5rem;
+}
+
+.spinner {
+    width: 10rem;
+    height: 10rem;
+    font-size: 2rem;
+}
+
 @media only screen and (max-width: 992px) {
     .container {
         flex-direction: column;

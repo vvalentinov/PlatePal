@@ -6,21 +6,35 @@ import { categoryServiceFactory } from '../../services/categoryService';
 import { useService } from '../../hooks/useService';
 
 import Card from 'react-bootstrap/Card';
+import Spinner from 'react-bootstrap/Spinner';
 
 const Categories = () => {
     const [categories, setCategories] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     const categoryService = useService(categoryServiceFactory);
 
     useEffect(() => {
         categoryService.getAll()
-            .then(data => setCategories(data))
+            .then(data => {
+                setIsLoading(false);
+                setCategories(data);
+            })
             .catch(error => console.log(`In error ${error}`));
     }, []);
 
     return (
         <>
-            <h2 className='text-center my-2'>Categories List!</h2>
+            <h2 className='text-center my-2'>{
+                isLoading ? 'Category List - Loading...' : 'Category List'
+            }</h2>
+            {isLoading && (
+                <div className={styles.spinnerContainer}>
+                    <Spinner className={styles.spinner} animation="border" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                    </Spinner>
+                </div>
+            )}
             {categories.map(x => (
                 <div key={x._id} className={styles.container}>
                     <img src={x.image.url} alt="" />
