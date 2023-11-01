@@ -5,7 +5,7 @@ const { uploadImage } = require('../utils/cloudinaryUtil');
 const path = require('path');
 
 exports.create = async (data, recipeImage) => {
-    const recipeWithName = await Recipe.find({ name: data.recipeName });
+    const recipeWithName = await Recipe.findOne({ name: data.recipeName });
     if (recipeWithName) {
         throw new Error('Recipe with given name already exists!');
     }

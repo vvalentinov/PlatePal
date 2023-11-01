@@ -1,25 +1,72 @@
 import styles from './CreateRecipe.module.css';
 
 import Form from 'react-bootstrap/Form';
-import FloatingLabel from 'react-bootstrap/FloatingLabel';
-import Button from 'react-bootstrap/Button';
 
-import { useForm, Controller } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 
 import { recipeServiceFactory } from '../../services/recipeService';
 import { useService } from '../../hooks/useService';
 
+import { useNavigate } from 'react-router-dom';
+
+import * as paths from '../../constants/pathNames';
+
+import RecipeDynamicField from './RecipeDynamicField/RecipeDynamicField';
+
+import FormInput from '../FormInput/FormInput';
+import BlockButton from '../BlockButton/BlockButton';
+
 const CreateRecipe = () => {
+    const navigate = useNavigate();
+
     const {
+        watch,
         handleSubmit,
         control,
         formState: { errors },
     } = useForm({ mode: "onBlur" });
 
+    const { fields, append, remove } = useFieldArray({ control, name: "fieldArray" });
+
+    const {
+        fields: fieldsList1,
+        append: appendList1,
+        remove: removeList1 } = useFieldArray({ control, name: "fieldArray1", });
+
+    const watchFieldArray = watch("fieldArray");
+    const watchFieldArray1 = watch("fieldArray1");
+
+    const controlledFields = fields.map((field, index) => {
+        return {
+            ...field,
+            ...watchFieldArray[index]
+        };
+    });
+
+    const controlledFields1 = fieldsList1.map((field, index) => {
+        return {
+            ...field,
+            ...watchFieldArray1[index]
+        };
+    });
+
     const recipeService = useService(recipeServiceFactory);
 
-    const onFormSubmit = (data) => {
-        console.log(data);
+    const onFormSubmit = async (data) => {
+        const file = data.recipeFile;
+
+        const formData = new FormData();
+        formData.append("recipeFile", file);
+        formData.append("recipeName", data.recipeName);
+        formData.append("recipeDescription", data.recipeDescription);
+        formData.append("recipeCookingTime", data.recipeCookTime);
+
+        try {
+            await recipeService.create(formData);
+            navigate(paths.homePath);
+        } catch (error) {
+            console.log(error.message);
+        }
     };
 
     return (
@@ -29,75 +76,70 @@ const CreateRecipe = () => {
                 <Form
                     method="POST"
                     onSubmit={handleSubmit(onFormSubmit)}
-                    className={styles.form}
-                >
-                    <FloatingLabel
-                        controlId="floatingNameInput"
+                    className={styles.form}>
+                    <FormInput
                         label="Name"
+                        name="recipeName"
+                        control={control}
+                        type="text"
+                        placeholder="Recipe Name"
                         className="mb-4"
-                    >
-                        <Controller
-                            control={control}
-                            name="recipeName"
-                            render={({ field: { onChange, onBlur } }) => (
-                                <Form.Control
-                                    autoComplete="on"
-                                    type="text"
-                                    onChange={onChange}
-                                    onBlur={onBlur}
-                                    placeholder="Recipe Name"
-                                />
-                            )}
-                        />
-                    </FloatingLabel>
-                    <FloatingLabel className='mb-4' controlId="floatingTextarea2" label="Description">
-                        <Form.Control
-                            as="textarea"
-                            placeholder="Leave a comment here"
-                            style={{ height: '180px' }}
-                        />
-                    </FloatingLabel>
-                    <FloatingLabel
-                        controlId="floatingInput"
+                        controlId="floatingNameInput" />
+                    <FormInput
+                        label="Description"
+                        name="recipeDescription"
+                        control={control}
+                        type="textarea"
+                        placeholder="Leave a comment here"
+                        className="mb-4"
+                        controlId="floatingTextarea2" />
+                    <FormInput
                         label="Cook Time (minutes)"
+                        name="recipeCookTime"
+                        control={control}
+                        type="number"
+                        placeholder="Recipe Cook Time"
                         className="mb-4"
-                    >
-                        <Controller
+                        controlId="floatingTimeInput" />
+                    <FormInput
+                        name="recipeFile"
+                        control={control}
+                        errors={errors}
+                        type="file"
+                        className="mb-4"
+                        controlId="formFile" />
+                    {controlledFields.map((field, index) =>
+                        <RecipeDynamicField
+                            key={field.id}
                             control={control}
-                            name="recipeCookTime"
-                            render={({ field: { onChange, onBlur } }) => (
-                                <Form.Control
-                                    type="number"
-                                    min={1}
-                                    onChange={onChange}
-                                    onBlur={onBlur}
-                                    placeholder="Recipe Cook Time"
-                                />
-                            )}
-                        />
-                    </FloatingLabel>
-                    <Form.Group controlId="formFile" className="mb-4">
-                        <Controller
+                            name={`recipeIngredient[${index}]`}
+                            index={index}
+                            remove={remove}
+                            placeholder="Ingredient"
+                        />)}
+                    <BlockButton
+                        text="Add Ingredient"
+                        type="button"
+                        className="mb-4"
+                        onClick={() => append({ ingredient: "" })} />
+                    {controlledFields1.map((field, index) =>
+                        <RecipeDynamicField
+                            key={field.id}
                             control={control}
-                            name="imageFile"
-                            rules={{ required: true }}
-                            render={({ field: { onChange, onBlur, ref } }) => (
-                                <Form.Control
-                                    accept=".jpg, .jpeg, .png"
-                                    type="file"
-                                    size='lg'
-                                    onChange={(event) => { onChange(event.target.files[0]); }}
-                                    onBlur={onBlur}
-                                    ref={ref}
-                                />
-                            )}
-                        />
-                    </Form.Group>
-                    <div className="d-grid gap-2 mb-4">
-                        <Button type="submit" variant="primary" size="lg">
-                            Create Recipe
-                        </Button>
-                    </div>
+                            name={`recipeStep[${index}]`}
+                            index={index}
+                            remove={removeList1}
+                            placeholder="Step"
+                        />)}
+                    <BlockButton
+                        text="Add Step"
+                        onClick={() => appendList1({ name: "" }, {})}
+                        className="mb-4"
+                        type="button" />
+                    <BlockButton
+                        text="Create Recipe"
+                        className="mb-4"
+                        type="submit" />
                 </Form>
             </div>
         </>
