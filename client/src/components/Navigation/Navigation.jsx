@@ -34,6 +34,13 @@ const Navigation = () => {
                             to={paths.homePath}>
                             PlatePal
                         </NavLink>
+                        {isAuthenticated && (
+                            <NavLink
+                                className={({ isActive }) => isActive ? styles.activeLink : styles.link}
+                                to={paths.recipeCreatePath}>
+                                Create Recipe
+                            </NavLink>
+                        )}
                         <NavLink
                             className={({ isActive }) => isActive ? styles.activeLink : styles.link}
                             to={paths.categoriesListPath}>

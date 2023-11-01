@@ -11,6 +11,7 @@ import Logout from './components/Logout/Logout';
 import Navigation from './components/Navigation/Navigation';
 import CreateCategory from './components/CreateCategory/CreateCategory';
 import Categories from './components/Categories/Categories';
+import CreateRecipe from './components/CreateRecipe/CreateRecipe';
 import Footer from './components/Footer/Footer';
 
 // Import AuthContext
@@ -36,6 +37,7 @@ const App = () => {
                         <Route path={paths.registerPath} element={<Register />} />
                         <Route path={paths.createCategoryPath} element={<CreateCategory />} />
                         <Route path={paths.categoriesListPath} element={<Categories />} />
+                        <Route path={paths.recipeCreatePath} element={<CreateRecipe />} />
                         <Route path={paths.logoutPath} element={<Logout />} />
                     </Routes>
                 </main>

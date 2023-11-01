@@ -1,0 +1,14 @@
+.form {
+    width: 70%;
+    text-align: center;
+}
+
+.form input,
+.form textarea {
+    border: solid 2px black;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+}
