@@ -2,7 +2,7 @@ import styles from './CreateRecipe.module.css';
 
 import Form from 'react-bootstrap/Form';
 
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 import { recipeServiceFactory } from '../../services/recipeService';
 import { useService } from '../../hooks/useService';
@@ -16,6 +16,8 @@ import RecipeDynamicField from './RecipeDynamicField/RecipeDynamicField';
 import FormInput from '../FormInput/FormInput';
 import BlockButton from '../BlockButton/BlockButton';
 
+import useDynamicFieldArray from '../../hooks/useDynamicFieldArray';
+
 const CreateRecipe = () => {
     const navigate = useNavigate();
 
@@ -26,29 +28,12 @@ const CreateRecipe = () => {
         formState: { errors },
     } = useForm({ mode: "onBlur" });
 
-    const { fields, append, remove } = useFieldArray({ control, name: "fieldArray" });
-
+    const { controlledFields, append, remove } = useDynamicFieldArray(control, 'ingredients', watch);
     const {
-        fields: fieldsList1,
-        append: appendList1,
-        remove: removeList1 } = useFieldArray({ control, name: "fieldArray1", });
-
-    const watchFieldArray = watch("fieldArray");
-    const watchFieldArray1 = watch("fieldArray1");
-
-    const controlledFields = fields.map((field, index) => {
-        return {
-            ...field,
-            ...watchFieldArray[index]
-        };
-    });
-
-    const controlledFields1 = fieldsList1.map((field, index) => {
-        return {
-            ...field,
-            ...watchFieldArray1[index]
-        };
-    });
+        controlledFields: steps,
+        append: stepsAppend,
+        remove: stepsRemove,
+    } = useDynamicFieldArray(control, 'steps', watch);
 
     const recipeService = useService(recipeServiceFactory);
 
@@ -71,12 +56,12 @@ const CreateRecipe = () => {
 
     return (
         <>
-            <h2 className="text-center my-4">Create Recipe!</h2>
             <div className={styles.container}>
                 <Form
                     method="POST"
                     onSubmit={handleSubmit(onFormSubmit)}
                     className={styles.form}>
+                    <h2 className="text-center my-4">Create Recipe!</h2>
                     <FormInput
                         label="Name"
                         name="recipeName"
@@ -85,6 +70,13 @@ const CreateRecipe = () => {
                         placeholder="Recipe Name"
                         className="mb-4"
                         controlId="floatingNameInput" />
+                    <FormInput
+                        name="recipeFile"
+                        control={control}
+                        errors={errors}
+                        type="file"
+                        className="mb-4"
+                        controlId="formFile" />
                     <FormInput
                         label="Description"
                         name="recipeDescription"
@@ -101,13 +93,6 @@ const CreateRecipe = () => {
                         placeholder="Recipe Cook Time"
                         className="mb-4"
                         controlId="floatingTimeInput" />
-                    <FormInput
-                        name="recipeFile"
-                        control={control}
-                        errors={errors}
-                        type="file"
-                        className="mb-4"
-                        controlId="formFile" />
                     {controlledFields.map((field, index) =>
                         <RecipeDynamicField
                             key={field.id}
@@ -120,28 +105,31 @@ const CreateRecipe = () => {
                     <BlockButton
                         text="Add Ingredient"
                         type="button"
+                        bsPrefix={styles.blockButton}
                         className="mb-4"
                         onClick={() => append({ ingredient: "" })} />
-                    {controlledFields1.map((field, index) =>
+                    {steps.map((field, index) =>
                         <RecipeDynamicField
                             key={field.id}
                             control={control}
                             name={`recipeStep[${index}]`}
                             index={index}
-                            remove={removeList1}
+                            remove={stepsRemove}
                             placeholder="Step"
                         />)}
                     <BlockButton
                         text="Add Step"
-                        onClick={() => appendList1({ name: "" }, {})}
+                        onClick={() => stepsAppend({ name: "" }, {})}
+                        bsPrefix={styles.blockButton}
                         className="mb-4"
                         type="button" />
                     <BlockButton
                         text="Create Recipe"
+                        bsPrefix={styles.blockButton}
                         className="mb-4"
                         type="submit" />
                 </Form>
-            </div>
+            </div >
         </>
     );
 };

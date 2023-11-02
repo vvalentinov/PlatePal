@@ -1,11 +1,28 @@
 .form {
-    width: 50%;
+    width: 60%;
     text-align: center;
+    border: solid 2px black;
+    margin: 1.5rem 0;
+    padding: 0 1rem;
+    border-radius: 10px;
 }
 
 .form input,
 .form textarea {
     border: solid 2px black;
+}
+
+.blockButton,
+.blockButton:hover,
+.blockButton:active {
+    background-color: #93DC80;
+    padding: 0.5rem 0;
+    border-radius: 10px;
+    font-size: 1.2rem;
+}
+
+.blockButton:hover {
+    color: white;
 }
 
 .container {

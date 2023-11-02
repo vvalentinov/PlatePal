@@ -5,10 +5,16 @@ const BlockButton = ({
     className,
     type,
     onClick,
+    bsPrefix,
 }) => {
     return (
-        <div className={`d-grid ${className}`}>
-            <Button onClick={onClick} type={type} size="lg">
+        <div className={`d-grid`}>
+            <Button
+                className={className}
+                bsPrefix={bsPrefix}
+                onClick={onClick}
+                type={type}
+                size="lg">
                 {text}
             </Button>
         </div>
