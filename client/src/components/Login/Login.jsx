@@ -54,6 +54,12 @@ const Login = () => {
         }
     };
 
+    const usernameRules = {
+        required: errorMessages.usernameEmptyError,
+        minLength: { value: 3, message: errorMessages.usernameLengthError },
+        maxLength: { value: 30, message: errorMessages.usernameLengthError },
+    };
+
     return (
         <>
             {toast && <ToastNotification message={toast} />}

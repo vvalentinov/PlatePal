@@ -16,7 +16,6 @@ const useDynamicFieldArray = (control, name, watch) => {
         };
     });
 
-
     return {
         controlledFields,
         append,
