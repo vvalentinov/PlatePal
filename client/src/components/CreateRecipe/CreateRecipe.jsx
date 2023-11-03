@@ -227,7 +227,7 @@ const CreateRecipe = () => {
                     <BlockButton
                         text="Create Recipe"
                         bsPrefix={styles.blockButton}
-                        className="mb-4"
+                        className="mb-4 text-uppercase"
                         type="submit" />
                 </Form>
             </div >

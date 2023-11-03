@@ -2,7 +2,7 @@
     display: flex;
     gap: 5rem;
     padding: 1rem;
-    margin: 0 1rem;
+    margin: 0 2rem;
     margin-bottom: 2rem;
 }
 
@@ -10,16 +10,30 @@
     flex-basis: 35%;
     border: solid 2px black;
     border-radius: 5%;
+    cursor: pointer;
+    transition: transform .2s;
+}
+
+.container img:hover {
+    transform: scale(1.1);
+    box-shadow: 5px 5px #93DC80;
 }
 
 .card {
     flex-basis: 65%;
     border: solid 2px black;
+
 }
 
 .cardHeader {
     font-size: 1.3rem;
     border-bottom: solid 2px black;
+    background-color: #93DC80;
+}
+
+.cardBody {
+    background-color: #2C3E50;
+    color: white;
 }
 
 .spinnerContainer {

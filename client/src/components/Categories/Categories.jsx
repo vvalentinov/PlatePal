@@ -17,10 +17,10 @@ const Categories = () => {
     useEffect(() => {
         categoryService.getAll()
             .then(data => {
-                setIsLoading(false);
                 setCategories(data);
             })
-            .catch(error => console.log(`In error ${error}`));
+            .catch(error => console.log(`In error ${error}`))
+            .finally(() => { setIsLoading(false); });
     }, []);
 
     return (
@@ -40,7 +40,7 @@ const Categories = () => {
                     <img src={x.image.url} alt="" />
                     <Card className={styles.card}>
                         <Card.Header className={styles.cardHeader}>{x.name}</Card.Header>
-                        <Card.Body>
+                        <Card.Body className={styles.cardBody}>
                             <Card.Text className='fs-5'>
                                 {x.description}
                             </Card.Text>
