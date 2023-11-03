@@ -5,7 +5,6 @@ import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
-import Offcanvas from 'react-bootstrap/Offcanvas';
 
 import { NavLink, Link } from 'react-router-dom';
 
@@ -23,9 +22,6 @@ const Navigation = () => {
 
     const [show, setShow] = useState(false);
 
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-
     return (
         <Navbar collapseOnSelect expand="lg" className={styles.navbar}>
             <Container>
@@ -40,13 +36,6 @@ const Navigation = () => {
                             to={paths.homePath}>
                             PlatePal
                         </NavLink>
-                        {isAuthenticated && (
-                            <NavLink
-                                className={({ isActive }) => isActive ? styles.activeLink : styles.link}
-                                to={paths.recipeCreatePath}>
-                                Create Recipe
-                            </NavLink>
-                        )}
                         <NavLink
                             className={({ isActive }) => isActive ? styles.activeLink : styles.link}
                             to={paths.categoriesListPath}>
@@ -65,7 +54,7 @@ const Navigation = () => {
                         <>
                             <Nav className="fs-4">
                                 <Navbar.Text bsPrefix={styles.navbarText}>
-                                    Logged in as: <Link onClick={handleShow} className={styles.link}>{username}</Link>
+                                    Logged in as: <Link className={styles.link}>{username}</Link>
                                 </Navbar.Text>
                                 <Button bsPrefix={styles.logoutButton} className="px-3 py-1">
                                     <Link to={paths.logoutPath}>
@@ -73,15 +62,6 @@ const Navigation = () => {
                                     </Link>
                                 </Button>
                             </Nav>
-                            <Offcanvas placement='end' show={show} onHide={handleClose}>
-                                <Offcanvas.Header closeButton>
-                                    <Offcanvas.Title>Offcanvas</Offcanvas.Title>
-                                </Offcanvas.Header>
-                                <Offcanvas.Body>
-                                    Some text as placeholder. In real life you can have the elements you
-                                    have chosen. Like, text, images, lists, etc.
-                                </Offcanvas.Body>
-                            </Offcanvas>
                         </>
                     )}
                     {/* For Guests */}

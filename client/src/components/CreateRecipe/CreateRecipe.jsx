@@ -33,6 +33,7 @@ const CreateRecipe = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        window.scrollTo(0, 0);
         categoryService
             .getAll()
             .then(res => setCategories(res))

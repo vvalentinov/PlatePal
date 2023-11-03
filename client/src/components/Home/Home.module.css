@@ -24,3 +24,20 @@
 .homeSection h1 {
     color: white;
 }
+
+.createRecipeSection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+    padding: 1rem 2.5rem;
+    border: solid 1px black;
+}
+
+.createRecipeSection img {
+    height: 25rem;
+    border: solid 4px #93DC80;
+    padding: 1.5rem;
+    border-radius: 15px;
+    background-color: #2c3e50;
+}
