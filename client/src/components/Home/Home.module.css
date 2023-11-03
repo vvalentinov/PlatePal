@@ -1,0 +1,55 @@
+.homeSection {
+    height: calc(100vh - 80px);
+    position: relative;
+    isolation: isolate;
+
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+
+.homeSection::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    opacity: .8;
+
+    background-image: url("../../assets/images/HomeImage.jpg");
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.homeSection h1 {
+    color: white;
+}
+
+.welcomeCard {
+    font-size: 1.3rem;
+    flex-basis: 40%;
+    margin-left: 5rem;
+    background-color: #2C3E50;
+    color: white;
+    font-family: "Playpen Sans";
+}
+
+.welcomeCardHeader {
+    background-color: #18A392;
+}
+
+@media only screen and (max-width: 1300px) {
+    .welcomeCard {
+        flex-basis: 100%;
+        margin: 1rem 2rem;
+        font-size: 1rem;
+    }
+}
+
+@media only screen and (max-width: 400px) {
+    .welcomeCard {
+        flex-basis: 100%;
+        margin: 1rem 2rem;
+        font-size: 0.5rem;
+    }
+}
