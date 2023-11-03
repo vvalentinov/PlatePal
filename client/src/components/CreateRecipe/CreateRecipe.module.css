@@ -1,5 +1,5 @@
 .form {
-    width: 60%;
+    width: 65%;
     text-align: center;
     border: solid 2px black;
     margin: 1.5rem 0;
@@ -20,18 +20,44 @@
 
 .blockButton,
 .blockButton:hover,
-.blockButton:active {
+.blockButton:active,
+.blockButton:disabled {
     background-color: #93DC80;
     padding: 0.5rem 0;
     border-radius: 10px;
     font-size: 1.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
 }
 
-.blockButton:hover {
+.blockButton:hover,
+.blockButton:disabled {
     color: white;
 }
 
 .container {
     display: flex;
     justify-content: center;
+}
+
+.spinnerContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 5rem;
+}
+
+.spinner {
+    width: 10rem;
+    height: 10rem;
+    font-size: 2rem;
+}
+
+@media only screen and (max-width: 1200px) {
+    .form {
+        width: 90%;
+    }
 }
