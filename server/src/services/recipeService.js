@@ -1,13 +1,20 @@
 const Recipe = require('../models/Recipe');
 
+const { getById } = require('../services/categoryService');
+
 const { uploadImage } = require('../utils/cloudinaryUtil');
 
 const path = require('path');
 
-exports.create = async (data, recipeImage) => {
+exports.create = async (data, recipeImage, owner) => {
     const recipeWithName = await Recipe.findOne({ name: data.recipeName });
     if (recipeWithName) {
         throw new Error('Recipe with given name already exists!');
+    }
+
+    const category = await getById(data.recipeCategory);
+    if (!category) {
+        throw new Error('Category does not exist!');
     }
 
     const imageExt = path.extname(recipeImage.originalname);
@@ -27,5 +34,11 @@ exports.create = async (data, recipeImage) => {
             url: secure_url,
         },
         cookingTime: data.recipeCookingTime,
+        ingredients: data.ingredients,
+        steps: data.steps,
+        owner,
+        category: data.recipeCategory
     });
+
+    return recipe;
 };

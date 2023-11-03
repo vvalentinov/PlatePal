@@ -16,10 +16,11 @@ router.post(
     multer().single('recipeFile'),
     async (req, res) => {
         const image = req.file;
-        const data = { ...req.body };
+        const data = req.body;
+        const owner = req.user._id;
         try {
-            await recipeService.create(data, image);
-            res.status(200).json({ message: "Recipe created successfully!" });
+            const result = await recipeService.create(data, image, owner);
+            res.status(200).json({ message: "Recipe created successfully!", result });
         } catch (error) {
             res.status(400).json({ message: getErrorMessage(error) });
         }

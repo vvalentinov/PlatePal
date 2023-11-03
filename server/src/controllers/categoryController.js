@@ -31,7 +31,6 @@ router.post(
 router.get(getAllRoute, async (req, res) => {
     try {
         const result = await categoryService.getAll().lean();
-        console.log(result);
         res.status(200).json(result);
     } catch (error) {
         res.status(400).json({ message: getErrorMessage(error) });

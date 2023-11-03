@@ -30,3 +30,5 @@ exports.create = async (data, categoryImage) => {
 };
 
 exports.getAll = () => Category.find({});
+
+exports.getById = (categoryId) => Category.findById(categoryId);

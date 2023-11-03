@@ -23,6 +23,24 @@ const recipeSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    ingredients: [{
+        type: String,
+        required: true,
+    }],
+    steps: [{
+        type: String,
+        required: true,
+    }],
+    owner: {
+        type: mongoose.Types.ObjectId,
+        required: true,
+        ref: 'User',
+    },
+    category: {
+        type: mongoose.Types.ObjectId,
+        required: true,
+        ref: 'Category',
+    },
 });
 
 const Recipe = mongoose.model('Recipe', recipeSchema);
