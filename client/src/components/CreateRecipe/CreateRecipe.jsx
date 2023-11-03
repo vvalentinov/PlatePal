@@ -31,16 +31,23 @@ const CreateRecipe = () => {
     useEffect(() => {
         categoryService
             .getAll()
-            .then(res => setCategories(res))
+            .then(res => {
+                setCategories(res);
+                setValue("recipeCategory", res[0]._id);
+            })
             .catch(error => console.log(error));
     }, []);
 
     const {
         watch,
+        setValue,
         handleSubmit,
         control,
         formState: { errors },
-    } = useForm({ mode: "onBlur" });
+    } = useForm({
+        mode: "onBlur",
+        defaultValues: { recipeCategory: categories[0]?._id }
+    });
 
     const {
         controlledFields: ingredients,
@@ -65,6 +72,13 @@ const CreateRecipe = () => {
         formData.append("recipeName", data.recipeName);
         formData.append("recipeDescription", data.recipeDescription);
         formData.append("recipeCookingTime", data.recipeCookTime);
+        formData.append("recipeCategory", data.recipeCategory);
+        data.ingredients.forEach((ingredient, index) => {
+            formData.append(`ingredients[${index}]`, ingredient);
+        });
+        data.steps.forEach((step, index) => {
+            formData.append(`steps[${index}]`, step);
+        });
 
         try {
             await recipeService.create(formData);
@@ -106,23 +120,21 @@ const CreateRecipe = () => {
                     </FloatingLabel>
 
                     {/* Recipe Category */}
-                    <FloatingLabel controlId="floatingSelect" label="Choose category:">
-                        <Controller
-                            control={control}
-                            name="recipeCategory"
-                            render={({ field: { onChange } }) =>
-                                <Form.Select
-                                    onChange={onChange}
-                                    aria-label="Floating label select example"
-                                    className='mb-4 border border-dark' size='lg'>
-                                    {categories.map(category => (
-                                        <option key={category._id}>{category.name}</option>
-                                    ))}
-                                </Form.Select>
-                            }
-                        />
-                        {errors.recipeCategory && (<p className="text-start text-danger">{errors.recipeCategory.message}</p>)}
-                    </FloatingLabel>
+                    <Controller
+                        control={control}
+                        name="recipeCategory"
+                        render={({ field: { onChange } }) =>
+                            <Form.Select
+                                onChange={onChange}
+                                aria-label="Floating label select example"
+                                className='mb-4 border border-dark' size='lg'>
+                                {categories.map(category => (
+                                    <option value={category._id} key={category._id}>{category.name}</option>
+                                ))}
+                            </Form.Select>
+                        }
+                    />
+                    {errors.recipeCategory && (<p className="text-start text-danger">{errors.recipeCategory.message}</p>)}
 
                     {/* Recipe Image File */}
                     <Form.Group controlId="formFile" className="mb-4">
