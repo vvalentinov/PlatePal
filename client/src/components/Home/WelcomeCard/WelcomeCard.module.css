@@ -1,0 +1,28 @@
+.welcomeCard {
+    font-size: 1.3rem;
+    flex-basis: 40%;
+    margin-left: 5rem;
+    background-color: #2C3E50;
+    color: white;
+    font-family: "Playpen Sans";
+}
+
+.welcomeCardHeader {
+    background-color: #18A392;
+}
+
+@media only screen and (max-width: 1300px) {
+    .welcomeCard {
+        flex-basis: 100%;
+        margin: 1rem 2rem;
+        font-size: 1rem;
+    }
+}
+
+@media only screen and (max-width: 400px) {
+    .welcomeCard {
+        flex-basis: 100%;
+        margin: 1rem 2rem;
+        font-size: 0.5rem;
+    }
+}
