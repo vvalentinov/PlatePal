@@ -7,32 +7,42 @@ import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 
-const RecipeSteps = ({ steps, control, remove }) => {
+const RecipeSteps = ({ steps, control, remove, errors }) => {
     return steps.map((field, index) => (
-        <Controller
-            key={field.id}
-            control={control}
-            name={`steps[${index}]`}
-            render={({ field: { onChange, onBlur } }) => (
-                <InputGroup className="mb-3">
-                    <Form.Control
-                        name={`steps[${index}]`}
-                        placeholder="Step"
-                        aria-label="Step"
-                        aria-describedby="basic-addon2"
-                        onChange={onChange}
-                        onBlur={onBlur}
-                        size="lg"
-                    />
-                    <Button
-                        className="border border-2 border-dark px-2"
-                        onClick={() => remove(index)}
-                        variant="danger">
-                        <FontAwesomeIcon className="px-3" size="2x" icon={faTrashCan} />
-                    </Button>
-                </InputGroup>
-            )}
-        />
+        <div key={field.id}>
+            <Controller
+                control={control}
+                name={`steps[${index}].name`}
+                rules={{
+                    required: { value: true, message: `Step ${index + 1} must not be empty!` },
+                    minLength: { value: 5, message: `Step ${index + 1} must be at least 5 characters long!` }
+                }}
+                render={({ field: { onChange, onBlur } }) => (
+                    <InputGroup className={errors.steps?.[index]?.name ? "" : "mb-3"}>
+                        <Form.Control
+                            name={`step[${index}]`}
+                            placeholder={`Step ${index + 1}`}
+                            aria-label={`Step ${index + 1}`}
+                            aria-describedby="basic-addon2"
+                            onChange={onChange}
+                            onBlur={onBlur}
+                            size="lg"
+                            className={errors.steps?.[index]?.name ? "border border-3 border-danger" : ""}
+                        />
+                        <Button
+                            className="border border-2 border-dark px-2"
+                            onClick={() => remove(index)}
+                            variant="danger">
+                            <FontAwesomeIcon className="px-3" size="2x" icon={faTrashCan} />
+                        </Button>
+                    </InputGroup>
+                )}
+            />
+            {
+                errors.steps?.[index]?.name &&
+                <p className="text-start text-danger">{errors.steps[index].name.message}</p>
+            }
+        </div>
     ));
 };
 

@@ -16,10 +16,7 @@ const Categories = () => {
 
     useEffect(() => {
         categoryService.getAll()
-            .then(data => {
-                console.log(data);
-                setCategories(data);
-            })
+            .then(data => setCategories(data))
             .catch(error => console.log(`In error ${error}`))
             .finally(() => { setIsLoading(false); });
     }, []);

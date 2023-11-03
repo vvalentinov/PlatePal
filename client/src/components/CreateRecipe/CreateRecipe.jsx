@@ -100,7 +100,7 @@ const CreateRecipe = () => {
                 <RecipeImageFile control={control} errors={errors} />
                 <RecipeDescription control={control} errors={errors} />
                 <RecipeCookTime control={control} errors={errors} />
-                <RecipeIngredients control={control} ingredients={ingredients} remove={ingredientsRemove} />
+                <RecipeIngredients errors={errors} control={control} ingredients={ingredients} remove={ingredientsRemove} />
 
                 {/* Add Ingredient Button */}
                 <div className="d-grid">
@@ -113,7 +113,7 @@ const CreateRecipe = () => {
                     </Button>
                 </div>
 
-                <RecipeSteps control={control} steps={steps} remove={stepsRemove} />
+                <RecipeSteps errors={errors} control={control} steps={steps} remove={stepsRemove} />
 
                 {/* Add Step Button */}
                 <div className="d-grid">
