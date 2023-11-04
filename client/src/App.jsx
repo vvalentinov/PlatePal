@@ -35,8 +35,8 @@ const App = () => {
                     <Route path={paths.categoriesListPath} element={<Categories />} />
                     <Route element={<GuestRouteGuard />}>
                         <Route path={paths.recipeCreatePath} element={<CreateRecipe />} />
+                        <Route path={paths.logoutPath} element={<Logout />} />
                     </Route>
-                    <Route path={paths.logoutPath} element={<Logout />} />
                 </Routes>
             </main>
             <Footer />
