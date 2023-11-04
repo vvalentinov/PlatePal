@@ -66,7 +66,7 @@ const Login = () => {
             <div className={`${styles.container}`}>
                 <img
                     className={styles.loginImg}
-                    src="https://res.cloudinary.com/web-project-softuni/image/upload/v1698070763/Register-Login/register_walfov.jpg"
+                    src='/src/assets/images/login-register.jpg'
                     alt="Logo Image..."
                 />
                 <Form

@@ -65,19 +65,21 @@ const CreateRecipe = () => {
     const categoryService = useService(categoryServiceFactory);
 
     const onFormSubmit = async (data) => {
+        const ingredients = data.ingredients.map(ingredient => ingredient.name);
+        const steps = data.steps.map(step => step.name);
+
         setIsRequestInProgress(true);
-        const file = data.recipeFile;
 
         const formData = new FormData();
-        formData.append("recipeFile", file);
+        formData.append("recipeFile", data.recipeFile);
         formData.append("recipeName", data.recipeName);
         formData.append("recipeDescription", data.recipeDescription);
         formData.append("recipeCookingTime", data.recipeCookTime);
         formData.append("recipeCategory", data.recipeCategory);
-        data.ingredients.forEach((ingredient, index) => {
+        ingredients.forEach((ingredient, index) => {
             formData.append(`ingredients[${index}]`, ingredient);
         });
-        data.steps.forEach((step, index) => {
+        steps.forEach((step, index) => {
             formData.append(`steps[${index}]`, step);
         });
 
@@ -106,7 +108,7 @@ const CreateRecipe = () => {
                 {/* Add Ingredient Button */}
                 <div className="d-grid">
                     <Button
-                        onClick={() => ingredientsAppend({ ingredient: "" })}
+                        onClick={() => ingredientsAppend({ name: "" })}
                         type="button"
                         bsPrefix={styles.blockButton}
                         size="lg">
