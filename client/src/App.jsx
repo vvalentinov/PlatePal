@@ -22,25 +22,25 @@ import GuestRouteGuard from './components/common/GuestRouteGuard';
 
 const App = () => {
     return (
-        <>
-            <AuthProvider>
-                <header>
-                    <Navigation />
-                </header>
-                <main>
-                    <Routes>
-                        <Route path={paths.homePath} element={<Home />} />
-                        <Route path={paths.loginPath} element={<Login />} />
-                        <Route path={paths.registerPath} element={<Register />} />
-                        <Route path={paths.createCategoryPath} element={<CreateCategory />} />
-                        <Route path={paths.categoriesListPath} element={<Categories />} />
-                        <Route path={paths.recipeCreatePath} element={<GuestRouteGuard><CreateRecipe /></GuestRouteGuard>} />
-                        <Route path={paths.logoutPath} element={<Logout />} />
-                    </Routes>
-                </main>
-                <Footer />
-            </AuthProvider>
-        </>
+        <AuthProvider>
+            <header>
+                <Navigation />
+            </header>
+            <main>
+                <Routes>
+                    <Route path={paths.homePath} element={<Home />} />
+                    <Route path={paths.loginPath} element={<Login />} />
+                    <Route path={paths.registerPath} element={<Register />} />
+                    <Route path={paths.createCategoryPath} element={<CreateCategory />} />
+                    <Route path={paths.categoriesListPath} element={<Categories />} />
+                    <Route element={<GuestRouteGuard />}>
+                        <Route path={paths.recipeCreatePath} element={<CreateRecipe />} />
+                    </Route>
+                    <Route path={paths.logoutPath} element={<Logout />} />
+                </Routes>
+            </main>
+            <Footer />
+        </AuthProvider>
     );
 }
 

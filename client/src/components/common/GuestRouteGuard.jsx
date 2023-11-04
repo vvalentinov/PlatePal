@@ -1,18 +1,18 @@
 import { AuthContext } from "../../contexts/AuthContext";
 
 import { useContext } from 'react';
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 
 import * as paths from '../../constants/pathNames';
 
-const GuestRouteGuard = ({ children }) => {
+const GuestRouteGuard = () => {
     const { isAuthenticated } = useContext(AuthContext);
 
     if (!isAuthenticated) {
         return <Navigate to={paths.loginPath} />
     }
 
-    return <>{children}</>;
+    return <Outlet />;
 };
 
 export default GuestRouteGuard;
