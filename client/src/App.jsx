@@ -1,9 +1,7 @@
-// Import CSS
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 import './App.css';
 
-// Import Components
 import Home from './components/Home/Home';
 import Login from './components/Login/Login';
 import Register from './components/Register/Register';
@@ -14,14 +12,13 @@ import Categories from './components/Categories/Categories';
 import CreateRecipe from './components/CreateRecipe/CreateRecipe';
 import Footer from './components/Footer/Footer';
 
-// Import AuthContext
 import { AuthProvider } from './contexts/AuthContext';
 
-// Import Routes
 import { Route, Routes } from 'react-router-dom';
 
-// Import path names
 import * as paths from './constants/pathNames';
+
+import GuestRouteGuard from './components/common/GuestRouteGuard';
 
 const App = () => {
     return (
@@ -37,7 +34,7 @@ const App = () => {
                         <Route path={paths.registerPath} element={<Register />} />
                         <Route path={paths.createCategoryPath} element={<CreateCategory />} />
                         <Route path={paths.categoriesListPath} element={<Categories />} />
-                        <Route path={paths.recipeCreatePath} element={<CreateRecipe />} />
+                        <Route path={paths.recipeCreatePath} element={<GuestRouteGuard><CreateRecipe /></GuestRouteGuard>} />
                         <Route path={paths.logoutPath} element={<Logout />} />
                     </Routes>
                 </main>
