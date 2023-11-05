@@ -7,6 +7,7 @@ const { isAuthenticated } = require('../middlewares/authMiddleware');
 const {
     createRecipeRoute,
     getRecipesInCategory,
+    getRecipeRoute,
 } = require('../constants/routeNames/recipeRoutes');
 
 const recipeService = require('../services/recipeService');
@@ -37,6 +38,16 @@ router.get(getRecipesInCategory, async (req, res) => {
     } catch (error) {
         res.status(400).json({ message: getErrorMessage(error) });
     }
+});
+
+router.get(getRecipeRoute, async (req, res) => {
+    const recipeId = req.params.recipeId;
+    const recipe = await recipeService.getById(recipeId).populate('owner', 'username');
+    if (!recipe) {
+        res.status(400).json({ message: 'No recipe found with given id!' });
+    }
+
+    res.status(200).json({ message: "Recipe with given id found!", result: recipe });
 });
 
 module.exports = router;

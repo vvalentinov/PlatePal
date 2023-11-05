@@ -50,3 +50,5 @@ exports.getAll = async (categoryName) => {
     const recipes = await Recipe.find({ category: category._id }).lean();
     return recipes;
 };
+
+exports.getById = (recipeId) => Recipe.findById(recipeId);
