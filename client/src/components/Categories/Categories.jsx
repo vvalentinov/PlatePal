@@ -8,6 +8,8 @@ import { useService } from '../../hooks/useService';
 import Card from 'react-bootstrap/Card';
 import Spinner from 'react-bootstrap/Spinner';
 
+import { Link } from 'react-router-dom';
+
 const Categories = () => {
     const [categories, setCategories] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -35,7 +37,9 @@ const Categories = () => {
             )}
             {categories.map(x => (
                 <div key={x._id} className={styles.container}>
-                    <img src={x.image.url} alt="" />
+                    <Link className={styles.link} to={`/recipe/all/${x.name}`}>
+                        <img className={styles.categoryImg} src={x.image.url} alt="" />
+                    </Link>
                     <Card className={styles.card}>
                         <Card.Header className={styles.cardHeader}>{x.name}</Card.Header>
                         <Card.Body className={styles.cardBody}>

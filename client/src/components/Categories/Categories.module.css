@@ -1,20 +1,29 @@
 .container {
     display: flex;
     gap: 5rem;
-    padding: 1rem;
+    padding: 2.5rem;
     margin: 0 2.5rem;
-    margin-bottom: 2rem;
+    margin-bottom: 4rem;
+    border: solid 2.5px black;
+    align-items: center;
+    border-radius: 15px;
 }
 
-.container img {
+.link {
     flex-basis: 35%;
+    height: 100%;
+}
+
+.categoryImg {
     border: solid 2px black;
-    border-radius: 30px;
+    border-radius: 15px;
     cursor: pointer;
     transition: transform .2s;
+    height: 100%;
+    width: 100%;
 }
 
-.container img:hover {
+.categoryImg:hover {
     transform: scale(1.1);
     box-shadow: 5px 5px #93DC80;
 }
@@ -22,7 +31,7 @@
 .card {
     flex-basis: 65%;
     border: solid 2px black;
-
+    height: 100%;
 }
 
 .cardHeader {

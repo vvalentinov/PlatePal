@@ -5,3 +5,4 @@ export const logoutPath = '/logout';
 export const createCategoryPath = '/category/create';
 export const categoriesListPath = '/category/all';
 export const recipeCreatePath = '/recipe/create';
+export const allRecipesPath = '/recipe/all/:category';
