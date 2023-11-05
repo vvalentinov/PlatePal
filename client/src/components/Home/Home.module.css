@@ -13,8 +13,6 @@
     position: absolute;
     inset: 0;
     z-index: -1;
-    opacity: .8;
-
     background-image: url("../../assets/images/HomeImage.jpg");
     background-position: center center;
     background-size: cover;

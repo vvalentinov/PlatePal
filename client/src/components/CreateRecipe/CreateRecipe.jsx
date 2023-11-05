@@ -10,6 +10,7 @@ import RecipeImageFile from './RecipeImageFile/RecipeImageFile';
 import RecipeDescription from './RecipeDescription/RecipeDescription';
 import RecipeCookTime from './RecipeCookTime/RecipeCookTime';
 import RecipeIngredients from './RecipeIngredients/RecipeIngredients';
+import RecipeYoutubeLink from './RecipeYoutubeLink/RecipeYoutubeLink';
 
 import { useForm } from "react-hook-form";
 
@@ -26,6 +27,8 @@ import useDynamicFieldArray from '../../hooks/useDynamicFieldArray';
 import { useEffect, useState } from 'react';
 import RecipeSteps from './RecipeSteps/RecipeSteps';
 
+import { extractRecipeFormData } from '../../utils/extractRecipeInfoUtil';
+
 const CreateRecipe = () => {
     const [categories, setCategories] = useState([]);
     const [isRequestInProgress, setIsRequestInProgress] = useState(false);
@@ -37,17 +40,15 @@ const CreateRecipe = () => {
         categoryService
             .getAll()
             .then(res => setCategories(res))
-            .catch(error => console.log(error))
-            .finally(() => setValue("recipeCategory", categories[0]?._id));
+            .catch(error => console.log(error));
     }, []);
 
     const {
         watch,
-        setValue,
         handleSubmit,
         control,
         formState: { errors },
-    } = useForm({ mode: "onBlur", defaultValues: { recipeCategory: categories[0]?._id } });
+    } = useForm({ mode: "onBlur" });
 
     const {
         controlledFields: ingredients,
@@ -65,23 +66,9 @@ const CreateRecipe = () => {
     const categoryService = useService(categoryServiceFactory);
 
     const onFormSubmit = async (data) => {
-        const ingredients = data.ingredients.map(ingredient => ingredient.name);
-        const steps = data.steps.map(step => step.name);
-
         setIsRequestInProgress(true);
 
-        const formData = new FormData();
-        formData.append("recipeFile", data.recipeFile);
-        formData.append("recipeName", data.recipeName);
-        formData.append("recipeDescription", data.recipeDescription);
-        formData.append("recipeCookingTime", data.recipeCookTime);
-        formData.append("recipeCategory", data.recipeCategory);
-        ingredients.forEach((ingredient, index) => {
-            formData.append(`ingredients[${index}]`, ingredient);
-        });
-        steps.forEach((step, index) => {
-            formData.append(`steps[${index}]`, step);
-        });
+        const formData = extractRecipeFormData(data);
 
         try {
             await recipeService.create(formData);
@@ -89,7 +76,7 @@ const CreateRecipe = () => {
             navigate(paths.homePath);
         } catch (error) {
             setIsRequestInProgress(false);
-            console.log(error.message);
+            console.log(error);
         }
     };
 
@@ -102,10 +89,10 @@ const CreateRecipe = () => {
                 <RecipeCategory control={control} categories={categories} />
                 <RecipeImageFile control={control} errors={errors} />
                 <RecipeDescription control={control} errors={errors} />
+                <RecipeYoutubeLink control={control} errors={errors} />
                 <RecipeCookTime control={control} errors={errors} />
                 <RecipeIngredients errors={errors} control={control} ingredients={ingredients} remove={ingredientsRemove} />
 
-                {/* Add Ingredient Button */}
                 <div className="d-grid">
                     <Button
                         onClick={() => ingredientsAppend({ name: "" })}
@@ -118,7 +105,6 @@ const CreateRecipe = () => {
 
                 <RecipeSteps errors={errors} control={control} steps={steps} remove={stepsRemove} />
 
-                {/* Add Step Button */}
                 <div className="d-grid">
                     <Button
                         onClick={() => stepsAppend({ name: "" }, {})}
@@ -129,25 +115,13 @@ const CreateRecipe = () => {
                     </Button>
                 </div>
 
-                {/* Submit Form Button */}
                 <div className="d-grid gap-2">
                     {isRequestInProgress ? (
-                        <Button
-                            disabled
-                            bsPrefix={styles.blockButton}
-                            size="lg">
-                            <Spinner
-                                as="span"
-                                animation="grow"
-                                role="status"
-                                aria-hidden="true"
-                            />
+                        <Button disabled bsPrefix={styles.blockButton} size="lg">
+                            <Spinner as="span" animation="grow" role="status" aria-hidden="true" />
                             Creating Recipe...
                         </Button>) : (
-                        <Button
-                            type="submit"
-                            bsPrefix={styles.blockButton}
-                            size="lg">
+                        <Button type="submit" bsPrefix={styles.blockButton} size="lg">
                             Create Recipe
                         </Button>)}
                 </div>

@@ -5,10 +5,14 @@ import CreateRecipeCard from './CreateRecipeCard/CreateRecipeCard';
 
 import { AuthContext } from '../../contexts/AuthContext';
 
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 
 const Home = () => {
     const { isAuthenticated } = useContext(AuthContext);
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
     return (
         <>
