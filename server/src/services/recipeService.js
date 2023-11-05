@@ -1,6 +1,6 @@
 const Recipe = require('../models/Recipe');
 
-const { getById } = require('../services/categoryService');
+const { getById, getByName } = require('../services/categoryService');
 
 const { uploadImage } = require('../utils/cloudinaryUtil');
 
@@ -39,4 +39,14 @@ exports.create = async (data, recipeImage, owner) => {
     });
 
     return recipe;
+};
+
+exports.getAll = async (categoryName) => {
+    const category = await getByName(categoryName);
+    if (!category) {
+        throw new Error('Invalid recipe category!');
+    }
+
+    const recipes = await Recipe.find({ category: category._id }).lean();
+    return recipes;
 };

@@ -4,7 +4,10 @@ const multer = require('multer');
 
 const { isAuthenticated } = require('../middlewares/authMiddleware');
 
-const { createRecipeRoute } = require('../constants/routeNames/recipeRoutes');
+const {
+    createRecipeRoute,
+    getRecipesInCategory,
+} = require('../constants/routeNames/recipeRoutes');
 
 const recipeService = require('../services/recipeService');
 
@@ -25,5 +28,15 @@ router.post(
             res.status(400).json({ message: getErrorMessage(error) });
         }
     });
+
+router.get(getRecipesInCategory, async (req, res) => {
+    const category = req.params.categoryName;
+    try {
+        const result = await recipeService.getAll(category);
+        res.status(200).json({ message: "Recipes retrieved successfully!", result });
+    } catch (error) {
+        res.status(400).json({ message: getErrorMessage(error) });
+    }
+});
 
 module.exports = router;
