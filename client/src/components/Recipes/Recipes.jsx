@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 
 import Card from 'react-bootstrap/Card';
 
@@ -20,12 +20,14 @@ const Recipes = () => {
         <>
             <div className={styles.container}>
                 {recipes.map(x => (
-                    <Card key={x._id} className={styles.recipeCard}>
-                        <Card.Img variant="top" src={x.image.url} />
-                        <Card.Body className={styles.recipeCardBody}>
-                            <Card.Title className={styles.recipeCardTitle}>{x.name}</Card.Title>
-                        </Card.Body>
-                    </Card>
+                    <Link className={styles.recipeLink} to={`/recipe/details/${x._id}`}>
+                        <Card key={x._id} className={styles.recipeCard}>
+                            <Card.Img variant="top" src={x.image.url} />
+                            <Card.Body className={styles.recipeCardBody}>
+                                <Card.Title className={styles.recipeCardTitle}>{x.name}</Card.Title>
+                            </Card.Body>
+                        </Card>
+                    </Link>
                 ))}
             </div>
         </>

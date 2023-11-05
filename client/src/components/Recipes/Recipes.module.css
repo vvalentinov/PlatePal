@@ -6,6 +6,11 @@
     margin: 3rem 0;
 }
 
+.recipeLink {
+    flex-basis: 25%;
+    text-decoration: none;
+}
+
 .recipeCard {
     flex-basis: 25%;
     text-align: center;

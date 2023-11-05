@@ -11,6 +11,7 @@ import CreateCategory from './components/CreateCategory/CreateCategory';
 import Categories from './components/Categories/Categories';
 import CreateRecipe from './components/CreateRecipe/CreateRecipe';
 import Recipes from './components/Recipes/Recipes';
+import RecipeDetails from './components/RecipeDetails/RecipeDetails';
 import Footer from './components/Footer/Footer';
 
 import { AuthProvider } from './contexts/AuthContext';
@@ -35,6 +36,7 @@ const App = () => {
                     <Route path={paths.createCategoryPath} element={<CreateCategory />} />
                     <Route path={paths.categoriesListPath} element={<Categories />} />
                     <Route path={paths.allRecipesPath} element={<Recipes />} />
+                    <Route path={paths.recipeDetailsPath} element={<RecipeDetails />} />
                     <Route element={<GuestRouteGuard />}>
                         <Route path={paths.recipeCreatePath} element={<CreateRecipe />} />
                         <Route path={paths.logoutPath} element={<Logout />} />
