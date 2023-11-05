@@ -29,15 +29,13 @@ exports.create = async (data, recipeImage, owner) => {
     const recipe = await Recipe.create({
         name: data.recipeName,
         description: data.recipeDescription,
-        image: {
-            publicId: public_id,
-            url: secure_url,
-        },
+        image: { publicId: public_id, url: secure_url },
         cookingTime: data.recipeCookingTime,
         ingredients: data.ingredients,
         steps: data.steps,
+        youtubeLink: data.youtubeLink,
+        category: data.recipeCategory,
         owner,
-        category: data.recipeCategory
     });
 
     return recipe;

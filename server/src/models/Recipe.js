@@ -31,6 +31,10 @@ const recipeSchema = new mongoose.Schema({
         type: String,
         required: true,
     }],
+    youtubeLink: {
+        type: String,
+        match: /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/
+    },
     owner: {
         type: mongoose.Types.ObjectId,
         required: true,
