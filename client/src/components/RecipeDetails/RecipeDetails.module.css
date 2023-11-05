@@ -1,0 +1,103 @@
+.container {
+    display: flex;
+    justify-content: center;
+    margin-top: 4rem;
+    gap: 5rem;
+    padding: 0 10rem;
+    align-items: center;
+}
+
+.container img {
+    height: 20rem;
+    flex-basis: 40%;
+    border: solid 2px black;
+    border-radius: 15px;
+}
+
+.recipeCard {
+    flex-basis: 60%;
+    border: solid 2px black;
+}
+
+.recipeCardHeader {
+    border-bottom: solid 2px black;
+    font-size: 1.3rem;
+    background-color: #18A392;
+    color: white;
+}
+
+.recipeCardBody {
+    background-color: #2C3E50;
+    color: white;
+}
+
+.recipeInfoContainer {
+    display: flex;
+    /* border: solid 1px black; */
+    justify-content: center;
+    gap: 5rem;
+    margin: 3rem 0;
+    align-items: center;
+    padding: 1rem 3rem;
+}
+
+.recipeIngredientsContainer {
+    flex-basis: 50%;
+    border: solid 2px black;
+    padding: 1.5rem;
+    border-radius: 15px;
+    background-color: #2C3E50;
+}
+
+.recipeIngredientsList {
+    border: solid 2px black;
+}
+
+.recipeIngredientsList li:not(:last-child) {
+    border-bottom: 2px solid black;
+}
+
+.recipeIngredientsList li {
+    background-color: #9FADBD;
+    color: black;
+}
+
+.recipeIngredientsList li:hover {
+    background-color: #93DC80;
+}
+
+.recipeIngredientsContainer h3 {
+    text-align: center;
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.recipeStepsContainer {
+    flex-basis: 50%;
+    border: solid 2px black;
+    padding: 1.5rem;
+    border-radius: 15px;
+    background-color: #2C3E50;
+}
+
+.recipeStepsContainer h3 {
+    text-align: center;
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.recipeStepsList {
+    border: solid 3px black;
+}
+
+.recipeStepsList li:not(:last-child) {
+    border-bottom: 2px solid black;
+}
+
+.recipeStepsList li {
+    background-color: #9FADBD;
+}
+
+.recipeStepsList li:hover {
+    background-color: #93DC80;
+}

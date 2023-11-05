@@ -20,8 +20,8 @@ const Recipes = () => {
         <>
             <div className={styles.container}>
                 {recipes.map(x => (
-                    <Link className={styles.recipeLink} to={`/recipe/details/${x._id}`}>
-                        <Card key={x._id} className={styles.recipeCard}>
+                    <Link key={x._id} className={styles.recipeLink} to={`/recipe/details/${x._id}`}>
+                        <Card className={styles.recipeCard}>
                             <Card.Img variant="top" src={x.image.url} />
                             <Card.Body className={styles.recipeCardBody}>
                                 <Card.Title className={styles.recipeCardTitle}>{x.name}</Card.Title>
