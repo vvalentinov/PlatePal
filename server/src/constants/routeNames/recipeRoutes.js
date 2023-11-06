@@ -1,3 +1,3 @@
 exports.createRecipeRoute = '/create';
-exports.getRecipesInCategory = '/all/:categoryName';
-exports.getRecipeRoute = '/details/:recipeId';
+exports.getRecipesInCategoryRoute = '/all/:categoryName';
+exports.getRecipeDetailsRoute = '/details/:recipeId';

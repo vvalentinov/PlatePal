@@ -1,10 +1,9 @@
 const Recipe = require('../models/Recipe');
 
-const { getById, getByName } = require('../services/categoryService');
+const { getById, getByName } = require('./categoryManager');
 
 const { uploadImage } = require('../utils/cloudinaryUtil');
-
-const path = require('path');
+const { validateImageFile } = require('../utils/imageFileValidatiorUtil');
 
 exports.create = async (data, recipeImage, owner) => {
     const recipeWithName = await Recipe.findOne({ name: data.recipeName });
@@ -17,12 +16,7 @@ exports.create = async (data, recipeImage, owner) => {
         throw new Error('Category does not exist!');
     }
 
-    const imageExt = path.extname(recipeImage.originalname);
-    if (imageExt != '.png' &&
-        imageExt != '.jpg' &&
-        imageExt != '.jpeg') {
-        throw new Error('Image file must be in format: .png, .jpg or .jpeg!');
-    }
+    validateImageFile(recipeImage);
 
     const { public_id, secure_url } = await uploadImage(recipeImage.buffer, 'Recipes');
 

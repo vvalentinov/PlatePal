@@ -5,7 +5,7 @@ const { validateUserPassword } = require('../utils/bcryptUtil');
 
 const userErrors = require('../constants/errorMessages/userErrors');
 
-const { createSession } = require('../services/createSessionService');
+const { createSession } = require('../utils/createSessionUtil');
 
 const jwt = require('../lib/jwt');
 const { JWT_SECRET } = require('../constants/jwtConstants');

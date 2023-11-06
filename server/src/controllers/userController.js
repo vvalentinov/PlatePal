@@ -10,12 +10,12 @@ const {
     logoutRoute,
 } = require('../constants/routeNames/userRoutes');
 
-const userService = require('../services/userService');
+const userManager = require('../managers/userManager');
 
 router.post(loginRoute, async (req, res) => {
     const { username, password } = req.body;
     try {
-        const session = await userService.login(username, password);
+        const session = await userManager.login(username, password);
         res.status(200).json(session);
     } catch (error) {
         res.status(400).json({ message: getErrorMessage(error) });
@@ -25,7 +25,7 @@ router.post(loginRoute, async (req, res) => {
 router.post(registerRoute, async (req, res) => {
     const userData = req.body;
     try {
-        const session = await userService.register(userData);
+        const session = await userManager.register(userData);
         res.status(201).json(session);
     } catch (error) {
         res.status(400).json({ message: getErrorMessage(error) });
@@ -33,7 +33,7 @@ router.post(registerRoute, async (req, res) => {
 });
 
 router.get(logoutRoute, isAuthenticated, async (req, res) => {
-    userService.logout(req.user.token);
+    userManager.logout(req.user.token);
     res.status(200).json({ message: "Logged out successfully!" });
 });
 

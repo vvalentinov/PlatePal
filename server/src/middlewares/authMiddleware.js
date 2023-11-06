@@ -1,4 +1,4 @@
-const { validateToken } = require('../services/userService');
+const { validateToken } = require('../managers/userManager');
 
 exports.authenticate = async (req, res, next) => {
     const token = req.get('X-Authorization');
@@ -6,11 +6,7 @@ exports.authenticate = async (req, res, next) => {
     if (token) {
         try {
             const decodedToken = await validateToken(token);
-
-            req.user = {
-                ...decodedToken,
-                token
-            };
+            req.user = { ...decodedToken, token };
         } catch (error) {
             return res.status(401).json({ message: error.message });
         }
