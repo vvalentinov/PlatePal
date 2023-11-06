@@ -1,0 +1,31 @@
+.recipeIngredientsContainer {
+    flex-basis: 50%;
+    border: solid 2px black;
+    padding: 1.5rem;
+    border-radius: 15px;
+    background-color: #2C3E50;
+}
+
+.recipeIngredientsContainer h3 {
+    text-align: center;
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.recipeIngredientsList {
+    border: solid 2px black;
+}
+
+.recipeIngredientsList li:not(:last-child) {
+    border-bottom: 2px solid black;
+}
+
+.recipeIngredientsList li {
+    background-color: #9FADBD;
+    color: black;
+    font-size: 1.1rem;
+}
+
+.recipeIngredientsList li:hover {
+    background-color: #93DC80;
+}

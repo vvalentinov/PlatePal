@@ -1,0 +1,30 @@
+.recipeStepsContainer {
+    flex-basis: 50%;
+    border: solid 2px black;
+    padding: 1.5rem;
+    border-radius: 15px;
+    background-color: #2C3E50;
+}
+
+.recipeStepsContainer h3 {
+    text-align: center;
+    color: white;
+    margin-bottom: 1rem;
+}
+
+.recipeStepsList {
+    border: solid 3px black;
+}
+
+.recipeStepsList li:not(:last-child) {
+    border-bottom: 2px solid black;
+}
+
+.recipeStepsList li {
+    background-color: #9FADBD;
+    font-size: 1.1rem;
+}
+
+.recipeStepsList li:hover {
+    background-color: #93DC80;
+}

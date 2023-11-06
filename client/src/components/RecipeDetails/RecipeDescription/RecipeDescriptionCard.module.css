@@ -1,0 +1,16 @@
+.recipeCard {
+    flex-basis: 60%;
+    border: solid 2px black;
+}
+
+.recipeCardHeader {
+    border-bottom: solid 2px black;
+    font-size: 1.3rem;
+    background-color: #18A392;
+    color: white;
+}
+
+.recipeCardBody {
+    background-color: #2C3E50;
+    color: white;
+}
