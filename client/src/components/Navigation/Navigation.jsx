@@ -12,15 +12,13 @@ import * as paths from '../../constants/pathNames';
 
 import { AuthContext } from '../../contexts/AuthContext';
 
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 
 const Navigation = () => {
     const { username, isAuthenticated, isAdmin } = useContext(AuthContext);
-
-    const [show, setShow] = useState(false);
 
     return (
         <Navbar collapseOnSelect expand="lg" className={styles.navbar}>
