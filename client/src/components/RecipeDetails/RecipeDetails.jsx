@@ -27,7 +27,8 @@ const RecipeDetails = () => {
                         <RecipeDescriptionCard
                             recipeName={recipe.name}
                             ownerUsername={recipe.owner.username}
-                            recipeDescription={recipe.description} />
+                            recipeDescription={recipe.description}
+                            recipeCookingTime={recipe.cookingTime} />
                     </div>
                     <div className={styles.recipeInfoContainer}>
                         <RecipeIngredientsContainer ingredients={recipe.ingredients} />

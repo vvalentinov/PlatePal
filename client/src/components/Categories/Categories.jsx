@@ -10,6 +10,8 @@ import Spinner from 'react-bootstrap/Spinner';
 
 import { Link } from 'react-router-dom';
 
+import BackToTopArrow from '../BackToTopArrow/BackToTopArrow';
+
 const Categories = () => {
     const [categories, setCategories] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -37,9 +39,12 @@ const Categories = () => {
             )}
             {categories.map(x => (
                 <div key={x._id} className={styles.container}>
-                    <Link className={styles.link} to={`/recipe/all/${x.name}`}>
-                        <img className={styles.categoryImg} src={x.image.url} alt="" />
-                    </Link>
+                    <div className={styles.imageContainer}>
+                        <Link className={styles.link} to={`/recipe/all/${x.name}`}>
+                            <img className={styles.categoryImg} src={x.image.url} alt="" />
+                        </Link>
+                    </div>
+
                     <Card className={styles.card}>
                         <Card.Header className={styles.cardHeader}>{x.name}</Card.Header>
                         <Card.Body className={styles.cardBody}>
@@ -50,6 +55,7 @@ const Categories = () => {
                     </Card>
                 </div>
             ))}
+            <BackToTopArrow />
         </>
     );
 };
