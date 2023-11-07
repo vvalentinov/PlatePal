@@ -1,6 +1,5 @@
 import styles from './Navigation.module.css';
 
-// Bootstrap components
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -18,7 +17,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 
 const Navigation = () => {
-    const { username, isAuthenticated, isAdmin } = useContext(AuthContext);
+    const { username, isAuthenticated } = useContext(AuthContext);
 
     return (
         <Navbar collapseOnSelect expand="lg" className={styles.navbar}>
@@ -39,13 +38,6 @@ const Navigation = () => {
                             to={paths.categoriesListPath}>
                             Categories
                         </NavLink>
-                        {isAdmin && (
-                            <NavLink
-                                className={({ isActive }) => isActive ? styles.activeLink : styles.link}
-                                to={paths.createCategoryPath}>
-                                Create Category
-                            </NavLink>
-                        )}
                     </Nav>
                     {/* For Logged In Users */}
                     {isAuthenticated && (
