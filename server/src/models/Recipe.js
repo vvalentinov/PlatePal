@@ -2,6 +2,12 @@ const mongoose = require('mongoose');
 
 const errors = require('../constants/errorMessages/recipeErrors');
 
+const {
+    RecipeModelName,
+    CategoryModelName,
+    UserModelName
+} = require('../constants/dbModelsNames');
+
 const recipeSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -58,15 +64,15 @@ const recipeSchema = new mongoose.Schema({
     owner: {
         type: mongoose.Types.ObjectId,
         required: [true, errors.recipeOwnerRequiredError],
-        ref: 'User',
+        ref: UserModelName,
     },
     category: {
         type: mongoose.Types.ObjectId,
         required: [true, errors.recipeCategoryRequiredError],
-        ref: 'Category',
+        ref: CategoryModelName,
     },
 });
 
-const Recipe = mongoose.model('Recipe', recipeSchema);
+const Recipe = mongoose.model(RecipeModelName, recipeSchema);
 
 module.exports = Recipe;
