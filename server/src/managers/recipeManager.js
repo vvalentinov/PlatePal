@@ -1,20 +1,13 @@
 const Recipe = require('../models/Recipe');
 
-const { getById, getByName } = require('./categoryManager');
+const { getByName } = require('./categoryManager');
 
 const { uploadImage } = require('../utils/cloudinaryUtil');
 const { validateImageFile } = require('../utils/imageFileValidatiorUtil');
+const { recipeValidator } = require('../utils/recipeValidatorUtil');
 
 exports.create = async (data, recipeImage, owner) => {
-    const recipeWithName = await Recipe.findOne({ name: data.recipeName });
-    if (recipeWithName) {
-        throw new Error('Recipe with given name already exists!');
-    }
-
-    const category = await getById(data.recipeCategory);
-    if (!category) {
-        throw new Error('Category does not exist!');
-    }
+    await recipeValidator(data);
 
     validateImageFile(recipeImage);
 

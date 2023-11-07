@@ -5,7 +5,8 @@ const errors = require('../constants/errorMessages/recipeErrors');
 const {
     RecipeModelName,
     CategoryModelName,
-    UserModelName
+    UserModelName,
+    CommentModelName
 } = require('../constants/dbModelsNames');
 
 const recipeSchema = new mongoose.Schema({
@@ -40,26 +41,13 @@ const recipeSchema = new mongoose.Schema({
     ingredients: [{
         type: String,
         required: [true, errors.recipeIngredientsRequiredError],
-        validate: [{
-            validator: function (ingredients) {
-                return ingredients.length >= 2 && ingredients.length <= 30;
-            },
-            message: errors.recipeIngredientsCountError(2, 30)
-        }]
     }],
     steps: [{
         type: String,
         required: [true, errors.recipeStepsRequiredError],
-        validate: [{
-            validator: function (steps) {
-                return steps.length >= 2 && steps.length <= 30;
-            },
-            message: errors.recipeStepsCountError(2, 30)
-        }]
     }],
     youtubeLink: {
         type: String,
-        match: /^((?:https?:)?\/\/)?((?:www|m)\.)?((?:youtube\.com|youtu.be))(\/(?:[\w\-]+\?v=|embed\/|v\/)?)([\w\-]+)(\S+)?$/
     },
     owner: {
         type: mongoose.Types.ObjectId,
@@ -70,6 +58,13 @@ const recipeSchema = new mongoose.Schema({
         type: mongoose.Types.ObjectId,
         required: [true, errors.recipeCategoryRequiredError],
         ref: CategoryModelName,
+    },
+    comments: {
+        type: [{
+            type: mongoose.Types.ObjectId,
+            ref: CommentModelName,
+        }],
+        default: [],
     },
 });
 

@@ -42,7 +42,10 @@ router.get(getRecipesInCategoryRoute, async (req, res) => {
 
 router.get(getRecipeDetailsRoute, async (req, res) => {
     const recipeId = req.params.recipeId;
-    const recipe = await recipeManager.getById(recipeId).populate('owner', 'username');
+    const recipe = await recipeManager.getById(recipeId)
+        .populate('owner', 'username')
+        .populate('comments')
+        .lean();
     if (!recipe) {
         res.status(400).json({ message: 'No recipe found with given id!' });
     }
