@@ -2,8 +2,6 @@ import styles from './BackToTopArrow.module.css';
 
 import { useEffect, useState } from 'react';
 
-import Button from 'react-bootstrap/Button';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleUp } from '@fortawesome/free-solid-svg-icons';
 
@@ -30,25 +28,8 @@ const BackToTopArrow = () => {
     return (
         <>
             {backToTopButton && (
-                <button
-                    style={
-                        {
-                            position: 'fixed',
-                            bottom: '100px',
-                            right: '50px',
-                            height: '50px',
-                            width: '50px',
-                            fontSize: '4rem',
-                            border: 'none',
-                            background: 'none',
-                        }
-                    }
-                    onClick={scrollUp}>
-                    <FontAwesomeIcon icon={faCircleUp}
-                        style={{
-                            color: "#93DC80",
-                            // backgroundColor: "red"
-                        }} />
+                <button className={styles.button} onClick={scrollUp}>
+                    <FontAwesomeIcon className={styles.icon} icon={faCircleUp} />
                 </button>
             )}
         </>
