@@ -1,11 +1,13 @@
 const Comment = require('../models/Comment');
 
-exports.create = async (commentData, userId) => {
+exports.create = async (commentData, user) => {
     const result = await Comment.create({
         text: commentData.text,
         recipeId: commentData.recipeId,
-        userId
+        user
     });
 
     return result;
 };
+
+exports.getRecipeComments = (recipeId) => Comment.find({ recipeId });

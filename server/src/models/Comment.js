@@ -1,5 +1,11 @@
 const mongoose = require('mongoose');
 
+const {
+    CommentModelName,
+    RecipeModelName,
+    UserModelName
+} = require('../constants/dbModelsNames');
+
 const commentSchema = new mongoose.Schema({
     text: {
         type: String,
@@ -8,15 +14,15 @@ const commentSchema = new mongoose.Schema({
     recipeId: {
         type: mongoose.Types.ObjectId,
         required: true,
-        ref: 'Recipe',
+        ref: RecipeModelName,
     },
-    userId: {
+    user: {
         type: mongoose.Types.ObjectId,
         required: true,
-        ref: 'User',
+        ref: UserModelName,
     },
 });
 
-const Comment = mongoose.model('Comment', commentSchema);
+const Comment = mongoose.model(CommentModelName, commentSchema);
 
 module.exports = Comment;
