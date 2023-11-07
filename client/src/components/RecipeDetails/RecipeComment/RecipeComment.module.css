@@ -7,3 +7,24 @@
 .modalFooter div {
     width: 100%;
 }
+
+.container {
+    display: flex;
+    justify-content: center;
+    margin: 2rem 0;
+}
+
+.commentButton,
+.commentButton:hover,
+.commentButton:active {
+    font-size: 1.5rem;
+    background-color: #93DC80;
+    padding: 1rem 2rem;
+    border-radius: 15px;
+    text-transform: uppercase;
+    border: solid 3px black;
+}
+
+.commentButton:hover {
+    color: white;
+}

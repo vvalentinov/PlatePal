@@ -11,7 +11,10 @@ import useForm from '../../../hooks/useForm';
 
 import { AuthContext } from '../../../contexts/AuthContext';
 
-const RecipeComment = ({ recipeId }) => {
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faComment } from '@fortawesome/free-solid-svg-icons';
+
+const RecipeComment = ({ recipeId, onCommentSubmit }) => {
     const [show, setShow] = useState(false);
 
     const { token } = useContext(AuthContext);
@@ -29,18 +32,24 @@ const RecipeComment = ({ recipeId }) => {
             body: JSON.stringify({ ...data, recipeId })
         })
             .then(res => res.json())
-            .then(res => console.log(res))
+            .then(res => onCommentSubmit(res.result))
             .catch(error => console.log(error));
     };
 
-    const { formValues, onChangeHandler, onSubmit } = useForm({
-        'text': ''
-    }, onFormSubmit);
+    const {
+        formValues,
+        onChangeHandler,
+        onSubmit
+    } = useForm({ 'text': '' }, onFormSubmit);
 
     return (
         <>
-            <div>
-                <Button onClick={handleShow}>Post Comment</Button>
+            <div className={styles.container}>
+                <Button
+                    bsPrefix={styles.commentButton}
+                    onClick={handleShow}>
+                    Post Comment<FontAwesomeIcon className='ms-2' icon={faComment} />
+                </Button>
             </div>
             <Modal size='lg' centered show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
@@ -52,10 +61,10 @@ const RecipeComment = ({ recipeId }) => {
                             <Form.Control
                                 as="textarea"
                                 placeholder="Leave a comment here"
-                                name='text'
+                                name="text"
                                 value={formValues.comment}
                                 onChange={onChangeHandler}
-                                style={{ height: '200px' }}
+                                style={{ height: '350px' }}
                             />
                         </FloatingLabel>
                     </Modal.Body>

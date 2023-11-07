@@ -20,3 +20,20 @@
     margin: 3rem 0;
     padding: 1rem 3rem;
 }
+
+.commentsSection {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 2rem 0;
+    font-size: 1.5rem;
+}
+
+.zeroCommentsCard {
+    width: 80%;
+    border: solid 4px #93DC80;
+    background-color: #2C3E50;
+    color: white;
+    border-radius: 15px;
+}

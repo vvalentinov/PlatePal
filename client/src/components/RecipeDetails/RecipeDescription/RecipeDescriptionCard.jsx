@@ -3,14 +3,14 @@ import styles from './RecipeDescriptionCard.module.css';
 import Card from 'react-bootstrap/Card';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClock } from '@fortawesome/free-solid-svg-icons';
-import { faNewspaper } from '@fortawesome/free-solid-svg-icons';
+import { faClock, faNewspaper, faComments } from '@fortawesome/free-solid-svg-icons';
 
 const RecipeDescriptionCard = ({
     recipeName,
     ownerUsername,
     recipeDescription,
     recipeCookingTime,
+    comments,
 }) => {
     return (
         <Card className={styles.recipeCard}>
@@ -24,6 +24,9 @@ const RecipeDescriptionCard = ({
                 </Card.Text>
                 <Card.Title>
                     <FontAwesomeIcon icon={faClock} className='me-2' />Recipe Cooking Time: {recipeCookingTime} minutes
+                </Card.Title>
+                <Card.Title>
+                    <FontAwesomeIcon icon={faComments} className='me-2' />Comments: {comments}
                 </Card.Title>
             </Card.Body>
         </Card>
