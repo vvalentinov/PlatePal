@@ -6,6 +6,8 @@ import styles from './RecipeDetails.module.css';
 import RecipeDescriptionCard from './RecipeDescription/RecipeDescriptionCard';
 import RecipeIngredientsContainer from './RecipeIngredients/RecipeIngredientsContainer';
 import RecipeStepsContainer from './RecipeSteps/RecipeStepsContainer';
+import RecipeComment from './RecipeComment/RecipeComment';
+import BackToTopArrow from '../BackToTopArrow/BackToTopArrow';
 
 const RecipeDetails = () => {
     const { recipeId } = useParams();
@@ -30,10 +32,12 @@ const RecipeDetails = () => {
                             recipeDescription={recipe.description}
                             recipeCookingTime={recipe.cookingTime} />
                     </div>
+                    <RecipeComment recipeId={recipeId} />
                     <div className={styles.recipeInfoContainer}>
                         <RecipeIngredientsContainer ingredients={recipe.ingredients} />
                         <RecipeStepsContainer steps={recipe.steps} />
                     </div>
+                    <BackToTopArrow />
                 </>
             )}
         </>

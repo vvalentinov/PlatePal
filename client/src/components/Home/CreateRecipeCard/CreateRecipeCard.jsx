@@ -7,11 +7,17 @@ import { Link } from 'react-router-dom';
 
 import * as paths from '../../../constants/pathNames';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faKitchenSet } from '@fortawesome/free-solid-svg-icons';
+
 const CreateRecipe = () => {
     return (
         <Card className={styles.createRecipeCard}>
-            <Card.Header className={styles.createRecipeCardHeader}>Be the Chef of Your Own Kitchen!</Card.Header>
-            <Card.Body>
+            <Card.Header
+                className={styles.createRecipeCardHeader}>
+                Be the Chef of Your Own Kitchen!<FontAwesomeIcon className='ms-2' icon={faKitchenSet} />
+            </Card.Header>
+            <Card.Body className={styles.createRecipeCardBody}>
                 <Card.Text>
                     At PlatePal, we believe that everyone has a chef inside them waiting to create something amazing. Share your passion for cooking with the world by uploading your unique recipes. Whether it's a family heirloom, a modern twist on a classic, or an experimental fusion, your recipes deserve to shine.
 

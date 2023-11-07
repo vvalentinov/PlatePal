@@ -1,7 +1,13 @@
 .createRecipeCard {
     background-color: #2c3e50;
     color: white;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
+}
+
+.createRecipeCardBody {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .createRecipeCard a {

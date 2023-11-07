@@ -21,11 +21,12 @@
 }
 
 .recipeIngredientsList li {
-    background-color: #9FADBD;
-    color: black;
+    background-color: #18A392;
+    color: white;
     font-size: 1.1rem;
 }
 
 .recipeIngredientsList li:hover {
     background-color: #93DC80;
+    color: black;
 }

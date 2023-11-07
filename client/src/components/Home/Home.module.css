@@ -26,7 +26,6 @@
 .createRecipeSection {
     display: flex;
     justify-content: center;
-    align-items: center;
     gap: 3rem;
     padding: 2rem 2.5rem;
 }
