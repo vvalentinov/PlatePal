@@ -15,21 +15,20 @@ const RecipeDetails = () => {
     const { recipeId } = useParams();
 
     const [recipe, setRecipe] = useState();
-    const [comments, setComments] = useState([]);
 
     useEffect(() => {
         fetch(`http://localhost:3000/recipe/details/${recipeId}`)
             .then(res => res.json())
             .then(res => setRecipe(res.result))
             .catch(error => console.log(error));
-
-        fetch(`http://localhost:3000/comment/all/${recipeId}`)
-            .then(res => res.json())
-            .then(res => setComments(res.result))
-            .catch(error => console.log(error));
     }, []);
 
-    const handleCommentSubmit = (newComment) => setComments((state) => [...state, newComment]);
+    const handleCommentSubmit = (newComment) => {
+        setRecipe((state) => ({
+            ...state,
+            comments: [...state.comments, newComment]
+        }));
+    };
 
     return (
         <>
@@ -42,7 +41,7 @@ const RecipeDetails = () => {
                             ownerUsername={recipe.owner.username}
                             recipeDescription={recipe.description}
                             recipeCookingTime={recipe.cookingTime}
-                            comments={comments.length} />
+                            comments={recipe.comments.length} />
                     </div>
                     <RecipeComment recipeId={recipeId} onCommentSubmit={handleCommentSubmit} />
                     <div className={styles.recipeInfoContainer}>
@@ -50,9 +49,9 @@ const RecipeDetails = () => {
                         <RecipeStepsContainer steps={recipe.steps} />
                     </div>
                     <section id='comments' className={styles.commentsSection}>
-                        {comments.length > 0 ? (
+                        {recipe.comments.length > 0 ? (
                             <ul>
-                                {comments.map(x => <li key={x._id}>{x.text}</li>)}
+                                {recipe.comments.map(x => <li key={x._id}>{x.text}</li>)}
                             </ul>
                         ) : (
                             <>

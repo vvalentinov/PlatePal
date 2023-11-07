@@ -15,7 +15,8 @@ const RecipeSteps = ({ steps, control, remove, errors }) => {
                 name={`steps[${index}].name`}
                 rules={{
                     required: { value: true, message: `Step ${index + 1} must not be empty!` },
-                    minLength: { value: 5, message: `Step ${index + 1} must be at least 5 characters long!` }
+                    minLength: { value: 5, message: `Step ${index + 1} must be at least 5 characters long!` },
+                    maxLength: { value: 200, message: `Step ${index + 1} must not exceed 200 characters!` }
                 }}
                 render={({ field: { onChange, onBlur } }) => (
                     <InputGroup className={errors.steps?.[index]?.name ? "" : "mb-3"}>
