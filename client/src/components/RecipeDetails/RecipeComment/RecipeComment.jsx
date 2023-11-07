@@ -5,18 +5,32 @@ import Form from 'react-bootstrap/Form';
 
 import styles from './RecipeComment.module.css';
 
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 
 import useForm from '../../../hooks/useForm';
 
+import { AuthContext } from '../../../contexts/AuthContext';
+
 const RecipeComment = ({ recipeId }) => {
     const [show, setShow] = useState(false);
+
+    const { token } = useContext(AuthContext);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
     const onFormSubmit = (data) => {
-        console.log({ ...data, recipeId });
+        fetch('http://localhost:3000/comment/create', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Authorization': token,
+            },
+            body: JSON.stringify({ ...data, recipeId })
+        })
+            .then(res => res.json())
+            .then(res => console.log(res))
+            .catch(error => console.log(error));
     };
 
     const { formValues, onChangeHandler, onSubmit } = useForm({
