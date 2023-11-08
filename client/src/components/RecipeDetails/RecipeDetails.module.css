@@ -37,3 +37,13 @@
     color: white;
     border-radius: 15px;
 }
+
+.youtubeVideoSection {
+    display: flex;
+    justify-content: center;
+}
+
+.youtubeVideoSection iframe {
+    width: 80%;
+    height: 35rem;
+}

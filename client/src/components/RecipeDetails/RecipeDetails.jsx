@@ -44,6 +44,9 @@ const RecipeDetails = () => {
                             comments={recipe.comments.length} />
                     </div>
                     <RecipeComment recipeId={recipeId} onCommentSubmit={handleCommentSubmit} />
+                    <div className={styles.youtubeVideoSection}>
+                        {recipe.youtubeLink && <iframe src={recipe.youtubeLink} allowFullScreen></iframe>}
+                    </div>
                     <div className={styles.recipeInfoContainer}>
                         <RecipeIngredientsContainer ingredients={recipe.ingredients} />
                         <RecipeStepsContainer steps={recipe.steps} />
