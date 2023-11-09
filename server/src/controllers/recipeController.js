@@ -53,4 +53,13 @@ router.get(getRecipeDetailsRoute, async (req, res) => {
     res.status(200).json({ message: "Recipe with given id found!", result: recipe });
 });
 
+// router.post('/rate/:recipeId', isAuthenticated, async (req, res) => {
+//     const recipeId = req.params.recipeId;
+//     const userId = req.user._id;
+//     const { rateValue } = req.body;
+
+//     const result = await recipeManager.rateRecipe(recipeId, userId, rateValue);
+//     res.status(200).json({ message: 'Recipe star rated successfully', result });
+// });
+
 module.exports = router;

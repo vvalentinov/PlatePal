@@ -66,6 +66,15 @@ const recipeSchema = new mongoose.Schema({
         }],
         default: [],
     },
+    averageRating: {
+        type: Number,
+        required: true,
+        default: 0,
+    },
+    ratings: [{
+        type: mongoose.Types.ObjectId,
+        ref: 'StarRating',
+    }],
 });
 
 const Recipe = mongoose.model(RecipeModelName, recipeSchema);
