@@ -1,0 +1,12 @@
+.card {
+    width: 80%;
+    border: solid 4px #93DC80;
+    background-color: #2C3E50;
+    color: white;
+    border-radius: 15px;
+}
+
+.cardHeader {
+    background-color: #18a392;
+    border-bottom: solid 4px #93DC80;
+}

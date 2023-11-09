@@ -30,20 +30,22 @@
     font-size: 1.5rem;
 }
 
-.zeroCommentsCard {
-    width: 80%;
-    border: solid 4px #93DC80;
-    background-color: #2C3E50;
-    color: white;
-    border-radius: 15px;
-}
-
 .youtubeVideoSection {
     display: flex;
     justify-content: center;
 }
 
 .youtubeVideoSection iframe {
-    width: 80%;
+    width: 60%;
     height: 35rem;
+    border-radius: 15px;
+}
+
+.recipeCommentStarContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5rem;
+    margin: 4rem 0;
+    text-align: center;
 }

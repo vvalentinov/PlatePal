@@ -8,12 +8,6 @@
     width: 100%;
 }
 
-.container {
-    display: flex;
-    justify-content: center;
-    margin: 2rem 0;
-}
-
 .commentButton,
 .commentButton:hover,
 .commentButton:active {

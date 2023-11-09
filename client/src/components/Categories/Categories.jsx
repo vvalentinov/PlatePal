@@ -6,7 +6,8 @@ import { categoryServiceFactory } from '../../services/categoryService';
 import { useService } from '../../hooks/useService';
 
 import Card from 'react-bootstrap/Card';
-import Spinner from 'react-bootstrap/Spinner';
+
+import CustomSpinner from '../Spinner/Spinner';
 
 import { Link } from 'react-router-dom';
 
@@ -26,17 +27,11 @@ const Categories = () => {
     }, []);
 
     return (
-        <>
+        <section>
             <h2 className='text-center my-2'>{
                 isLoading ? 'Category List - Loading...' : 'Category List'
             }</h2>
-            {isLoading && (
-                <div className={styles.spinnerContainer}>
-                    <Spinner className={styles.spinner} animation="border" role="status">
-                        <span className="visually-hidden">Loading...</span>
-                    </Spinner>
-                </div>
-            )}
+            {isLoading && <CustomSpinner />}
             {categories.map(x => (
                 <div key={x._id} className={styles.container}>
                     <div className={styles.imageContainer}>
@@ -44,7 +39,6 @@ const Categories = () => {
                             <img className={styles.categoryImg} src={x.image.url} alt="" />
                         </Link>
                     </div>
-
                     <Card className={styles.card}>
                         <Card.Header className={styles.cardHeader}>{x.name}</Card.Header>
                         <Card.Body className={styles.cardBody}>
@@ -56,7 +50,7 @@ const Categories = () => {
                 </div>
             ))}
             <BackToTopArrow />
-        </>
+        </section>
     );
 };
 

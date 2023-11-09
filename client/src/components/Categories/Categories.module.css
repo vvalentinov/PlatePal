@@ -29,7 +29,6 @@
 .card {
     flex-basis: 60%;
     border: solid 2px black;
-    /* height: 100%; */
 }
 
 .cardHeader {
