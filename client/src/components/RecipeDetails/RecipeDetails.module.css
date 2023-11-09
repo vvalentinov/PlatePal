@@ -1,16 +1,18 @@
 .container {
     display: flex;
     justify-content: center;
+    align-items: center;
     margin-top: 4rem;
-    gap: 5rem;
-    padding: 0 10rem;
+    margin-bottom: 6rem;
+    gap: 3rem;
+    padding: 0 6rem;
 }
 
 .container img {
-    height: 20rem;
-    flex-basis: 40%;
-    border: solid 2px black;
+    width: 35%;
+    border: solid 3px black;
     border-radius: 15px;
+    box-shadow: 5px 5px;
 }
 
 .recipeInfoContainer {
@@ -46,6 +48,6 @@
     align-items: center;
     justify-content: center;
     gap: 5rem;
-    margin: 4rem 0;
     text-align: center;
+    margin-bottom: 5rem;
 }

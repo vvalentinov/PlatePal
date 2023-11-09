@@ -52,25 +52,25 @@ const RecipeComment = ({ recipeId, onCommentSubmit }) => {
                 </Button>
             </div>
             <Modal size='lg' centered show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
+                <Modal.Header className={styles.modalHeader} closeButton>
                     <Modal.Title>Post Comment</Modal.Title>
                 </Modal.Header>
                 <Form onSubmit={onSubmit}>
-                    <Modal.Body>
-                        <FloatingLabel controlId="floatingTextarea2" label="Your Comment:">
+                    <Modal.Body className={styles.modalBody}>
+                        <FloatingLabel controlId="floatingTextarea2" label="Comment:">
                             <Form.Control
                                 as="textarea"
                                 placeholder="Leave a comment here"
                                 name="text"
                                 value={formValues.comment}
                                 onChange={onChangeHandler}
-                                style={{ height: '350px' }}
+                                style={{ height: '300px' }}
                             />
                         </FloatingLabel>
                     </Modal.Body>
                     <Modal.Footer bsPrefix={styles.modalFooter}>
                         <div className="d-grid">
-                            <Button type='submit' onClick={handleClose} size="lg" >
+                            <Button bsPrefix={styles.modalButton} type='submit' onClick={handleClose} size="lg" >
                                 Comment
                             </Button>
                         </div>

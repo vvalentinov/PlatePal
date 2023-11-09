@@ -19,6 +19,11 @@
     gap: 1rem;
     font-size: 5rem;
     padding: 5rem 0;
+    background-color: #2C3E50;
+}
+
+.modalHeader {
+    background-color: #93DC80;
 }
 
 .starIcon {
@@ -44,8 +49,18 @@
 
 .buttonContainer {
     padding: 1rem 2rem;
+    background-color: #2C3E50;
 }
 
-.buttonContainer button {
+.buttonContainerBtn {
+    font-size: 1.5rem;
+    background-color: #93DC80;
+    border-radius: 15px;
     text-transform: uppercase;
+    border: solid 3px black;
+    padding: 0.5rem 0;
+}
+
+.buttonContainerBtn:hover {
+    color: white;
 }

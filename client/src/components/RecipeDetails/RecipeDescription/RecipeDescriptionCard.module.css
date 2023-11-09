@@ -1,11 +1,11 @@
 .recipeCard {
-    flex-basis: 60%;
-    border: solid 2px black;
+    width: 65%;
+    border: solid #93DC80;
 }
 
 .recipeCardHeader {
     border-bottom: solid 2px black;
-    font-size: 1.3rem;
+    font-size: 1.5rem;
     background-color: #18A392;
     color: white;
 }
@@ -13,4 +13,12 @@
 .recipeCardBody {
     background-color: #2C3E50;
     color: white;
+}
+
+.recipeCardBody p {
+    font-size: 1.2rem;
+}
+
+.icon {
+    color: #93DC80;
 }

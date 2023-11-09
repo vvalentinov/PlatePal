@@ -50,7 +50,7 @@ const RecipeStarRating = ({ recipeId, onRatingSubmit }) => {
                 Star Recipe<FontAwesomeIcon className='ms-2' icon={faStar} />
             </Button>
             <Modal size='lg' centered show={show} onHide={handleClose}>
-                <Modal.Header closeButton>
+                <Modal.Header className={styles.modalHeader} closeButton>
                     <Modal.Title>Give Your Opinion</Modal.Title>
                 </Modal.Header>
                 <Form onSubmit={onFormSubmit}>
@@ -67,7 +67,7 @@ const RecipeStarRating = ({ recipeId, onRatingSubmit }) => {
                                         onChange={onRadioChange}
                                         checked={isRadioSelected(ratingValue)} />
                                     <FontAwesomeIcon
-                                        color={ratingValue <= (hover || rating) ? '#93DC80' : 'black'}
+                                        color={ratingValue <= (hover || rating) ? '#93DC80' : 'white'}
                                         className={styles.starIcon}
                                         icon={faStar}
                                         onMouseEnter={() => setHover(ratingValue)}
@@ -77,7 +77,7 @@ const RecipeStarRating = ({ recipeId, onRatingSubmit }) => {
                         })}
                     </Modal.Body>
                     <div className={`d-grid gap-2 ${styles.buttonContainer}`}>
-                        <Button onClick={handleClose} type='submit' size="lg">
+                        <Button bsPrefix={styles.buttonContainerBtn} onClick={handleClose} type='submit' size="lg">
                             Rate Recipe
                         </Button>
                     </div>

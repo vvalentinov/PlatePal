@@ -1,7 +1,16 @@
+.modalHeader {
+    background-color: #93DC80;
+}
+
+.modalBody {
+    background-color: #2C3E50;
+}
+
 .modalFooter {
     display: flex;
     justify-content: center;
     padding: 1rem;
+    background-color: #2C3E50;
 }
 
 .modalFooter div {
@@ -9,16 +18,27 @@
 }
 
 .commentButton,
+.modalButton,
+.modalButton:hover,
+.modalButton:active,
 .commentButton:hover,
 .commentButton:active {
     font-size: 1.5rem;
     background-color: #93DC80;
-    padding: 1rem 2rem;
     border-radius: 15px;
     text-transform: uppercase;
     border: solid 3px black;
 }
 
-.commentButton:hover {
+.commentButton {
+    padding: 1rem 2rem;
+}
+
+.commentButton:hover,
+.modalButton:hover {
     color: white;
+}
+
+.modalButton {
+    padding: 0.5rem 0;
 }

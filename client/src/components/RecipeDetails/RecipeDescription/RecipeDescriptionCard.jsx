@@ -18,7 +18,8 @@ const RecipeDescriptionCard = ({
     cookingTime,
     comments,
     averageRating,
-    userRating
+    userRating,
+    ratings
 }) => {
     return (
         <Card className={styles.recipeCard}>
@@ -37,7 +38,8 @@ const RecipeDescriptionCard = ({
                     <FontAwesomeIcon icon={faComments} className='me-2' />Comments: {comments.length}
                 </Card.Title>
                 <Card.Title>
-                    <FontAwesomeIcon icon={faStar} className='me-2' />Recipe Average Rating: {averageRating}
+                    <FontAwesomeIcon icon={faStar} className='me-2' />
+                    Recipe Average Rating: {averageRating} - (Total votes: {ratings.length})
                 </Card.Title>
                 <Card.Title>
                     <FontAwesomeIcon icon={faUser} className='me-2' />
@@ -45,7 +47,7 @@ const RecipeDescriptionCard = ({
                         'You haven\'t rated this recipe yet!' :
                         <>
                             Your star rating: {[...Array(userRating)].map((star, index) =>
-                                <FontAwesomeIcon key={index} icon={faStar} />
+                                <FontAwesomeIcon className={styles.icon} key={index} icon={faStar} />
                             )}
                         </>
                     }
