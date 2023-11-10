@@ -12,7 +12,8 @@ import {
     faNewspaper,
     faComments,
     faStar,
-    faUser
+    faUser,
+    faRectangleList
 } from '@fortawesome/free-solid-svg-icons';
 
 const RecipeDescriptionCard = ({
@@ -20,6 +21,7 @@ const RecipeDescriptionCard = ({
     owner,
     description,
     cookingTime,
+    category,
     comments,
     averageRating,
     userRating,
@@ -37,6 +39,9 @@ const RecipeDescriptionCard = ({
                     {description}
                 </Card.Text>
                 <Card.Title>
+                    <FontAwesomeIcon icon={faRectangleList} className='me-2' />Category: {category.name}
+                </Card.Title>
+                <Card.Title>
                     <FontAwesomeIcon icon={faClock} className='me-2' />Recipe Cooking Time: {cookingTime} minutes
                 </Card.Title>
                 <Card.Title>
@@ -44,7 +49,7 @@ const RecipeDescriptionCard = ({
                 </Card.Title>
                 <Card.Title>
                     <FontAwesomeIcon icon={faStar} className='me-2' />
-                    Recipe Average Rating: {averageRating} - (Total votes: {ratings.length})
+                    Recipe Average Rating: {averageRating} / 5.0 - (Total votes: {ratings.length})
                 </Card.Title>
                 {isAuthenticated && (
                     <Card.Title>

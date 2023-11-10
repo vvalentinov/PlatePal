@@ -16,35 +16,30 @@ import CustomSpinner from '../Spinner/Spinner';
 import { AuthContext } from '../../contexts/AuthContext';
 import NoCommentsCard from './NoCommentsCard/NoCommentsCard';
 
+import { recipeServiceFactory } from '../../services/recipeService';
+
+import { useService } from '../../hooks/useService';
+
 const RecipeDetails = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [toast, setToast] = useState('');
 
-    const { token, isAuthenticated } = useContext(AuthContext);
+    const { isAuthenticated } = useContext(AuthContext);
 
     const { recipeId } = useParams();
 
     const [recipe, setRecipe] = useState();
 
-    useEffect(() => {
-        fetch(`http://localhost:3000/recipe/details/${recipeId}`, {
-            headers: { 'X-Authorization': token }
-        })
-            .then(res => res.json())
-            .then(res => {
-                if (res.message !== 'Recipe with given id found!') {
-                    throw new Error(res.message);
-                }
+    const recipeService = useService(recipeServiceFactory);
 
-                return setRecipe(res.result);
-            })
+    useEffect(() => {
+        recipeService.getRecipe(recipeId)
+            .then(res => setRecipe(res.result))
             .catch(error => setToast(error.message))
             .finally(() => setIsLoading(false));
     }, [recipeId]);
 
-    const handleCommentSubmit = (newComment) => {
-        setRecipe((state) => ({ ...state, comments: [...state.comments, newComment] }));
-    };
+    const handleCommentSubmit = (newComment) => setRecipe((state) => ({ ...state, comments: [...state.comments, newComment] }));
 
     const handleRatingSubmit = (result) => {
         setRecipe((state) => ({
@@ -81,8 +76,8 @@ const RecipeDetails = () => {
                         <h2>Comments:</h2>
                         {
                             recipe.comments.length > 0 ?
-                                <RecipeCommentsList comments={recipe.comments} />
-                                : <NoCommentsCard />
+                                <RecipeCommentsList comments={recipe.comments} /> :
+                                <NoCommentsCard />
                         }
                     </section>
                     <BackToTopArrow />

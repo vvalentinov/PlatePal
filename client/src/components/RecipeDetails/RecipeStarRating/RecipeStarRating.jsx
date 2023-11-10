@@ -4,12 +4,13 @@ import Form from 'react-bootstrap/Form';
 
 import styles from './RecipeStarRating.module.css';
 
-import { useState, useContext } from 'react';
-
-import { AuthContext } from '../../../contexts/AuthContext';
+import { useState } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
+
+import { useService } from '../../../hooks/useService';
+import { ratingServiceFactory } from '../../../services/ratingService';
 
 const RecipeStarRating = ({ recipeId, onRatingSubmit }) => {
     const [show, setShow] = useState(false);
@@ -19,7 +20,7 @@ const RecipeStarRating = ({ recipeId, onRatingSubmit }) => {
     const [rating, setRating] = useState(null);
     const [hover, setHover] = useState(null);
 
-    const { token } = useContext(AuthContext);
+    const ratingService = useService(ratingServiceFactory);
 
     const isRadioSelected = (value) => rating === value;
     const onRadioChange = (e) => setRating(e.target.value);
@@ -27,17 +28,7 @@ const RecipeStarRating = ({ recipeId, onRatingSubmit }) => {
     const onFormSubmit = (e) => {
         e.preventDefault();
 
-        const rateValue = Number(rating);
-
-        fetch(`http://localhost:3000/rating/rate-recipe/${recipeId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Authorization': token,
-            },
-            body: JSON.stringify({ rateValue })
-        })
-            .then(res => res.json())
+        ratingService.rateRecipe(recipeId, { rateValue: Number(rating) })
             .then(res => onRatingSubmit(res.result))
             .catch(error => console.log(error));
     };

@@ -6,6 +6,7 @@ export const recipeServiceFactory = (token) => {
     const request = requestFactory(token);
 
     return {
-        create: (data) => request.post(`${baseUrl}/create`, data)
+        create: (data) => request.post(`${baseUrl}/create`, data),
+        getRecipe: (recipeId) => request.get(`${baseUrl}/details/${recipeId}`)
     }
 };
