@@ -30,7 +30,6 @@ exports.rateRecipe = async (recipeId, userId, value) => {
 
 exports.getRating = async (userId, recipeId) => {
     const rating = await StarRating.findOne({ userId, recipeId });
-
     if (!rating) {
         return 0;
     }

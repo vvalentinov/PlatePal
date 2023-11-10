@@ -1,15 +1,39 @@
 const Recipe = require('../models/Recipe');
 
-// const StarRating = require('../models/StarRating');
-
 const { getByName } = require('./categoryManager');
+const { getRating } = require('./ratingManager');
 
 const { uploadImage } = require('../utils/cloudinaryUtil');
 const { validateImageFile } = require('../utils/imageFileValidatiorUtil');
 const { recipeValidator } = require('../utils/recipeValidatorUtil');
-// const { calcAvgRating } = require('../utils/calcRecipeAvgRatingUtil');
+const { checkIfRecipeExists } = require('../utils/checkIfRecipeExistsUtil');
 
-exports.getById = (recipeId) => Recipe.findById(recipeId);
+exports.getById = async (recipeId) => {
+    await checkIfRecipeExists(recipeId);
+    return Recipe.findById(recipeId);
+};
+
+exports.getPopulatedRecipe = async (recipeId, userId) => {
+    await checkIfRecipeExists(recipeId);
+
+    let populatedRecipe = await Recipe.findById(recipeId)
+        .populate('owner', 'username')
+        .populate({
+            path: 'comments',
+            populate: {
+                path: 'user',
+                model: 'User',
+                select: 'username'
+            },
+        }).lean();
+
+    if (userId) {
+        const rating = await getRating(userId, recipeId);
+        populatedRecipe = { ...populatedRecipe, userRating: rating };
+    }
+
+    return populatedRecipe;
+};
 
 exports.create = async (data, recipeImage, owner) => {
     await recipeValidator(data);
@@ -42,28 +66,3 @@ exports.getAll = async (categoryName) => {
     const recipes = await Recipe.find({ category: category._id }).lean();
     return recipes;
 };
-
-// exports.rateRecipe = async (recipeId, userId, rateValue) => {
-//     const recipe = await Recipe.findById(recipeId);
-
-//     const existingRating = await StarRating.findOne({ userId, recipeId });
-//     if (existingRating) {
-//         existingRating.value = rateValue;
-//         await existingRating.save();
-//     } else {
-//         const newRating = new StarRating({
-//             value: rateValue,
-//             userId: userId,
-//             recipeId: recipeId,
-//         });
-
-//         await newRating.save();
-//         recipe.ratings.push(newRating._id);
-//     }
-
-//     const averageRating = await calcAvgRating(recipe);
-//     recipe.averageRating = averageRating;
-//     await recipe.save();
-
-//     return { averageRating, rateValue };
-// };

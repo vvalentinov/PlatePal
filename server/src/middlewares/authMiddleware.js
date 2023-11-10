@@ -3,7 +3,7 @@ const { validateToken } = require('../managers/userManager');
 exports.authenticate = async (req, res, next) => {
     const token = req.get('X-Authorization');
 
-    if (token) {
+    if (token !== 'undefined' && token) {
         try {
             const decodedToken = await validateToken(token);
             req.user = { ...decodedToken, token };

@@ -2,11 +2,11 @@ const Comment = require('../models/Comment');
 
 const { getById } = require('./recipeManager');
 
-exports.create = async (commentData, user) => {
+exports.create = async (commentData, userId) => {
     const comment = await Comment.create({
         text: commentData.text,
         recipeId: commentData.recipeId,
-        user
+        user: userId,
     });
 
     const recipe = await getById(commentData.recipeId);
