@@ -10,6 +10,7 @@ import PostRecipeComment from './PostRecipeComment/PostRecipeComment';
 import RecipeStarRating from './RecipeStarRating/RecipeStarRating';
 import RecipeCommentsList from './RecipeCommentsList/RecipeCommentsList';
 import BackToTopArrow from '../BackToTopArrow/BackToTopArrow';
+import ToastNotification from '../Toast/ToastNotification';
 import CustomSpinner from '../Spinner/Spinner';
 
 import { AuthContext } from '../../contexts/AuthContext';
@@ -17,7 +18,10 @@ import NoCommentsCard from './NoCommentsCard/NoCommentsCard';
 
 const RecipeDetails = () => {
     const [isLoading, setIsLoading] = useState(true);
+    const [toast, setToast] = useState('');
+
     const { token, isAuthenticated } = useContext(AuthContext);
+
     const { recipeId } = useParams();
 
     const [recipe, setRecipe] = useState();
@@ -34,7 +38,7 @@ const RecipeDetails = () => {
 
                 return setRecipe(res.result);
             })
-            .catch(error => console.log(error.message))
+            .catch(error => setToast(error.message))
             .finally(() => setIsLoading(false));
     }, [recipeId]);
 
@@ -53,6 +57,7 @@ const RecipeDetails = () => {
     return (
         <>
             {isLoading && <CustomSpinner />}
+            {toast && <ToastNotification message={toast} />}
             {recipe && (
                 <>
                     <div className={styles.container}>
@@ -73,6 +78,7 @@ const RecipeDetails = () => {
                         <RecipeStepsContainer steps={recipe.steps} />
                     </div>
                     <section id='comments' className={styles.commentsSection}>
+                        <h2>Comments:</h2>
                         {
                             recipe.comments.length > 0 ?
                                 <RecipeCommentsList comments={recipe.comments} />
