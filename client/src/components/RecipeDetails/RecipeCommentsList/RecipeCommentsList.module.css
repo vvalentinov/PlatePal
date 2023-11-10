@@ -1,0 +1,14 @@
+.card {
+    width: 80%;
+    border: solid 3px black;
+}
+
+.cardHeader {
+    /* background-color: #2C3E50; */
+    background-color: #93DC80;
+}
+
+.cardBody {
+    background-color: #2C3E50;
+    color: white;
+}

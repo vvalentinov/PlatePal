@@ -6,8 +6,9 @@ import styles from './RecipeDetails.module.css';
 import RecipeDescriptionCard from './RecipeDescription/RecipeDescriptionCard';
 import RecipeIngredientsContainer from './RecipeIngredients/RecipeIngredientsContainer';
 import RecipeStepsContainer from './RecipeSteps/RecipeStepsContainer';
-import RecipeComment from './RecipeComment/RecipeComment';
+import PostRecipeComment from './PostRecipeComment/PostRecipeComment';
 import RecipeStarRating from './RecipeStarRating/RecipeStarRating';
+import RecipeCommentsList from './RecipeCommentsList/RecipeCommentsList';
 import BackToTopArrow from '../BackToTopArrow/BackToTopArrow';
 import CustomSpinner from '../Spinner/Spinner';
 
@@ -16,38 +17,37 @@ import NoCommentsCard from './NoCommentsCard/NoCommentsCard';
 
 const RecipeDetails = () => {
     const [isLoading, setIsLoading] = useState(true);
-    const { token } = useContext(AuthContext);
+    const { token, isAuthenticated } = useContext(AuthContext);
     const { recipeId } = useParams();
 
     const [recipe, setRecipe] = useState();
-    const [userRateValue, setUserRateValue] = useState(0);
 
     useEffect(() => {
-        fetch(`http://localhost:3000/recipe/details/${recipeId}`)
+        fetch(`http://localhost:3000/recipe/details/${recipeId}`, {
+            headers: { 'X-Authorization': token }
+        })
             .then(res => res.json())
-            .then(res => setRecipe(res.result))
-            .catch(error => console.log(error))
-            .finally(() => setIsLoading(false));
-
-        fetch(`http://localhost:3000/rating/getRating/${recipeId}`,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Authorization': token
+            .then(res => {
+                if (res.message !== 'Recipe with given id found!') {
+                    throw new Error(res.message);
                 }
+
+                return setRecipe(res.result);
             })
-            .then(res => res.json())
-            .then(res => setUserRateValue(res.result))
-            .catch(error => console.log(error));
-    }, [recipeId, userRateValue]);
+            .catch(error => console.log(error.message))
+            .finally(() => setIsLoading(false));
+    }, [recipeId]);
 
     const handleCommentSubmit = (newComment) => {
         setRecipe((state) => ({ ...state, comments: [...state.comments, newComment] }));
     };
 
     const handleRatingSubmit = (result) => {
-        setRecipe((state) => ({ ...state, averageRating: result.averageRating }));
-        setUserRateValue(result.rateValue);
+        setRecipe((state) => ({
+            ...state,
+            averageRating: result.averageRating,
+            userRating: result.rateValue
+        }));
     };
 
     return (
@@ -57,12 +57,14 @@ const RecipeDetails = () => {
                 <>
                     <div className={styles.container}>
                         <img src={recipe.image.url} alt={`Recipe Image: ${recipe.name}`} />
-                        <RecipeDescriptionCard {...recipe} userRating={userRateValue} />
+                        <RecipeDescriptionCard {...recipe} />
                     </div>
-                    <div className={styles.recipeCommentStarContainer}>
-                        <RecipeComment recipeId={recipeId} onCommentSubmit={handleCommentSubmit} />
-                        <RecipeStarRating recipeId={recipeId} onRatingSubmit={handleRatingSubmit} />
-                    </div>
+                    {isAuthenticated && (
+                        <div className={styles.recipeCommentStarContainer}>
+                            <PostRecipeComment recipeId={recipeId} onCommentSubmit={handleCommentSubmit} />
+                            <RecipeStarRating recipeId={recipeId} onRatingSubmit={handleRatingSubmit} />
+                        </div>
+                    )}
                     <div className={styles.youtubeVideoSection}>
                         {recipe.youtubeLink && <iframe src={recipe.youtubeLink} allowFullScreen></iframe>}
                     </div>
@@ -71,11 +73,11 @@ const RecipeDetails = () => {
                         <RecipeStepsContainer steps={recipe.steps} />
                     </div>
                     <section id='comments' className={styles.commentsSection}>
-                        {recipe.comments.length > 0 ? (
-                            <ul>
-                                {recipe.comments.map(x => <li key={x._id}>{x.text}</li>)}
-                            </ul>
-                        ) : <NoCommentsCard />}
+                        {
+                            recipe.comments.length > 0 ?
+                                <RecipeCommentsList comments={recipe.comments} />
+                                : <NoCommentsCard />
+                        }
                     </section>
                     <BackToTopArrow />
                 </>

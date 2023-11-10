@@ -3,7 +3,7 @@ import Modal from 'react-bootstrap/Modal';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 
-import styles from './RecipeComment.module.css';
+import styles from './PostRecipeComment.module.css';
 
 import { useState, useContext } from 'react';
 
@@ -14,7 +14,7 @@ import { AuthContext } from '../../../contexts/AuthContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment } from '@fortawesome/free-solid-svg-icons';
 
-const RecipeComment = ({ recipeId, onCommentSubmit }) => {
+const PostRecipeComment = ({ recipeId, onCommentSubmit }) => {
     const [show, setShow] = useState(false);
 
     const { token } = useContext(AuthContext);
@@ -81,4 +81,4 @@ const RecipeComment = ({ recipeId, onCommentSubmit }) => {
     );
 };
 
-export default RecipeComment;
+export default PostRecipeComment;

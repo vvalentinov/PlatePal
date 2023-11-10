@@ -2,6 +2,10 @@ import styles from './RecipeDescriptionCard.module.css';
 
 import Card from 'react-bootstrap/Card';
 
+import { AuthContext } from '../../../contexts/AuthContext';
+
+import { useContext } from 'react';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faClock,
@@ -21,6 +25,7 @@ const RecipeDescriptionCard = ({
     userRating,
     ratings
 }) => {
+    const { isAuthenticated } = useContext(AuthContext);
     return (
         <Card className={styles.recipeCard}>
             <Card.Header className={styles.recipeCardHeader}>
@@ -41,17 +46,19 @@ const RecipeDescriptionCard = ({
                     <FontAwesomeIcon icon={faStar} className='me-2' />
                     Recipe Average Rating: {averageRating} - (Total votes: {ratings.length})
                 </Card.Title>
-                <Card.Title>
-                    <FontAwesomeIcon icon={faUser} className='me-2' />
-                    {userRating === 0 ?
-                        'You haven\'t rated this recipe yet!' :
-                        <>
-                            Your star rating: {[...Array(userRating)].map((star, index) =>
-                                <FontAwesomeIcon className={styles.icon} key={index} icon={faStar} />
-                            )}
-                        </>
-                    }
-                </Card.Title>
+                {isAuthenticated && (
+                    <Card.Title>
+                        <FontAwesomeIcon icon={faUser} className='me-2' />
+                        {userRating === 0 ?
+                            'You haven\'t rated this recipe yet!' :
+                            <>
+                                Your star rating: {[...Array(userRating)].map((star, index) =>
+                                    <FontAwesomeIcon className={styles.icon} key={index} icon={faStar} />
+                                )}
+                            </>
+                        }
+                    </Card.Title>
+                )}
             </Card.Body>
         </Card>
     );
