@@ -24,19 +24,4 @@ router.post(
         }
     });
 
-// router.get(
-//     '/getRating/:recipeId',
-//     isAuthenticated,
-//     async (req, res) => {
-//         const recipeId = req.params.recipeId;
-//         const userId = req.user._id;
-//         try {
-//             await checkIfRecipeExists(recipeId);
-//             const value = await ratingManager.getRating(userId, recipeId);
-//             res.status(200).json({ message: 'User rating retrieved successfully!', result: value });
-//         } catch (error) {
-//             res.status(400).json({ message: getErrorMessage(error) });
-//         }
-//     });
-
 module.exports = router;

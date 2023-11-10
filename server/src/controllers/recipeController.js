@@ -3,6 +3,7 @@ const router = require('express').Router();
 const multer = require('multer');
 
 const { isAuthenticated } = require('../middlewares/authMiddleware');
+const { isAdmin } = require('../middlewares/isAdminMiddleware');
 
 const {
     createRecipeRoute,
@@ -49,6 +50,11 @@ router.get(getRecipeDetailsRoute, async (req, res) => {
     } catch (error) {
         res.status(400).json({ message: getErrorMessage(error) });
     }
+});
+
+router.get('/all/unapproved', isAdmin, async (req, res) => {
+    const recipes = await recipeManager.genUnapproved();
+    res.status(200).json({ message: "Unapproved recipes retrieved!", result: recipes });
 });
 
 module.exports = router;

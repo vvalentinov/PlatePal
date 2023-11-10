@@ -18,6 +18,7 @@ exports.getPopulatedRecipe = async (recipeId, userId) => {
 
     let populatedRecipe = await Recipe.findById(recipeId)
         .populate('owner', 'username')
+        .populate('category', 'name')
         .populate({
             path: 'comments',
             populate: {
@@ -66,3 +67,5 @@ exports.getAll = async (categoryName) => {
     const recipes = await Recipe.find({ category: category._id }).lean();
     return recipes;
 };
+
+exports.genUnapproved = () => Recipe.find({ isApproved: false }).lean();

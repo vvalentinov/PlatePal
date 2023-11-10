@@ -75,6 +75,11 @@ const recipeSchema = new mongoose.Schema({
         type: mongoose.Types.ObjectId,
         ref: 'StarRating',
     }],
+    isApproved: {
+        type: Boolean,
+        required: true,
+        default: false,
+    },
 });
 
 const Recipe = mongoose.model(RecipeModelName, recipeSchema);
