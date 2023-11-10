@@ -52,9 +52,15 @@ router.get(getRecipeDetailsRoute, async (req, res) => {
     }
 });
 
-router.get('/all/unapproved', isAdmin, async (req, res) => {
+router.get('/unapproved', isAdmin, async (req, res) => {
     const recipes = await recipeManager.genUnapproved();
     res.status(200).json({ message: "Unapproved recipes retrieved!", result: recipes });
+});
+
+router.put('/approve/:recipeId', isAdmin, async (req, res) => {
+    const recipeId = req.params.recipeId;
+    const recipe = await recipeManager.approveRecipe(recipeId);
+    res.status(200).json({ message: "Recipe approved successfully!", result: recipe });
 });
 
 module.exports = router;

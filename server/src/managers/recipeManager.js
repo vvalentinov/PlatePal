@@ -64,8 +64,17 @@ exports.getAll = async (categoryName) => {
         throw new Error('Invalid recipe category!');
     }
 
-    const recipes = await Recipe.find({ category: category._id }).lean();
+    const recipes = await Recipe.find
+        ({
+            category: category._id,
+            isApproved: true
+        })
+        .select('_id image name')
+        .lean();
+
     return recipes;
 };
 
 exports.genUnapproved = () => Recipe.find({ isApproved: false }).lean();
+
+exports.approveRecipe = (recipeId) => Recipe.findByIdAndUpdate(recipeId, { isApproved: true }, { new: true });
