@@ -44,13 +44,11 @@ const PostRecipeComment = ({ recipeId, onCommentSubmit }) => {
 
     return (
         <>
-            <div className={styles.container}>
-                <Button
-                    bsPrefix={styles.commentButton}
-                    onClick={handleShow}>
-                    Post Comment<FontAwesomeIcon className='ms-2' icon={faComment} />
-                </Button>
-            </div>
+            <Button
+                bsPrefix={styles.commentButton}
+                onClick={handleShow}>
+                Post Comment<FontAwesomeIcon className='ms-2' icon={faComment} />
+            </Button>
             <Modal size='lg' centered show={show} onHide={handleClose}>
                 <Modal.Header className={styles.modalHeader} closeButton>
                     <Modal.Title>Post Comment</Modal.Title>

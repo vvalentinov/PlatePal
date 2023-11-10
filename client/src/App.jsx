@@ -13,6 +13,7 @@ import CreateRecipe from './components/CreateRecipe/CreateRecipe';
 import Recipes from './components/Recipes/Recipes';
 import RecipeDetails from './components/RecipeDetails/RecipeDetails';
 import Footer from './components/Footer/Footer';
+import UnapprovedRecipesList from './components/UnapprovedRecipesList/UnapprovedRecipesList';
 
 import { AuthProvider } from './contexts/AuthContext';
 
@@ -41,6 +42,7 @@ const App = () => {
                         <Route path={paths.recipeCreatePath} element={<CreateRecipe />} />
                         <Route path={paths.logoutPath} element={<Logout />} />
                     </Route>
+                    <Route path='/recipe/all/unapproved' element={<UnapprovedRecipesList />} />
                 </Routes>
             </main>
             <Footer />

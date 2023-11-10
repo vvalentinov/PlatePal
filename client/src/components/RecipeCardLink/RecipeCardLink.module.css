@@ -1,0 +1,35 @@
+.recipeLink {
+    flex-basis: 25%;
+    text-decoration: none;
+}
+
+.recipeCard {
+    flex-basis: 25%;
+    text-align: center;
+    cursor: pointer;
+    transition: transform .3s;
+    border: solid 2px black;
+    color: white;
+}
+
+.recipeCard img {
+    height: 15rem;
+    border-bottom: solid 2px black;
+
+}
+
+.recipeCardBody {
+    background-color: #2C3E50;
+}
+
+.recipeCard:hover {
+    transform: scale(1.1);
+    color: #93DC80;
+}
+
+.recipeCardTitle {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 340px;
+}

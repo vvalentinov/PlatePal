@@ -19,12 +19,13 @@ import NoCommentsCard from './NoCommentsCard/NoCommentsCard';
 import { recipeServiceFactory } from '../../services/recipeService';
 
 import { useService } from '../../hooks/useService';
+import ApproveRecipe from './ApproveRecipe/ApproveRecipe';
 
 const RecipeDetails = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [toast, setToast] = useState('');
 
-    const { isAuthenticated } = useContext(AuthContext);
+    const { isAuthenticated, isAdmin } = useContext(AuthContext);
 
     const { recipeId } = useParams();
 
@@ -49,6 +50,13 @@ const RecipeDetails = () => {
         }));
     };
 
+    const handleApprovingRecipe = (result) => {
+        setRecipe((state) => ({
+            ...state,
+            isApproved: result.isApproved
+        }));
+    };
+
     return (
         <>
             {isLoading && <CustomSpinner />}
@@ -59,12 +67,15 @@ const RecipeDetails = () => {
                         <img src={recipe.image.url} alt={`Recipe Image: ${recipe.name}`} />
                         <RecipeDescriptionCard {...recipe} />
                     </div>
-                    {isAuthenticated && (
-                        <div className={styles.recipeCommentStarContainer}>
-                            <PostRecipeComment recipeId={recipeId} onCommentSubmit={handleCommentSubmit} />
-                            <RecipeStarRating recipeId={recipeId} onRatingSubmit={handleRatingSubmit} />
-                        </div>
-                    )}
+                    <div className={styles.recipeCommentStarContainer}>
+                        {!recipe.isApproved && isAdmin && <ApproveRecipe recipeId={recipeId} handleApprovingRecipe={handleApprovingRecipe} />}
+                        {isAuthenticated && (
+                            <>
+                                <PostRecipeComment recipeId={recipeId} onCommentSubmit={handleCommentSubmit} />
+                                <RecipeStarRating recipeId={recipeId} onRatingSubmit={handleRatingSubmit} />
+                            </>
+                        )}
+                    </div>
                     <div className={styles.youtubeVideoSection}>
                         {recipe.youtubeLink && <iframe src={recipe.youtubeLink} allowFullScreen></iframe>}
                     </div>

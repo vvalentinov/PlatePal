@@ -15,7 +15,7 @@ const RecipeIngredients = ({ ingredients, control, remove, errors }) => {
                 name={`ingredients[${index}].name`}
                 rules={{
                     required: { value: true, message: "Ingredient must not be empty!" },
-                    minLength: { value: 5, message: "Ingredient must be at least 5 characters long!" },
+                    minLength: { value: 3, message: "Ingredient must be at least 5 characters long!" },
                     maxLength: { value: 100, message: "Ingredient must not exceed 100 characters!" }
                 }}
                 render={({ field: { onChange, onBlur } }) => (

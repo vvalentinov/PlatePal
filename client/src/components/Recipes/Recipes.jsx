@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
-import Card from 'react-bootstrap/Card';
+import RecipeCardLink from '../RecipeCardLink/RecipeCardLink';
 
 import styles from './Recipes.module.css';
 
 const Recipes = () => {
     const { category } = useParams();
+
     const [recipes, setRecipes] = useState([]);
 
     useEffect(() => {
@@ -19,16 +20,11 @@ const Recipes = () => {
     return (
         <>
             <div className={styles.container}>
-                {recipes.map(x => (
-                    <Link key={x._id} className={styles.recipeLink} to={`/recipe/details/${x._id}`}>
-                        <Card className={styles.recipeCard}>
-                            <Card.Img variant="top" src={x.image.url} />
-                            <Card.Body className={styles.recipeCardBody}>
-                                <Card.Title className={styles.recipeCardTitle}>{x.name}</Card.Title>
-                            </Card.Body>
-                        </Card>
-                    </Link>
-                ))}
+                {recipes.map(x => <RecipeCardLink
+                    key={x._id}
+                    recipe={x}
+                    link={`/recipe/details/${x._id}`} />
+                )}
             </div>
         </>
     );
