@@ -82,4 +82,25 @@ exports.approveRecipe = (recipeId) => Recipe.findByIdAndUpdate(
     { isApproved: true },
     { new: true });
 
-exports.getUserRecipes = (userId) => Recipe.find({ owner: userId }).select('_id image name');
+exports.getUserRecipes = (userId, searchName) => Recipe.find(
+    {
+        owner: userId,
+        name: new RegExp(searchName, 'i'),
+    })
+    .select('_id image name');
+
+exports.getUserApprovedRecipes = (userId, searchName) => Recipe.find(
+    {
+        owner: userId,
+        isApproved: true,
+        name: new RegExp(searchName, 'i'),
+    })
+    .select('_id image name');
+
+exports.getUserUnapprovedRecipes = (userId, searchName) => Recipe.find(
+    {
+        owner: userId,
+        isApproved: false,
+        name: new RegExp(searchName, 'i'),
+    }
+).select('_id image name');

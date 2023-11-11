@@ -65,8 +65,23 @@ router.put('/approve/:recipeId', isAdmin, async (req, res) => {
 
 router.get('/user-recipes', isAuthenticated, async (req, res) => {
     const userId = req.user._id;
-    const recipes = await recipeManager.getUserRecipes(userId);
+    const searchName = req.query.searchName;
+    const recipes = await recipeManager.getUserRecipes(userId, searchName);
     res.status(200).json({ message: "User recipes retrieved successfully!", result: recipes });
+});
+
+router.get('/user-recipes/approved', isAuthenticated, async (req, res) => {
+    const userId = req.user._id;
+    const searchName = req.query.searchName;
+    const recipes = await recipeManager.getUserApprovedRecipes(userId, searchName);
+    res.status(200).json({ message: "User approved recipes retrieved successfully!", result: recipes });
+});
+
+router.get('/user-recipes/unapproved', isAuthenticated, async (req, res) => {
+    const userId = req.user._id;
+    const searchName = req.query.searchName;
+    const recipes = await recipeManager.getUserUnapprovedRecipes(userId, searchName);
+    res.status(200).json({ message: "User unapproved recipes retrieved successfully!", result: recipes });
 });
 
 module.exports = router;
