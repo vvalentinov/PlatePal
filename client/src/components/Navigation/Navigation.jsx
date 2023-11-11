@@ -38,23 +38,26 @@ const Navigation = () => {
                             to={paths.categoriesListPath}>
                             Categories
                         </NavLink>
+                        {isAuthenticated && (
+                            <NavLink
+                                className={({ isActive }) => isActive ? styles.activeLink : styles.link}
+                                to='/recipe/all/user-recipes'>
+                                My Recipes
+                            </NavLink>
+                        )}
                     </Nav>
-                    {/* For Logged In Users */}
                     {isAuthenticated && (
-                        <>
-                            <Nav className="fs-4">
-                                <Navbar.Text bsPrefix={styles.navbarText}>
-                                    Logged in as: <Link className={styles.link}>{username}</Link>
-                                </Navbar.Text>
-                                <Button bsPrefix={styles.logoutButton} className="px-3 py-1">
-                                    <Link to={paths.logoutPath}>
-                                        Logout<FontAwesomeIcon icon={faRightFromBracket} className="ms-1" />
-                                    </Link>
-                                </Button>
-                            </Nav>
-                        </>
+                        <Nav className="fs-4">
+                            <Navbar.Text bsPrefix={styles.navbarText}>
+                                Logged in as: <Link className={styles.link}>{username}</Link>
+                            </Navbar.Text>
+                            <Button bsPrefix={styles.logoutButton} className="px-3 py-1">
+                                <Link to={paths.logoutPath}>
+                                    Logout<FontAwesomeIcon icon={faRightFromBracket} className="ms-1" />
+                                </Link>
+                            </Button>
+                        </Nav>
                     )}
-                    {/* For Guests */}
                     {!isAuthenticated && (
                         <Nav className="fs-4">
                             <NavLink

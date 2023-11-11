@@ -14,6 +14,7 @@ import Recipes from './components/Recipes/Recipes';
 import RecipeDetails from './components/RecipeDetails/RecipeDetails';
 import Footer from './components/Footer/Footer';
 import UnapprovedRecipesList from './components/UnapprovedRecipesList/UnapprovedRecipesList';
+import UserRecipesList from './components/UserRecipesList/UserRecipesList';
 
 import { AuthProvider } from './contexts/AuthContext';
 
@@ -38,6 +39,7 @@ const App = () => {
                     <Route path={paths.categoriesListPath} element={<Categories />} />
                     <Route path={paths.allRecipesPath} element={<Recipes />} />
                     <Route path={paths.recipeDetailsPath} element={<RecipeDetails />} />
+                    <Route path='/recipe/all/user-recipes' element={<UserRecipesList />} />
                     <Route element={<GuestRouteGuard />}>
                         <Route path={paths.recipeCreatePath} element={<CreateRecipe />} />
                         <Route path={paths.logoutPath} element={<Logout />} />
