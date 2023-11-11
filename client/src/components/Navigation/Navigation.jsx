@@ -41,7 +41,7 @@ const Navigation = () => {
                         {isAuthenticated && (
                             <NavLink
                                 className={({ isActive }) => isActive ? styles.activeLink : styles.link}
-                                to='/recipe/all/user-recipes'>
+                                to='/recipe/user-recipes/all'>
                                 My Recipes
                             </NavLink>
                         )}

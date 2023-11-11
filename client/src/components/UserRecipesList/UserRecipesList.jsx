@@ -1,39 +1,98 @@
 import styles from './UserRecipesList.module.css';
 
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 
-import { AuthContext } from '../../contexts/AuthContext';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
 
-import RecipeCardLink from '../RecipeCardLink/RecipeCardLink';
-import Spinner from '../Spinner/Spinner';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import RecipesList from './RecipesList/RecipesList';
 
 const UserRecipesList = () => {
-    const { token } = useContext(AuthContext);
+    const navigate = useNavigate();
 
-    const [isLoading, setIsLoading] = useState(true);
-    const [recipes, setRecipes] = useState([]);
+    const { recipeType } = useParams();
+
+    const location = useLocation();
+    const currentURL = location.pathname;
+
+    const [title, setTitle] = useState('All Recipes');
+    const [searchName, setSearchName] = useState('');
+
+    const [recipeTypeState, setRecipeTypeState] = useState(recipeType);
+    const [searchQuery, setSearchQuery] = useState('');
+
+    const onSearchNameChange = (e) => setSearchName(e.target.value);
+
+    const searchInputText = `Search recipe by name in ${title.toLowerCase()}`;
+
+    const getAllUserRecipes = () => {
+        setTitle('All Recipes');
+        navigate('/recipe/user-recipes/all');
+        setRecipeTypeState('all');
+        setSearchQuery('');
+    };
 
     useEffect(() => {
-        fetch('http://localhost:3000/recipe/user-recipes', {
-            headers: {
-                'X-Authorization': token
-            }
-        })
-            .then(res => res.json())
-            .then(res => setRecipes(res.result))
-            .catch(error => console.log(error))
-            .finally(() => setIsLoading(false));
-    }, []);
+        setRecipeTypeState(recipeType);
+    }, [recipeType]);
+
+    const getUserApprovedRecipes = () => {
+        setTitle('Approved Recipes');
+        navigate('/recipe/user-recipes/approved');
+        setRecipeTypeState('approved');
+        setSearchQuery('');
+    };
+
+    const getUserUnapprovedRecipes = () => {
+        setTitle('Unapproved Recipes');
+        navigate('/recipe/user-recipes/unapproved');
+        setRecipeTypeState('unapproved');
+        setSearchQuery('');
+    };
+
+    const onSearchFormSubmit = (e) => {
+        e.preventDefault();
+        if (searchName) {
+            navigate(`${currentURL}?search=${searchName}`);
+        } else {
+            navigate(`${currentURL}`);
+        }
+        setSearchQuery(searchName);
+    };
 
     return (
-        <div className={styles.container}>
-            {isLoading && <Spinner />}
-            {recipes.map(x => <RecipeCardLink
-                key={x._id}
-                recipe={x}
-                link={`/recipe/details/${x._id}`} />
-            )}
-        </div>
+        <>
+            <div className={styles.buttonsContainer}>
+                <Button onClick={getUserApprovedRecipes} bsPrefix={styles.button} size='lg'>Approved Recipes</Button>
+                <Button onClick={getUserUnapprovedRecipes} bsPrefix={styles.button} size='lg'>Unapproved Recipes</Button>
+                <Button onClick={getAllUserRecipes} bsPrefix={styles.button} size='lg'>All Recipes</Button>
+            </div>
+
+            <div className={styles.searchContainer}>
+                <Form onSubmit={onSearchFormSubmit} className={styles.searchForm}>
+                    <InputGroup size='lg'>
+                        <Form.Control
+                            placeholder={`${searchInputText}`}
+                            aria-label={`${searchInputText}`}
+                            aria-describedby="basic-addon2"
+                            className='border border-2 border-dark'
+                            onChange={onSearchNameChange}
+                            value={searchName}
+                        />
+                        <Button
+                            type='submit'
+                            className='border border-2 border-dark'
+                            id="button-addon2">
+                            Button
+                        </Button>
+                    </InputGroup>
+                </Form>
+            </div>
+
+            <RecipesList title={title} recipeType={recipeTypeState} searchQuery={searchQuery} />
+        </>
     );
 };
 

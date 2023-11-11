@@ -6,3 +6,37 @@
     margin: 3rem 0;
     text-align: center;
 }
+
+.buttonsContainer {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-top: 2rem;
+    padding: 0 3rem;
+}
+
+.button {
+    background-color: #93DC80;
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    border-radius: 15px;
+    text-transform: uppercase;
+    flex-basis: 33.3%;
+}
+
+.button:hover,
+.button:active {
+    color: white;
+}
+
+.searchContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 2rem 0;
+}
+
+.searchForm {
+    width: 80%;
+}
