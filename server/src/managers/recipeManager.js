@@ -77,4 +77,9 @@ exports.getAll = async (categoryName) => {
 
 exports.genUnapproved = () => Recipe.find({ isApproved: false }).lean();
 
-exports.approveRecipe = (recipeId) => Recipe.findByIdAndUpdate(recipeId, { isApproved: true }, { new: true });
+exports.approveRecipe = (recipeId) => Recipe.findByIdAndUpdate(
+    recipeId,
+    { isApproved: true },
+    { new: true });
+
+exports.getUserRecipes = (userId) => Recipe.find({ owner: userId }).select('_id image name');
