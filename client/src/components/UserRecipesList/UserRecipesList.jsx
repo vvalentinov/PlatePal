@@ -6,18 +6,20 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useParams, useNavigate, useLocation, Link } from 'react-router-dom';
 import RecipesList from './RecipesList/RecipesList';
+
+import { extractTitle } from '../../utils/extractInitialTitle';
 
 const UserRecipesList = () => {
     const navigate = useNavigate();
 
-    const { recipeType } = useParams();
-
     const location = useLocation();
     const currentURL = location.pathname;
 
-    const [title, setTitle] = useState('All Recipes');
+    const { recipeType } = useParams();
+
+    const [title, setTitle] = useState(extractTitle(recipeType));
     const [searchName, setSearchName] = useState('');
 
     const [recipeTypeState, setRecipeTypeState] = useState(recipeType);
@@ -29,7 +31,6 @@ const UserRecipesList = () => {
 
     const getAllUserRecipes = () => {
         setTitle('All Recipes');
-        navigate('/recipe/user-recipes/all');
         setRecipeTypeState('all');
         setSearchQuery('');
     };
@@ -40,14 +41,12 @@ const UserRecipesList = () => {
 
     const getUserApprovedRecipes = () => {
         setTitle('Approved Recipes');
-        navigate('/recipe/user-recipes/approved');
         setRecipeTypeState('approved');
         setSearchQuery('');
     };
 
     const getUserUnapprovedRecipes = () => {
         setTitle('Unapproved Recipes');
-        navigate('/recipe/user-recipes/unapproved');
         setRecipeTypeState('unapproved');
         setSearchQuery('');
     };
@@ -65,9 +64,15 @@ const UserRecipesList = () => {
     return (
         <>
             <div className={styles.buttonsContainer}>
-                <Button onClick={getUserApprovedRecipes} bsPrefix={styles.button} size='lg'>Approved Recipes</Button>
-                <Button onClick={getUserUnapprovedRecipes} bsPrefix={styles.button} size='lg'>Unapproved Recipes</Button>
-                <Button onClick={getAllUserRecipes} bsPrefix={styles.button} size='lg'>All Recipes</Button>
+                <Link className={styles.link} to='/recipe/user-recipes/approved'>
+                    <Button onClick={getUserApprovedRecipes} bsPrefix={styles.button} size='lg'>Approved Recipes</Button>
+                </Link>
+                <Link className={styles.link} to='/recipe/user-recipes/unapproved'>
+                    <Button onClick={getUserUnapprovedRecipes} bsPrefix={styles.button} size='lg'>Unapproved Recipes</Button>
+                </Link>
+                <Link className={styles.link} to='/recipe/user-recipes/all'>
+                    <Button onClick={getAllUserRecipes} bsPrefix={styles.button} size='lg'>All Recipes</Button>
+                </Link>
             </div>
 
             <div className={styles.searchContainer}>
@@ -90,8 +95,8 @@ const UserRecipesList = () => {
                     </InputGroup>
                 </Form>
             </div>
-
-            <RecipesList title={title} recipeType={recipeTypeState} searchQuery={searchQuery} />
+            <h2 className='text-center'>{title}</h2>
+            <RecipesList recipeType={recipeTypeState} searchQuery={searchQuery} />
         </>
     );
 };

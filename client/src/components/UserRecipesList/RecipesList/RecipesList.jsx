@@ -7,10 +7,14 @@ import RecipeCardLink from '../../RecipeCardLink/RecipeCardLink';
 
 import styles from './RecipesList.module.css';
 
-const RecipesList = ({ recipeType, title, searchQuery }) => {
+import { useNavigate } from 'react-router-dom';
+
+const RecipesList = ({ recipeType, searchQuery }) => {
     const [recipes, setRecipes] = useState([]);
 
     const recipeService = useService(recipeServiceFactory);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         switch (recipeType) {
@@ -30,6 +34,8 @@ const RecipesList = ({ recipeType, title, searchQuery }) => {
                     .catch(error => console.log(error));
                 break;
             default:
+
+                navigate('/recipe/user-recipes/all');
                 recipeService.getAllUserRecipes(searchQuery)
                     .then(res => setRecipes(res.result))
                     .catch(error => console.log(error));
@@ -39,7 +45,6 @@ const RecipesList = ({ recipeType, title, searchQuery }) => {
 
     return (
         <>
-            <h2 className='text-center mt-3'>{title} ({recipes.length})</h2>
             <div className={styles.container}>
                 {recipes.map(x => <RecipeCardLink
                     key={x._id}

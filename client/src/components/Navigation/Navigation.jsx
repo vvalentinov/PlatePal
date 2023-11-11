@@ -16,6 +16,8 @@ import { useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 
+import CustomNavLink from './CustomNavLink/CustomNavLink';
+
 const Navigation = () => {
     const { username, isAuthenticated } = useContext(AuthContext);
 
@@ -39,11 +41,9 @@ const Navigation = () => {
                             Categories
                         </NavLink>
                         {isAuthenticated && (
-                            <NavLink
-                                className={({ isActive }) => isActive ? styles.activeLink : styles.link}
-                                to='/recipe/user-recipes/all'>
+                            <CustomNavLink to='/recipe/user-recipes/all'>
                                 My Recipes
-                            </NavLink>
+                            </CustomNavLink>
                         )}
                     </Nav>
                     {isAuthenticated && (

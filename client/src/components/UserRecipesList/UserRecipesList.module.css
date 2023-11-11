@@ -15,13 +15,17 @@
     padding: 0 3rem;
 }
 
+.link {
+    flex-basis: 33.3%;
+}
+
 .button {
     background-color: #93DC80;
     padding: 1rem 2rem;
     font-size: 1.2rem;
     border-radius: 15px;
     text-transform: uppercase;
-    flex-basis: 33.3%;
+    width: 100%;
 }
 
 .button:hover,
