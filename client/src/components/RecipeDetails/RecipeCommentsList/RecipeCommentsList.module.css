@@ -4,8 +4,15 @@
 }
 
 .cardHeader {
-    /* background-color: #2C3E50; */
     background-color: #93DC80;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cardHeaderContainer {
+    display: flex;
+    gap: 1rem;
 }
 
 .cardBody {

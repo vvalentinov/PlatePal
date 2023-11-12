@@ -40,7 +40,23 @@ const RecipeDetails = () => {
             .finally(() => setIsLoading(false));
     }, [recipeId]);
 
-    const handleCommentSubmit = (newComment) => setRecipe((state) => ({ ...state, comments: [...state.comments, newComment] }));
+    const handleCommentSubmit = (newComment) => setRecipe((state) =>
+    ({
+        ...state,
+        comments: [...state.comments, newComment]
+    }));
+
+    const handleCommentEdit = (newComment, oldCommentId) => setRecipe((state) => {
+        return {
+            ...state,
+            comments: state.comments.map(comment => {
+                if (comment && comment._id === oldCommentId) {
+                    return newComment;
+                }
+                return comment;
+            })
+        };
+    });
 
     const handleRatingSubmit = (result) => {
         setRecipe((state) => ({
@@ -87,7 +103,11 @@ const RecipeDetails = () => {
                         <h2>Comments:</h2>
                         {
                             recipe.comments.length > 0 ?
-                                <RecipeCommentsList comments={recipe.comments} /> :
+                                <RecipeCommentsList
+                                    comments={recipe.comments}
+                                    handleCommentEdit={handleCommentEdit}
+                                    recipeId={recipe._id}
+                                /> :
                                 <NoCommentsCard />
                         }
                     </section>

@@ -1,0 +1,35 @@
+.cardHeaderContainerBtn {
+    color: white;
+    background-color: #2C3E50;
+    padding: 0.3rem 1rem;
+    text-transform: uppercase;
+    border-radius: 10px;
+}
+
+.cardHeaderContainerBtn:hover {
+    color: #18A392;
+}
+
+.modalHeader {
+    background-color: #93DC80;
+}
+
+.modalBody {
+    background-color: #2C3E50;
+}
+
+.editBtn {
+    background-color: #93DC80;
+    padding: 0.8rem 0;
+    font-size: 1.5rem;
+    border-radius: 15px;
+    text-transform: uppercase;
+}
+
+.textArea {
+    font-size: 1.3rem;
+}
+
+.editBtn:hover {
+    color: white;
+}

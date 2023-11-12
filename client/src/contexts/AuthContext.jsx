@@ -14,7 +14,7 @@ export const AuthProvider = ({ children }) => {
     const contextValue = {
         userLogin,
         userLogout,
-        userId: auth._id,
+        userId: auth.userId,
         username: auth.username,
         token: auth.token,
         isAuthenticated: !!auth.token,
