@@ -58,6 +58,11 @@ const RecipeDetails = () => {
         };
     });
 
+    const handleCommentDelete = (commentId) => setRecipe((state) => ({
+        ...state,
+        comments: recipe.comments.filter(comment => comment._id !== commentId)
+    }))
+
     const handleRatingSubmit = (result) => {
         setRecipe((state) => ({
             ...state,
@@ -106,6 +111,7 @@ const RecipeDetails = () => {
                                 <RecipeCommentsList
                                     comments={recipe.comments}
                                     handleCommentEdit={handleCommentEdit}
+                                    handleCommentDelete={handleCommentDelete}
                                     recipeId={recipe._id}
                                 /> :
                                 <NoCommentsCard />

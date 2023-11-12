@@ -1,0 +1,35 @@
+.cardHeaderContainerBtn {
+    color: white;
+    background-color: #2C3E50;
+    padding: 0.3rem 1rem;
+    text-transform: uppercase;
+    border-radius: 10px;
+}
+
+.cardHeaderContainerBtn:hover {
+    color: #18A392;
+}
+
+.modalHeader {
+    background-color: #93DC80;
+}
+
+.modalBody {
+    background-color: #2C3E50;
+    color: white;
+    font-size: 1.4rem;
+    text-align: center;
+}
+
+.deleteBtn {
+    background-color: #93DC80;
+    padding: 0.8rem 0;
+    font-size: 1.5rem;
+    border-radius: 15px;
+    text-transform: uppercase;
+    margin-top: 3rem;
+}
+
+.deleteBtn:hover {
+    color: red;
+}

@@ -63,6 +63,7 @@ const PostRecipeComment = ({ recipeId, onCommentSubmit }) => {
                                 value={formValues.comment}
                                 onChange={onChangeHandler}
                                 style={{ height: '300px' }}
+                                className={styles.commentArea}
                             />
                         </FloatingLabel>
                     </Modal.Body>

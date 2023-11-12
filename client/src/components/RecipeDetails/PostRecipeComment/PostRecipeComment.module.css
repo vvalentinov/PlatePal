@@ -34,6 +34,10 @@
     padding: 1rem 2rem;
 }
 
+.commentArea {
+    font-size: 1.5rem;
+}
+
 .commentButton:hover,
 .modalButton:hover {
     color: white;

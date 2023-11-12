@@ -10,10 +10,12 @@ import EditCommentBtn from './EditCommentBtn/EditCommentBtn';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
+import DeleteCommentBtn from './DeleteCommentBtn/DeleteCommentBtn';
 
 const RecipeCommentsList = ({
     comments,
     handleCommentEdit,
+    handleCommentDelete,
     recipeId
 }) => {
     const { userId } = useContext(AuthContext);
@@ -31,9 +33,9 @@ const RecipeCommentsList = ({
                                     commentId={x._id}
                                     recipeId={recipeId}
                                     text={x.text} />
-                                <Button bsPrefix={styles.cardHeaderContainerBtn}>
-                                    Delete<FontAwesomeIcon className='ms-2' icon={faTrashCan} />
-                                </Button>
+                                <DeleteCommentBtn
+                                    commentId={x._id}
+                                    handleCommentDelete={handleCommentDelete} />
                             </div>
                         )}
                     </Card.Header>
