@@ -17,3 +17,15 @@ exports.create = async (commentData, userId) => {
 };
 
 exports.getRecipeComments = (recipeId) => Comment.find({ recipeId });
+
+exports.editComment = async (commentId, userId, recipeId, newText) => {
+    const comment = await Comment.findOne({ _id: commentId, recipeId });
+    if (!comment) {
+        throw new Error('No comment of recipe found with given id!');
+    }
+
+    comment.text = newText;
+    await comment.save();
+
+    return comment.populate('user', 'username');
+};

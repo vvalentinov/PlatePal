@@ -37,4 +37,17 @@ router.get(getRecipeCommentsRoute, async (req, res) => {
     }
 });
 
+router.put('/edit/:commentId', isAuthenticated, async (req, res) => {
+    const commentId = req.params.commentId;
+    const userId = req.user._id;
+    const { recipeId, text } = req.body;
+
+    try {
+        const result = await commentManager.editComment(commentId, userId, recipeId, text);
+        res.status(200).json({ message: 'Comment edited successfully!', result });
+    } catch (error) {
+        res.status(400).json({ message: getErrorMessage(error) });
+    }
+});
+
 module.exports = router;
