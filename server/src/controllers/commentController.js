@@ -50,4 +50,15 @@ router.put('/edit/:commentId', isAuthenticated, async (req, res) => {
     }
 });
 
+router.delete('/delete/:commentId', isAuthenticated, async (req, res) => {
+    const commentId = req.params.commentId;
+
+    try {
+        const result = await commentManager.deleteComment(commentId);
+        res.status(200).json({ message: 'Comment deleted successfully!', result });
+    } catch (error) {
+        res.status(400).json({ message: getErrorMessage(error) });
+    }
+});
+
 module.exports = router;

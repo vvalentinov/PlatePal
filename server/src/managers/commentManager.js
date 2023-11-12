@@ -13,7 +13,7 @@ exports.create = async (commentData, userId) => {
     recipe.comments.push(comment._id);
     await recipe.save();
 
-    return comment;
+    return comment.populate('user', 'username');
 };
 
 exports.getRecipeComments = (recipeId) => Comment.find({ recipeId });
@@ -28,4 +28,15 @@ exports.editComment = async (commentId, userId, recipeId, newText) => {
     await comment.save();
 
     return comment.populate('user', 'username');
+};
+
+exports.deleteComment = async (commentId) => {
+    const comment = await Comment.findById(commentId);
+    if (!comment) {
+        throw new Error('Comment with given id not found!');
+    }
+
+    await Comment.deleteOne({ _id: commentId });
+
+    return comment;
 };
