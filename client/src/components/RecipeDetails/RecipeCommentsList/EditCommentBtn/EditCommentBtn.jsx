@@ -1,15 +1,18 @@
+import styles from './EditCommentBtn.module.css';
+
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
-import { useContext, useState } from 'react';
-
-import { AuthContext } from '../../../../contexts/AuthContext';
+import { useState } from 'react';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare } from '@fortawesome/free-regular-svg-icons';
 
-import styles from './EditCommentBtn.module.css';
+import { commentServiceFactory } from '../../../../services/commentService';
+import { useService } from '../../../../hooks/useService';
+
+import useForm from '../../../../hooks/useForm';
 
 const EditCommentBtn = ({
     commentId,
@@ -17,36 +20,24 @@ const EditCommentBtn = ({
     handleCommentEdit,
     recipeId
 }) => {
-    const [editCommentValue, setEditCommentValue] = useState(text);
     const [show, setShow] = useState(false);
-
-    const { token } = useContext(AuthContext);
-
-    const handleClose = () => {
-        setShow(false);
-        setEditCommentValue(editCommentValue);
-    }
+    const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    const onEditCommentChange = (e) => setEditCommentValue(e.target.value);
+    const commentService = useService(commentServiceFactory);
 
-    const onEditFormSubmit = (e) => {
-        e.preventDefault();
-
-        fetch(`http://localhost:3000/comment/edit/${commentId}`,
-            {
-                method: 'PUT',
-                headers: {
-                    'X-Authorization': token,
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ recipeId, text: editCommentValue })
-            })
-            .then(res => res.json())
+    const onEditFormSubmit = () => {
+        commentService.edit(commentId, { recipeId, text: formValues.text })
             .then(res => handleCommentEdit(res.result, commentId))
             .catch(error => console.log(error))
             .finally(() => handleClose());
     };
+
+    const {
+        formValues,
+        onChangeHandler,
+        onSubmit
+    } = useForm({ 'text': text }, onEditFormSubmit);
 
     return (
         <>
@@ -60,12 +51,13 @@ const EditCommentBtn = ({
                     <Modal.Title>Edit Comment</Modal.Title>
                 </Modal.Header>
                 <Modal.Body className={styles.modalBody}>
-                    <Form onSubmit={onEditFormSubmit}>
+                    <Form onSubmit={onSubmit}>
                         <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
                             <Form.Control
+                                name='text'
                                 className={styles.textArea}
-                                value={editCommentValue}
-                                onChange={onEditCommentChange}
+                                value={formValues.text}
+                                onChange={onChangeHandler}
                                 as="textarea"
                                 rows={8} />
                         </Form.Group>

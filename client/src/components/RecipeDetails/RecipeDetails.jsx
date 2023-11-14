@@ -24,12 +24,11 @@ import ApproveRecipe from './ApproveRecipe/ApproveRecipe';
 const RecipeDetails = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [toast, setToast] = useState('');
+    const [recipe, setRecipe] = useState();
 
     const { isAuthenticated, isAdmin } = useContext(AuthContext);
 
     const { recipeId } = useParams();
-
-    const [recipe, setRecipe] = useState();
 
     const recipeService = useService(recipeServiceFactory);
 
@@ -112,7 +111,7 @@ const RecipeDetails = () => {
                                     comments={recipe.comments}
                                     handleCommentEdit={handleCommentEdit}
                                     handleCommentDelete={handleCommentDelete}
-                                    recipeId={recipe._id}
+                                    recipeId={recipeId}
                                 /> :
                                 <NoCommentsCard />
                         }

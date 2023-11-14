@@ -11,7 +11,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 
 const ApproveRecipe = ({ recipeId, handleApprovingRecipe }) => {
-
     const [show, setShow] = useState(false);
 
     const { token } = useContext(AuthContext);

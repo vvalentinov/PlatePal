@@ -91,7 +91,11 @@ const CreateRecipe = () => {
                 <RecipeDescription control={control} errors={errors} />
                 <RecipeYoutubeLink control={control} errors={errors} />
                 <RecipeCookTime control={control} errors={errors} />
-                <RecipeIngredients errors={errors} control={control} ingredients={ingredients} remove={ingredientsRemove} />
+                <RecipeIngredients
+                    errors={errors}
+                    control={control}
+                    ingredients={ingredients}
+                    remove={ingredientsRemove} />
 
                 <div className="d-grid">
                     <Button
