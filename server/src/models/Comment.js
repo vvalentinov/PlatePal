@@ -21,6 +21,11 @@ const commentSchema = new mongoose.Schema({
         required: true,
         ref: UserModelName,
     },
+    createdAt: {
+        type: Date,
+        required: true,
+        default: Date.now
+    }
 });
 
 const Comment = mongoose.model(CommentModelName, commentSchema);

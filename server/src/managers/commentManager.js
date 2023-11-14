@@ -7,6 +7,7 @@ exports.create = async (commentData, userId) => {
         text: commentData.text,
         recipeId: commentData.recipeId,
         user: userId,
+        createdAt: commentData.createdAt
     });
 
     const recipe = await getById(commentData.recipeId);
