@@ -12,39 +12,41 @@ import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { useService } from '../../../hooks/useService';
 import { ratingServiceFactory } from '../../../services/ratingService';
 
-const RecipeStarRating = ({ recipeId, onRatingSubmit }) => {
+import useForm from '../../../hooks/useForm';
+
+const RecipeStarRating = ({ recipeId, onRatingSubmit, userRating }) => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    const [rating, setRating] = useState(null);
-    const [hover, setHover] = useState(null);
-
     const ratingService = useService(ratingServiceFactory);
 
-    const isRadioSelected = (value) => rating === value;
-    const onRadioChange = (e) => setRating(e.target.value);
-
-    const onFormSubmit = (e) => {
-        e.preventDefault();
-
-        ratingService.rateRecipe(recipeId, { rateValue: Number(rating) })
+    const onFormSubmit = () => {
+        ratingService.rateRecipe(recipeId, { rateValue: formValues.ratingBtn })
             .then(res => onRatingSubmit(res.result))
             .catch(error => console.log(error));
     };
 
+    const isRadioSelected = (value) => formValues.ratingBtn === value;
+
+    const {
+        formValues,
+        onRecipeStarHandler,
+        onSubmit } = useForm({
+            "ratingBtn": userRating,
+            "hover": null
+        }, onFormSubmit);
+
     return (
         <>
-            <Button
-                bsPrefix={styles.starButton}
-                onClick={handleShow}>
+            <Button bsPrefix={styles.starButton} onClick={handleShow}>
                 Star Recipe<FontAwesomeIcon className='ms-2' icon={faStar} />
             </Button>
             <Modal size='lg' centered show={show} onHide={handleClose}>
                 <Modal.Header className={styles.modalHeader} closeButton>
                     <Modal.Title>Give Your Opinion</Modal.Title>
                 </Modal.Header>
-                <Form onSubmit={onFormSubmit}>
+                <Form onSubmit={onSubmit}>
                     <Modal.Body className={styles.modalBody}>
                         {[...Array(5)].map((star, index) => {
                             const ratingValue = index + 1;
@@ -54,21 +56,25 @@ const RecipeStarRating = ({ recipeId, onRatingSubmit }) => {
                                         className={styles.radioBtn}
                                         type="radio"
                                         name="ratingBtn"
-                                        value={ratingValue}
-                                        onChange={onRadioChange}
+                                        value={formValues.ratingBtn}
+                                        onChange={() => onRecipeStarHandler("ratingBtn", ratingValue)}
                                         checked={isRadioSelected(ratingValue)} />
                                     <FontAwesomeIcon
-                                        color={ratingValue <= (hover || rating) ? '#93DC80' : 'white'}
+                                        color={ratingValue <= (formValues.hover || formValues.ratingBtn) ? '#93DC80' : 'white'}
                                         className={styles.starIcon}
                                         icon={faStar}
-                                        onMouseEnter={() => setHover(ratingValue)}
-                                        onMouseLeave={() => setHover(null)} />
+                                        onMouseEnter={() => onRecipeStarHandler('hover', ratingValue)}
+                                        onMouseLeave={() => onRecipeStarHandler('hover', null)} />
                                 </label>
                             )
                         })}
                     </Modal.Body>
-                    <div className={`d-grid gap-2 ${styles.buttonContainer}`}>
-                        <Button bsPrefix={styles.buttonContainerBtn} onClick={handleClose} type='submit' size="lg">
+                    <div className={`d-grid ${styles.buttonContainer}`}>
+                        <Button
+                            bsPrefix={styles.buttonContainerBtn}
+                            onClick={handleClose}
+                            type='submit'
+                            size="lg">
                             Rate Recipe
                         </Button>
                     </div>
@@ -77,5 +83,5 @@ const RecipeStarRating = ({ recipeId, onRatingSubmit }) => {
         </>
     );
 };
-export default RecipeStarRating;
 
+export default RecipeStarRating;

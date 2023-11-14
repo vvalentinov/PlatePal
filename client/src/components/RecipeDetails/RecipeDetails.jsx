@@ -1,29 +1,29 @@
-import { useEffect, useState, useContext } from 'react';
-import { useParams } from 'react-router-dom';
-
 import styles from './RecipeDetails.module.css';
 
+import ApproveRecipe from './ApproveRecipe/ApproveRecipe';
 import RecipeDescriptionCard from './RecipeDescription/RecipeDescriptionCard';
 import RecipeIngredientsContainer from './RecipeIngredients/RecipeIngredientsContainer';
 import RecipeStepsContainer from './RecipeSteps/RecipeStepsContainer';
 import PostRecipeComment from './PostRecipeComment/PostRecipeComment';
 import RecipeStarRating from './RecipeStarRating/RecipeStarRating';
 import RecipeCommentsList from './RecipeCommentsList/RecipeCommentsList';
+import NoCommentsCard from './NoCommentsCard/NoCommentsCard';
 import BackToTopArrow from '../BackToTopArrow/BackToTopArrow';
 import ToastNotification from '../Toast/ToastNotification';
 import CustomSpinner from '../Spinner/Spinner';
 
+import { useEffect, useState, useContext } from 'react';
+import { useParams } from 'react-router-dom';
+
 import { AuthContext } from '../../contexts/AuthContext';
-import NoCommentsCard from './NoCommentsCard/NoCommentsCard';
 
 import { recipeServiceFactory } from '../../services/recipeService';
 
 import { useService } from '../../hooks/useService';
-import ApproveRecipe from './ApproveRecipe/ApproveRecipe';
 
 const RecipeDetails = () => {
-    const [isLoading, setIsLoading] = useState(true);
-    const [toast, setToast] = useState('');
+    const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
+    const [toastMessage, setToastMessage] = useState('');
     const [recipe, setRecipe] = useState();
 
     const { isAuthenticated, isAdmin } = useContext(AuthContext);
@@ -35,8 +35,8 @@ const RecipeDetails = () => {
     useEffect(() => {
         recipeService.getRecipe(recipeId)
             .then(res => setRecipe(res.result))
-            .catch(error => setToast(error.message))
-            .finally(() => setIsLoading(false));
+            .catch(error => setToastMessage(error.message))
+            .finally(() => setIsSpinnerLoading(false));
     }, [recipeId]);
 
     const handleCommentSubmit = (newComment) => setRecipe((state) =>
@@ -70,17 +70,15 @@ const RecipeDetails = () => {
         }));
     };
 
-    const handleApprovingRecipe = (result) => {
-        setRecipe((state) => ({
-            ...state,
-            isApproved: result.isApproved
-        }));
-    };
+    const date = new Date();
+    console.log(date);
+
+    const handleApprovingRecipe = (result) => setRecipe((state) => ({ ...state, isApproved: result.isApproved }));
 
     return (
         <>
-            {isLoading && <CustomSpinner />}
-            {toast && <ToastNotification message={toast} />}
+            {isSpinnerLoading && <CustomSpinner />}
+            {toastMessage && <ToastNotification message={toastMessage} />}
             {recipe && (
                 <>
                     <div className={styles.container}>
@@ -88,11 +86,18 @@ const RecipeDetails = () => {
                         <RecipeDescriptionCard {...recipe} />
                     </div>
                     <div className={styles.recipeCommentStarContainer}>
-                        {!recipe.isApproved && isAdmin && <ApproveRecipe recipeId={recipeId} handleApprovingRecipe={handleApprovingRecipe} />}
+                        {
+                            !recipe.isApproved &&
+                            isAdmin &&
+                            <ApproveRecipe recipeId={recipeId} handleApprovingRecipe={handleApprovingRecipe} />
+                        }
                         {isAuthenticated && (
                             <>
                                 <PostRecipeComment recipeId={recipeId} onCommentSubmit={handleCommentSubmit} />
-                                <RecipeStarRating recipeId={recipeId} onRatingSubmit={handleRatingSubmit} />
+                                <RecipeStarRating
+                                    recipeId={recipeId}
+                                    onRatingSubmit={handleRatingSubmit}
+                                    userRating={recipe.userRating} />
                             </>
                         )}
                     </div>
