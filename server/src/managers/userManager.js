@@ -55,3 +55,5 @@ exports.validateToken = async (token) => {
 };
 
 exports.logout = (token) => revokedTokens.add(token);
+
+exports.getById = (userId) => User.findById(userId);

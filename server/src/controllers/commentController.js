@@ -61,4 +61,16 @@ router.delete('/delete/:commentId', isAuthenticated, async (req, res) => {
     }
 });
 
+router.put('/like/:commentId', isAuthenticated, async (req, res) => {
+    const commentId = req.params.commentId;
+    const userId = req.user._id;
+
+    try {
+        const result = await commentManager.likeComment(commentId, userId);
+        res.status(200).json(result);
+    } catch (error) {
+        res.status(400).json({ message: getErrorMessage(error) });
+    }
+});
+
 module.exports = router;

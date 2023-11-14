@@ -25,7 +25,11 @@ const commentSchema = new mongoose.Schema({
         type: Date,
         required: true,
         default: Date.now
-    }
+    },
+    likes: [{
+        type: mongoose.Types.ObjectId,
+        ref: UserModelName,
+    }],
 });
 
 const Comment = mongoose.model(CommentModelName, commentSchema);
