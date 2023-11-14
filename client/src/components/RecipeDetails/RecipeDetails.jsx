@@ -70,9 +70,6 @@ const RecipeDetails = () => {
         }));
     };
 
-    const date = new Date();
-    console.log(date);
-
     const handleApprovingRecipe = (result) => setRecipe((state) => ({ ...state, isApproved: result.isApproved }));
 
     return (

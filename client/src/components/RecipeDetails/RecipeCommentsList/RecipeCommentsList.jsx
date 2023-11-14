@@ -1,15 +1,11 @@
 import styles from './RecipeCommentsList.module.css';
 
 import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
 
 import { AuthContext } from '../../../contexts/AuthContext';
 import { useContext } from 'react';
 
 import EditCommentBtn from './EditCommentBtn/EditCommentBtn';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
 import DeleteCommentBtn from './DeleteCommentBtn/DeleteCommentBtn';
 
 const RecipeCommentsList = ({
@@ -20,12 +16,21 @@ const RecipeCommentsList = ({
 }) => {
     const { userId } = useContext(AuthContext);
 
+    const formattedDate = (comment) => {
+        const dateObj = new Date(comment.createdAt);
+        return dateObj.toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+        })
+    };
+
     return (
         <>
             {comments.map(x => (
                 <Card className={styles.card} key={x._id}>
                     <Card.Header className={styles.cardHeader}>
-                        Author - {x.user.username}
+                        {x.user.username} ({formattedDate(x)})
                         {userId && userId === x.user._id && (
                             <div className={styles.cardHeaderContainer}>
                                 <EditCommentBtn

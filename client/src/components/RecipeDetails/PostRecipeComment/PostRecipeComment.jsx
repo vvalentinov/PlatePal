@@ -23,7 +23,7 @@ const PostRecipeComment = ({ recipeId, onCommentSubmit }) => {
     const commentService = useService(commentServiceFactory);
 
     const onFormSubmit = (data) => {
-        commentService.create({ ...data, recipeId })
+        commentService.create({ ...data, recipeId, createdAt: new Date() })
             .then(res => onCommentSubmit(res.result))
             .catch(error => console.log(error));
     };
