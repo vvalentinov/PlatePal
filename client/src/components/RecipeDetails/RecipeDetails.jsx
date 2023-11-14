@@ -106,15 +106,19 @@ const RecipeDetails = () => {
                         <RecipeStepsContainer steps={recipe.steps} />
                     </div>
                     <section id='comments' className={styles.commentsSection}>
-                        <h2>Comments:</h2>
                         {
                             recipe.comments.length > 0 ?
-                                <RecipeCommentsList
-                                    comments={recipe.comments}
-                                    handleCommentEdit={handleCommentEdit}
-                                    handleCommentDelete={handleCommentDelete}
-                                    recipeId={recipeId}
-                                /> :
+                                (
+                                    <>
+                                        <h2>Comments:</h2>
+                                        <RecipeCommentsList
+                                            comments={recipe.comments}
+                                            handleCommentEdit={handleCommentEdit}
+                                            handleCommentDelete={handleCommentDelete}
+                                            recipeId={recipeId}
+                                        />
+                                    </>
+                                ) :
                                 <NoCommentsCard />
                         }
                     </section>

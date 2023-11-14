@@ -24,7 +24,7 @@ function ToastNotification({ message }) {
                     <FontAwesomeIcon icon={faTriangleExclamation} className='me-2' />
                     <strong className="me-auto">Ooops! Something went wrong!</strong>
                 </Toast.Header>
-                <Toast.Body className=' fs-5'>{message}</Toast.Body>
+                <Toast.Body className='fs-5'>{message}</Toast.Body>
             </Toast>
         </ToastContainer>
     );

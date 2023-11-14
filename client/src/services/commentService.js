@@ -8,6 +8,7 @@ export const commentServiceFactory = (token) => {
     return {
         create: (data) => request.post(`${baseUrl}/create`, data),
         edit: (commentId, data) => request.put(`${baseUrl}/edit/${commentId}`, data),
-        delete: (commentId) => request.delete(`${baseUrl}/delete/${commentId}`)
+        delete: (commentId) => request.delete(`${baseUrl}/delete/${commentId}`),
+        like: (commentId) => request.put(`${baseUrl}/like/${commentId}`)
     }
 };

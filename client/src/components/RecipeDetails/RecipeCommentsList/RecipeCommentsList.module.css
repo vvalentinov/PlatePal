@@ -10,12 +10,33 @@
     align-items: center;
 }
 
-.cardHeaderContainer {
-    display: flex;
-    gap: 1rem;
-}
-
 .cardBody {
     background-color: #2C3E50;
     color: white;
+}
+
+.thumbsUpIcon {
+    cursor: pointer;
+}
+
+.thumbsUpIcon,
+.thumbsUpIconAuthor {
+    margin-right: 5px;
+}
+
+.commentBtnsContainer {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.thumbsUpContainer {
+    display: flex;
+    align-items: center;
+}
+
+.commentInfoContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
