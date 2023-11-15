@@ -8,8 +8,6 @@ import Button from 'react-bootstrap/Button';
 
 import { Link, useNavigate } from 'react-router-dom';
 
-import { useForm, Controller } from "react-hook-form";
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faRightToBracket } from '@fortawesome/free-solid-svg-icons';
 
@@ -18,9 +16,12 @@ import { useService } from '../../hooks/useService';
 import { authServiceFactory } from '../../services/authService';
 
 import * as paths from '../../constants/pathNames';
-import * as errorMessages from '../../constants/errorMessages';
+
+import { usernameValidator, passwordValidator } from '../../utils/validatorUtil';
 
 import ToastNotification from '../Toast/ToastNotification';
+
+import useForm from '../../hooks/useForm';
 
 const LoginKeys = {
     Username: 'username',
@@ -28,15 +29,12 @@ const LoginKeys = {
 };
 
 const Login = () => {
-    const {
-        handleSubmit,
-        control,
-        formState: { errors },
-    } = useForm({ mode: "onBlur" });
+    const navigate = useNavigate();
 
     const [toast, setToast] = useState('');
 
-    const navigate = useNavigate();
+    const [usernameError, setUsernameError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
 
     const { userLogin } = useContext(AuthContext);
 
@@ -44,6 +42,15 @@ const Login = () => {
 
     const onLoginSubmit = async (data) => {
         setToast('');
+
+        const usernameErrMsg = usernameValidator(formValues[LoginKeys.Username]);
+        const passwordErrMsg = passwordValidator(formValues[LoginKeys.Password]);
+
+        if (usernameErrMsg || passwordErrMsg) {
+            setUsernameError(usernameErrMsg);
+            setPasswordError(passwordErrMsg);
+            return;
+        }
 
         try {
             const result = await authService.login(data);
@@ -54,84 +61,46 @@ const Login = () => {
         }
     };
 
-    const usernameRules = {
-        required: errorMessages.usernameEmptyError,
-        minLength: { value: 3, message: errorMessages.usernameLengthError },
-        maxLength: { value: 30, message: errorMessages.usernameLengthError },
-    };
+    const {
+        formValues,
+        onChangeHandler,
+        onSubmit
+    } = useForm({ [LoginKeys.Username]: '', [LoginKeys.Password]: '' }, onLoginSubmit);
+
+    const onUsernameBlur = () => setUsernameError(usernameValidator(formValues[LoginKeys.Username]));
+
+    const onPasswordBlur = () => setPasswordError(passwordValidator(formValues[LoginKeys.Password]));
 
     return (
         <>
             {toast && <ToastNotification message={toast} />}
             <div className={`${styles.container}`}>
-                <img
-                    className={styles.loginImg}
-                    src='/src/assets/images/login-register.jpg'
-                    alt="Logo Image..."
-                />
-                <Form
-                    method="POST"
-                    onSubmit={handleSubmit(onLoginSubmit)}
-                    className={styles.form}
-                >
+                <img className={styles.loginImg} src='/src/assets/images/login-register.jpg' alt="Logo Image..." />
+                <Form method="POST" onSubmit={onSubmit} className={styles.form}>
                     <h2 className="my-3">Login</h2>
-                    <FloatingLabel
-                        controlId="floatingInput"
-                        label="Username"
-                        className="mb-4"
-                    >
-                        <Controller
-                            control={control}
+                    <FloatingLabel controlId="floatingInput" label="Username" className="mb-4">
+                        <Form.Control
                             name={LoginKeys.Username}
-                            rules={{
-                                required: errorMessages.usernameEmptyError,
-                                minLength: { value: 3, message: errorMessages.usernameLengthError },
-                                maxLength: { value: 30, message: errorMessages.usernameLengthError },
-                            }}
-                            render={({ field: { onChange, onBlur } }) => (
-                                <Form.Control
-                                    autoComplete="on"
-                                    type="text"
-                                    onChange={onChange}
-                                    onBlur={onBlur}
-                                    placeholder="username"
-                                    className={`
-                                        border-2
-                                        ${styles.formControl}
-                                        ${errors[LoginKeys.Username] ? 'border-danger' : 'border-dark'}`}
-                                />
-                            )}
+                            autoComplete="on"
+                            type="text"
+                            onChange={onChangeHandler}
+                            onBlur={onUsernameBlur}
+                            value={formValues[LoginKeys.Username]}
+                            placeholder="username"
+                            className={usernameError ? styles.formControlError : styles.formControl}
                         />
-                        {errors[LoginKeys.Username] && (
-                            <p className="text-start text-danger">
-                                {errors[LoginKeys.Username].message}
-                            </p>
-                        )}
+                        {usernameError && <p className='text-start text-danger'>{usernameError}</p>}
                     </FloatingLabel>
                     <FloatingLabel controlId="floatingPassword" label="Password">
-                        <Controller
-                            control={control}
+                        <Form.Control
                             name={LoginKeys.Password}
-                            rules={{ required: errorMessages.passwordEmptyError }}
-                            render={({ field: { onChange, onBlur } }) => (
-                                <Form.Control
-                                    type="password"
-                                    onChange={onChange}
-                                    onBlur={onBlur}
-                                    placeholder="Password"
-                                    className={`
-                                    border-2
-                                    ${styles.formControl}
-                                    ${errors[LoginKeys.Password] ? 'border-danger' : 'border-dark'}`
-                                    }
-                                />
-                            )}
+                            type="password"
+                            onChange={onChangeHandler}
+                            onBlur={onPasswordBlur}
+                            placeholder="Password"
+                            className={passwordError ? styles.formControlError : styles.formControl}
                         />
-                        {errors[LoginKeys.Password] && (
-                            <p className="text-start text-danger">
-                                {errors[LoginKeys.Password].message}
-                            </p>
-                        )}
+                        {passwordError && <p className='text-start text-danger'>{passwordError}</p>}
                     </FloatingLabel>
                     <div className="text-start mt-4">
                         <Link to="/register">You don't have an account? Register here!</Link>

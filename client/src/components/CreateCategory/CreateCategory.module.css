@@ -18,10 +18,20 @@
     color: red;
 }
 
+.formControl {
+    border: solid 2px black;
+}
+
+.formControlError {
+    border: solid 2px red;
+}
+
 .formButton,
 .formButton:hover,
 .formButton:active {
     background-color: #93DC80;
+    text-transform: uppercase;
+    font-size: 1.5rem;
 }
 
 .formButton:hover {

@@ -6,7 +6,7 @@ import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Button from 'react-bootstrap/Button';
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
@@ -15,16 +15,17 @@ import { AuthContext } from '../../contexts/AuthContext';
 
 import { useService } from '../../hooks/useService';
 
-import { useNavigate } from 'react-router-dom';
-
 import * as paths from '../../constants/pathNames';
-import * as errorMessages from '../../constants/errorMessages';
 
 import { authServiceFactory } from '../../services/authService';
 
 import ToastNotification from '../Toast/ToastNotification';
 
-import { useForm, Controller } from "react-hook-form";
+import useForm from '../../hooks/useForm';
+
+import * as validator from '../../utils/validatorUtil';
+
+import * as errors from '../../constants/errorMessages';
 
 const RegisterKeys = {
     Username: 'username',
@@ -33,18 +34,13 @@ const RegisterKeys = {
 };
 
 const Register = () => {
-    const {
-        handleSubmit,
-        control,
-        formState: { errors },
-        getValues,
-        setError,
-        clearErrors,
-    } = useForm({ mode: "onBlur" });
+    const navigate = useNavigate();
 
     const [toast, setToast] = useState('');
 
-    const navigate = useNavigate();
+    const [usernameError, setUsernameError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+    const [repeatPassError, setRepeatPassError] = useState('');
 
     const authService = useService(authServiceFactory);
 
@@ -52,6 +48,21 @@ const Register = () => {
 
     const onRegisterSubmit = async (data) => {
         setToast('');
+
+        const username = formValues[RegisterKeys.Username];
+        const password = formValues[RegisterKeys.Password];
+        const repeatPass = formValues[RegisterKeys.RepeatPassword];
+
+        const usernameErrMsg = validator.usernameValidator(username);
+        const passwordErrMsg = validator.passwordValidator(password, repeatPass);
+        const repeatPassErrMsg = validator.repeatPassValidator(password, repeatPass);
+
+        if (usernameErrMsg || passwordErrMsg || repeatPassErrMsg) {
+            setUsernameError(usernameErrMsg);
+            setPasswordError(passwordErrMsg);
+            setRepeatPassError(repeatPassErrMsg);
+            return;
+        }
 
         try {
             const result = await authService.register(data);
@@ -62,129 +73,98 @@ const Register = () => {
         }
     };
 
+    const {
+        formValues,
+        onChangeHandler,
+        onSubmit
+    } = useForm(
+        {
+            [RegisterKeys.Username]: '',
+            [RegisterKeys.Password]: '',
+            [RegisterKeys.RepeatPassword]: ''
+        }, onRegisterSubmit);
+
+    const onUsernameBlur = () => setUsernameError(validator.usernameValidator(formValues[RegisterKeys.Username]));
+
+    const onPasswordBlur = () => {
+        const password = formValues[RegisterKeys.Password];
+        const repeatPass = formValues[RegisterKeys.RepeatPassword];
+
+        const passwordErrMsg = validator.passwordValidator(password, repeatPass);
+
+        if (passwordErrMsg === errors.passwordsMismatchError) {
+            setPasswordError(passwordErrMsg);
+            setRepeatPassError(passwordErrMsg);
+        } else if (passwordErrMsg === errors.passwordRequiredError) {
+            setPasswordError(passwordErrMsg);
+        } else {
+            setPasswordError(passwordErrMsg);
+            setRepeatPassError(validator.repeatPassValidator(password, repeatPass));
+        }
+    };
+
+    const onRepeatPassBlur = () => {
+        const password = formValues[RegisterKeys.Password];
+        const repeatPass = formValues[RegisterKeys.RepeatPassword];
+
+        const repeatPassErrMsg = validator.repeatPassValidator(password, repeatPass);
+
+        if (repeatPassErrMsg === errors.passwordsMismatchError) {
+            setPasswordError(repeatPassErrMsg);
+            setRepeatPassError(repeatPassErrMsg);
+        } else if (repeatPassErrMsg === errors.repeatPasswordRequiredError) {
+            setRepeatPassError(repeatPassErrMsg);
+        } else {
+            setRepeatPassError(repeatPassErrMsg);
+            setPasswordError(validator.passwordValidator(password, repeatPass));
+        }
+    };
+
     return (
         <>
             {toast && <ToastNotification message={toast} />}
             <div className={styles.container}>
-                <img
-                    className={styles.registerImg}
-                    src="https://res.cloudinary.com/web-project-softuni/image/upload/v1698070763/Register-Login/register_walfov.jpg"
-                    alt="Register Image..."
-                />
-                <Form onSubmit={handleSubmit(onRegisterSubmit)} className={styles.form}>
+                <img className={styles.registerImg} src='/src/assets/images/login-register.jpg' alt="Register Image..." />
+                <Form onSubmit={onSubmit} className={styles.form}>
                     <h2 className="my-4">Register</h2>
-                    <FloatingLabel
-                        controlId="floatingUsernameInput"
-                        label="Username"
-                        className="mb-4"
-                    >
-                        <Controller
-                            control={control}
+                    <FloatingLabel controlId="floatingUsernameInput" label="Username" className="mb-4">
+                        <Form.Control
+                            autoComplete="on"
+                            type="text"
                             name={RegisterKeys.Username}
-                            rules={{
-                                required: errorMessages.usernameEmptyError,
-                                minLength: { value: 3, message: errorMessages.usernameLengthError },
-                                maxLength: { value: 30, message: errorMessages.usernameLengthError },
-                            }}
-                            render={({ field: { onChange, onBlur } }) => (
-                                <Form.Control
-                                    autoComplete="on"
-                                    type="text"
-                                    placeholder="username"
-                                    className={`
-                                        border-2
-                                        ${styles.formControl}
-                                        ${errors[RegisterKeys.Username] ? 'border-danger' : 'border-dark'}`}
-                                    onChange={onChange}
-                                    onBlur={onBlur}
-                                />
-                            )}
+                            placeholder="username"
+                            className={usernameError ? styles.formControlError : styles.formControl}
+                            onChange={onChangeHandler}
+                            onBlur={onUsernameBlur}
                         />
-                        {errors[RegisterKeys.Username] && (
-                            <p className="text-start text-danger">
-                                {errors[RegisterKeys.Username].message}
-                            </p>
-                        )}
+                        {usernameError && <p className='text-start text-danger'>{usernameError}</p>}
                     </FloatingLabel>
                     <FloatingLabel controlId="floatingPassword" label="Password" className="mb-4">
-                        <Controller
-                            control={control}
+                        <Form.Control
+                            type="password"
+                            onChange={onChangeHandler}
+                            onBlur={onPasswordBlur}
                             name={RegisterKeys.Password}
-                            rules={{
-                                required: errorMessages.passwordEmptyError,
-                                validate: (value) => {
-                                    if (value !== getValues(RegisterKeys.RepeatPassword)) {
-                                        setError(RegisterKeys.RepeatPassword, {
-                                            type: 'validate',
-                                            message: errorMessages.passwordsMismatchError
-                                        });
-                                        return errorMessages.passwordsMismatchError;
-                                    }
-                                    clearErrors(RegisterKeys.RepeatPassword);
-                                    return true;
-                                }
-                            }}
-                            render={({ field: { onChange, onBlur } }) => (
-                                <Form.Control
-                                    type="password"
-                                    onChange={onChange}
-                                    onBlur={onBlur}
-                                    placeholder="Password"
-                                    className={`
-                                        border-2
-                                        ${styles.formControl}
-                                        ${errors[RegisterKeys.Password] ? 'border-danger' : 'border-dark'}`}
-                                />
-                            )}
+                            placeholder="Password"
+                            className={passwordError ? styles.formControlError : styles.formControl}
                         />
-                        {errors[RegisterKeys.Password] && (
-                            <p className="text-start text-danger">
-                                {errors[RegisterKeys.Password].message}
-                            </p>
-                        )}
+                        {passwordError && <p className='text-start text-danger'>{passwordError}</p>}
                     </FloatingLabel>
                     <FloatingLabel controlId="floatingRepeatPassword" label="Repeat Password">
-                        <Controller
-                            control={control}
+                        <Form.Control
                             name={RegisterKeys.RepeatPassword}
-                            rules={{
-                                required: errorMessages.repeatPasswordEmptyError,
-                                validate: (value) => {
-                                    if (value !== getValues(RegisterKeys.Password)) {
-                                        setError(RegisterKeys.Password, { type: 'validate', message: errorMessages.passwordsMismatchError });
-                                        return errorMessages.passwordsMismatchError;
-                                    }
-                                    clearErrors(RegisterKeys.Password);
-                                    return true;
-                                }
-                            }}
-                            render={({ field: { onChange, onBlur } }) => (
-                                <Form.Control
-                                    type="password"
-                                    onChange={onChange}
-                                    onBlur={onBlur}
-                                    placeholder="Repeat Password"
-                                    className={`
-                                        border-2
-                                        ${styles.formControl}
-                                        ${errors[RegisterKeys.RepeatPassword] ? 'border-danger' : 'border-dark'}`}
-                                />
-                            )}
+                            type="password"
+                            onChange={onChangeHandler}
+                            onBlur={onRepeatPassBlur}
+                            placeholder="Repeat Password"
+                            className={repeatPassError ? styles.formControlError : styles.formControl}
                         />
-                        {errors[RegisterKeys.RepeatPassword] && (
-                            <p className="text-start text-danger">
-                                {errors[RegisterKeys.RepeatPassword].message}
-                            </p>
-                        )}
+                        {repeatPassError && <p className='text-start text-danger'>{repeatPassError}</p>}
                     </FloatingLabel>
                     <div className="text-start mt-4">
                         <Link to="/login">You already have an account? Go to Login!</Link>
                     </div>
-                    <Button
-                        type="submit"
-                        bsPrefix={styles.registerButton}
-                        className="my-4 px-4 py-1 border-3"
-                    >
+                    <Button type="submit" bsPrefix={styles.registerButton} className="my-4 px-4 py-1 border-3">
                         Register<FontAwesomeIcon icon={faUser} className="ms-2" />
                     </Button>
                 </Form>

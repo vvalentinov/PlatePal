@@ -8,6 +8,11 @@ const useForm = (initialFormValues, onSubmitHandler) => {
         setFormValues((state) => ({ ...state, [name]: value }));
     };
 
+    const onFileChangeHandler = (e) => {
+        const { name, files } = e.target;
+        setFormValues((state) => ({ ...state, [name]: files[0] }));
+    };
+
     const onRecipeStarHandler = (name, value) => setFormValues((state) => ({ ...state, [name]: Number(value) }));
 
     const onSubmit = (e) => {
@@ -18,6 +23,7 @@ const useForm = (initialFormValues, onSubmitHandler) => {
     return {
         formValues,
         onChangeHandler,
+        onFileChangeHandler,
         onRecipeStarHandler,
         onSubmit,
     };

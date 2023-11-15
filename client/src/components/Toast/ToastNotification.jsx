@@ -7,7 +7,7 @@ import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
 
 import styles from './ToastNotification.module.css';
 
-function ToastNotification({ message }) {
+function ToastNotification({ message, isSuccessfull }) {
     const [show, setShow] = useState(true);
     const toggleShowA = () => setShow(!show);
 
@@ -19,10 +19,12 @@ function ToastNotification({ message }) {
                 onClose={toggleShowA}
                 delay={8000}
                 autohide
-                bg='danger'>
+                bg={isSuccessfull ? 'success' : 'danger'}>
                 <Toast.Header className='border-bottom border-2 border-black'>
                     <FontAwesomeIcon icon={faTriangleExclamation} className='me-2' />
-                    <strong className="me-auto">Ooops! Something went wrong!</strong>
+                    <strong className="me-auto">
+                        {isSuccessfull ? 'Successful operation!' : 'Ooops! Something went wrong!'}
+                    </strong>
                 </Toast.Header>
                 <Toast.Body className='fs-5'>{message}</Toast.Body>
             </Toast>

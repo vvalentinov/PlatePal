@@ -3,7 +3,7 @@ import styles from './RecipeCommentsList.module.css';
 import Card from 'react-bootstrap/Card';
 
 import { AuthContext } from '../../../contexts/AuthContext';
-import { useContext } from 'react';
+import { useContext, useState, useEffect } from 'react';
 
 import EditCommentBtn from './EditCommentBtn/EditCommentBtn';
 import DeleteCommentBtn from './DeleteCommentBtn/DeleteCommentBtn';
@@ -15,13 +15,17 @@ import { faThumbsUp as solidIcon } from '@fortawesome/free-solid-svg-icons';
 import { commentServiceFactory } from '../../../services/commentService';
 import { useService } from '../../../hooks/useService';
 
+import ToastNotification from '../../Toast/ToastNotification';
+
 const RecipeCommentsList = ({
     comments,
     handleCommentEdit,
     handleCommentDelete,
     recipeId
 }) => {
-    const { userId } = useContext(AuthContext);
+    const [toast, setToast] = useState('');
+
+    const { userId, isAuthenticated } = useContext(AuthContext);
 
     const commentService = useService(commentServiceFactory);
 
@@ -34,16 +38,22 @@ const RecipeCommentsList = ({
         })
     };
 
+    useEffect(() => window.scrollTo(0, 0), [toast]);
+
     const isCommentLiked = (comment) => comment.likes.includes(userId);
 
     const onCommentLike = (commentId) => {
-        commentService.like(commentId)
+        setToast('');
+
+        commentService.like('non-existing')
             .then(res => handleCommentEdit(res.result, commentId))
-            .catch(error => console.log(error));
+            .catch(error => setToast(error.message))
+            .finnaly(() => setToast(''));
     };
 
     return (
         <>
+            {toast && <ToastNotification isSuccessfull={false} message={toast} />}
             {comments.map(x => (
                 <Card className={styles.card} key={x._id}>
                     <Card.Header className={styles.cardHeader}>
@@ -53,8 +63,15 @@ const RecipeCommentsList = ({
                             <span className={styles.thumbsUpContainer}>
                                 <FontAwesomeIcon
                                     size='lg'
-                                    onClick={() => { x.user._id !== userId && onCommentLike(x._id) }}
-                                    className={x.user._id === userId ? styles.thumbsUpIconAuthor : styles.thumbsUpIcon}
+                                    onClick={() => {
+                                        x.user._id !== userId &&
+                                            isAuthenticated &&
+                                            onCommentLike(x._id)
+                                    }}
+                                    className={
+                                        (x.user._id === userId || !isAuthenticated) ?
+                                            styles.thumbsUpIconAuthor :
+                                            styles.thumbsUpIcon}
                                     icon={isCommentLiked(x) ? solidIcon : regularIcon} />
                                 ({x.likes.length})
                             </span>

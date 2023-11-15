@@ -4,7 +4,9 @@ const { isAuthenticated } = require('../middlewares/authMiddleware');
 
 const {
     createCommentRoute,
-    getRecipeCommentsRoute
+    editCommentRoute,
+    deleteCommentRoute,
+    likeCommentRoute,
 } = require('../constants/routeNames/commentRoutes');
 
 const { getErrorMessage } = require('../utils/errorMessageUtil');
@@ -25,19 +27,7 @@ router.post(
         }
     });
 
-router.get(getRecipeCommentsRoute, async (req, res) => {
-    const recipeId = req.params.recipeId;
-    try {
-        const result = await commentManager.getRecipeComments(recipeId)
-            .populate('user', 'username')
-            .lean();
-        res.status(200).json({ message: 'Recipe comments retrieved successfully!', result });
-    } catch (error) {
-        res.status(400).json({ message: getErrorMessage(error) });
-    }
-});
-
-router.put('/edit/:commentId', isAuthenticated, async (req, res) => {
+router.put(editCommentRoute, isAuthenticated, async (req, res) => {
     const commentId = req.params.commentId;
     const userId = req.user._id;
     const { recipeId, text } = req.body;
@@ -50,7 +40,7 @@ router.put('/edit/:commentId', isAuthenticated, async (req, res) => {
     }
 });
 
-router.delete('/delete/:commentId', isAuthenticated, async (req, res) => {
+router.delete(deleteCommentRoute, isAuthenticated, async (req, res) => {
     const commentId = req.params.commentId;
 
     try {
@@ -61,7 +51,7 @@ router.delete('/delete/:commentId', isAuthenticated, async (req, res) => {
     }
 });
 
-router.put('/like/:commentId', isAuthenticated, async (req, res) => {
+router.put(likeCommentRoute, isAuthenticated, async (req, res) => {
     const commentId = req.params.commentId;
     const userId = req.user._id;
 
