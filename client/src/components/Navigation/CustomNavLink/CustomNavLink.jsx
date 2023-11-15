@@ -6,9 +6,9 @@ const CustomNavLink = ({ to, children }) => {
     const location = useLocation();
 
     const activeRoutes = [
-        '/recipe/user-recipes/all',
-        '/recipe/user-recipes/approved',
-        '/recipe/user-recipes/unapproved'];
+        '/recipes/user-recipes/all',
+        '/recipes/user-recipes/approved',
+        '/recipes/user-recipes/unapproved'];
 
     const isActive = activeRoutes.some(route => location.pathname === route);
 

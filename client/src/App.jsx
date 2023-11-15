@@ -39,7 +39,7 @@ const App = () => {
                     <Route path={paths.categoriesListPath} element={<Categories />} />
                     <Route path={paths.allRecipesPath} element={<Recipes />} />
                     <Route path={paths.recipeDetailsPath} element={<RecipeDetails />} />
-                    <Route path='/recipe/user-recipes/:recipeType' element={<UserRecipesList />} />
+                    <Route path='/recipes/user-recipes/:recipeType?/:search?' element={<UserRecipesList />} />
                     <Route element={<GuestRouteGuard />}>
                         <Route path={paths.recipeCreatePath} element={<CreateRecipe />} />
                         <Route path={paths.logoutPath} element={<Logout />} />

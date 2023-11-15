@@ -16,9 +16,9 @@ import { faUser } from '@fortawesome/free-solid-svg-icons';
 const Home = () => {
     const { isAuthenticated, isAdmin } = useContext(AuthContext);
 
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, []);
+    // useEffect(() => {
+    //     window.scrollTo(0, 0);
+    // }, []);
 
     return (
         <>
@@ -32,13 +32,13 @@ const Home = () => {
                 </section>
             )}
             {isAdmin && (
-                <>
-                    <h2 className='text-center'>For Our Admins<FontAwesomeIcon icon={faUser} className='ms-2' /></h2>
-                    <section className={styles.adminSection}>
+                <section className={styles.adminSection}>
+                    <h2>For Our Admins<FontAwesomeIcon icon={faUser} className='ms-2' /></h2>
+                    <div className={styles.adminContainer}>
                         <CreateRecipeCategoryCard />
                         <LinkUnapprovedRecipesCard />
-                    </section>
-                </>
+                    </div>
+                </section>
             )}
             <BackToTopArrow />
         </>

@@ -6,12 +6,45 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 
-import { useParams, useNavigate, useLocation, Link } from 'react-router-dom';
+import {
+    useParams,
+    useSearchParams,
+    useNavigate,
+    useLocation,
+    Link
+} from 'react-router-dom';
+
 import RecipesList from './RecipesList/RecipesList';
 
 import { extractTitle } from '../../utils/extractInitialTitle';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+    faCircleCheck,
+    faList,
+    faCircleXmark,
+    faMagnifyingGlass
+} from '@fortawesome/free-solid-svg-icons';
+
+import useForm from '../../hooks/useForm';
+
 const UserRecipesList = () => {
+    const onSearchFormSubmit = () => {
+        if (formValues.search) {
+            navigate(`${currentURL}?search=${formValues.search}`);
+        } else {
+            navigate(`${currentURL}`);
+        }
+        setSearchQuery(formValues.search);
+    };
+
+    const {
+        formValues,
+        updateSearchQuery,
+        onChangeHandler,
+        onSubmit
+    } = useForm({ 'search': '' }, onSearchFormSubmit);
+
     const navigate = useNavigate();
 
     const location = useLocation();
@@ -19,25 +52,30 @@ const UserRecipesList = () => {
 
     const { recipeType } = useParams();
 
+    const [searchParams, setSearchParams] = useSearchParams();
+
     const [title, setTitle] = useState(extractTitle(recipeType));
-    const [searchName, setSearchName] = useState('');
 
     const [recipeTypeState, setRecipeTypeState] = useState(recipeType);
     const [searchQuery, setSearchQuery] = useState('');
 
-    const onSearchNameChange = (e) => setSearchName(e.target.value);
-
     const searchInputText = `Search recipe by name in ${title.toLowerCase()}`;
+
+    useEffect(() => {
+        const searchValue = searchParams.get('search');
+        if (searchValue) {
+            updateSearchQuery(searchValue);
+            setSearchQuery(searchValue);
+        } else {
+            navigate(`/recipes/user-recipes/${recipeType}`);
+        }
+    }, [recipeType]);
 
     const getAllUserRecipes = () => {
         setTitle('All Recipes');
         setRecipeTypeState('all');
         setSearchQuery('');
     };
-
-    useEffect(() => {
-        setRecipeTypeState(recipeType);
-    }, [recipeType]);
 
     const getUserApprovedRecipes = () => {
         setTitle('Approved Recipes');
@@ -51,46 +89,55 @@ const UserRecipesList = () => {
         setSearchQuery('');
     };
 
-    const onSearchFormSubmit = (e) => {
-        e.preventDefault();
-        if (searchName) {
-            navigate(`${currentURL}?search=${searchName}`);
-        } else {
-            navigate(`${currentURL}`);
-        }
-        setSearchQuery(searchName);
-    };
-
     return (
         <>
             <div className={styles.buttonsContainer}>
-                <Link className={styles.link} to='/recipe/user-recipes/approved'>
-                    <Button onClick={getUserApprovedRecipes} bsPrefix={styles.button} size='lg'>Approved Recipes</Button>
+                <Link className={styles.link} to='/recipes/user-recipes/approved'>
+                    <Button
+                        onClick={getUserApprovedRecipes}
+                        bsPrefix={styles.button}
+                        size='lg'>
+                        <FontAwesomeIcon className='me-1' icon={faCircleCheck} />
+                        Approved Recipes
+                    </Button>
                 </Link>
-                <Link className={styles.link} to='/recipe/user-recipes/unapproved'>
-                    <Button onClick={getUserUnapprovedRecipes} bsPrefix={styles.button} size='lg'>Unapproved Recipes</Button>
+                <Link className={styles.link} to='/recipes/user-recipes/unapproved'>
+                    <Button
+                        onClick={getUserUnapprovedRecipes}
+                        bsPrefix={styles.button}
+                        size='lg'>
+                        <FontAwesomeIcon className='me-1' icon={faCircleXmark} />
+                        Unapproved Recipes
+                    </Button>
                 </Link>
-                <Link className={styles.link} to='/recipe/user-recipes/all'>
-                    <Button onClick={getAllUserRecipes} bsPrefix={styles.button} size='lg'>All Recipes</Button>
+                <Link className={styles.link} to='/recipes/user-recipes/all'>
+                    <Button
+                        onClick={getAllUserRecipes}
+                        bsPrefix={styles.button}
+                        size='lg'>
+                        <FontAwesomeIcon className='me-1' icon={faList} />
+                        All Recipes
+                    </Button>
                 </Link>
             </div>
 
             <div className={styles.searchContainer}>
-                <Form onSubmit={onSearchFormSubmit} className={styles.searchForm}>
+                <Form onSubmit={onSubmit} className={styles.searchForm}>
                     <InputGroup size='lg'>
                         <Form.Control
                             placeholder={`${searchInputText}`}
                             aria-label={`${searchInputText}`}
                             aria-describedby="basic-addon2"
                             className='border border-2 border-dark'
-                            onChange={onSearchNameChange}
-                            value={searchName}
+                            onChange={onChangeHandler}
+                            value={formValues.search}
+                            name='search'
                         />
                         <Button
                             type='submit'
-                            className='border border-2 border-dark'
+                            bsPrefix={styles.searchBtn}
                             id="button-addon2">
-                            Button
+                            <FontAwesomeIcon size='lg' icon={faMagnifyingGlass} />
                         </Button>
                     </InputGroup>
                 </Form>

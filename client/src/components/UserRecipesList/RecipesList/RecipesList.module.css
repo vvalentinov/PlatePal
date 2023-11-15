@@ -1,8 +1,24 @@
 .container {
     display: flex;
-    gap: 4rem;
     justify-content: center;
+    gap: 4rem;
     flex-wrap: wrap;
     margin: 3rem 0;
-    text-align: center;
+}
+
+.noRecipesCard {
+    flex-basis: 80%;
+    border: solid 2px black;
+}
+
+.noRecipesCardHeader {
+    font-size: 1.3rem;
+    border-bottom: solid 2px black;
+    background-color: lightcoral;
+}
+
+.noRecipesCardBody {
+    font-size: 1.5rem;
+    background-color: #2C3E50;
+    color: white;
 }

@@ -22,7 +22,7 @@
 .button {
     background-color: #93DC80;
     padding: 1rem 2rem;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     border-radius: 15px;
     text-transform: uppercase;
     width: 100%;
@@ -43,4 +43,18 @@
 
 .searchForm {
     width: 80%;
+}
+
+.searchBtn,
+.searchBtn:hover,
+.searchBtn:active {
+    background-color: #93DC80;
+    border: solid 2px black;
+    padding: 0 1.5rem;
+    font-size: 1.5rem;
+    border-radius: 8px;
+}
+
+.searchBtn:hover {
+    color: white;
 }

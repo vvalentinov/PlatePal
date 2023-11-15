@@ -41,7 +41,7 @@ const Navigation = () => {
                             Categories
                         </NavLink>
                         {isAuthenticated && (
-                            <CustomNavLink to='/recipe/user-recipes/all'>
+                            <CustomNavLink to='/recipes/user-recipes/all'>
                                 My Recipes
                             </CustomNavLink>
                         )}

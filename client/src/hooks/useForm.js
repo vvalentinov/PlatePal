@@ -15,6 +15,8 @@ const useForm = (initialFormValues, onSubmitHandler) => {
 
     const onRecipeStarHandler = (name, value) => setFormValues((state) => ({ ...state, [name]: Number(value) }));
 
+    const updateSearchQuery = (searchValue) => setFormValues((state) => ({ ...state, search: searchValue }));
+
     const onSubmit = (e) => {
         e.preventDefault();
         onSubmitHandler(formValues);
@@ -22,6 +24,7 @@ const useForm = (initialFormValues, onSubmitHandler) => {
 
     return {
         formValues,
+        updateSearchQuery,
         onChangeHandler,
         onFileChangeHandler,
         onRecipeStarHandler,

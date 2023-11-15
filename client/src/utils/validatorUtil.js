@@ -49,12 +49,20 @@ export const categoryDescriptionValidator = (description) => {
         return errors.categoryDescriptionRequiredError;
     }
 
+    if (description.length < 200 || description.length > 750) {
+        return errors.categoryDescriptionLengthError;
+    }
+
     return '';
 };
 
 export const categoryFileValidator = (file) => {
     if (!file) {
         return errors.categoryFileRequiredError;
+    }
+
+    if (file.type !== 'image/png' && file.type !== 'image/jpeg') {
+        return errors.categoryImageFileError;
     }
 
     return '';
