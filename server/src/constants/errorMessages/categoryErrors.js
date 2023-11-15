@@ -1,4 +1,5 @@
 exports.categoryNameRequiredError = 'Category name is required!';
+exports.categoryNameLengthError = (min, max) => `Category name must be between ${min} and ${max} characters long!`;
 
 exports.categoryDescriptionRequiredError = 'Category description is required!';
 exports.categoryDescriptionLengthError = (min, max) => `Category description must be between ${min} and ${max} characters long!`;

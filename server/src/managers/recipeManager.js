@@ -82,25 +82,30 @@ exports.approveRecipe = (recipeId) => Recipe.findByIdAndUpdate(
     { isApproved: true },
     { new: true });
 
+function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 exports.getUserRecipes = (userId, searchName) => Recipe.find(
     {
         owner: userId,
-        name: new RegExp(searchName, 'i'),
-    })
-    .select('_id image name');
+        name: new RegExp(escapeRegExp(searchName), 'i'),
+    }
+).select('_id image name');
+
 
 exports.getUserApprovedRecipes = (userId, searchName) => Recipe.find(
     {
         owner: userId,
         isApproved: true,
-        name: new RegExp(searchName, 'i'),
-    })
-    .select('_id image name');
+        name: new RegExp(escapeRegExp(searchName), 'i'),
+    }
+).select('_id image name');
 
 exports.getUserUnapprovedRecipes = (userId, searchName) => Recipe.find(
     {
         owner: userId,
         isApproved: false,
-        name: new RegExp(searchName, 'i'),
+        name: new RegExp(escapeRegExp(searchName), 'i'),
     }
 ).select('_id image name');
