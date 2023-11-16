@@ -19,14 +19,7 @@ exports.getPopulatedRecipe = async (recipeId, userId) => {
     let populatedRecipe = await Recipe.findById(recipeId)
         .populate('owner', 'username')
         .populate('category', 'name')
-        .populate({
-            path: 'comments',
-            populate: {
-                path: 'user',
-                model: 'User',
-                select: 'username'
-            },
-        }).lean();
+        .lean();
 
     if (userId) {
         const rating = await getRating(userId, recipeId);

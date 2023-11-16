@@ -66,7 +66,9 @@ router.put('/approve/:recipeId', isAdmin, async (req, res) => {
 router.get('/user-recipes', isAuthenticated, async (req, res) => {
     const userId = req.user._id;
     const searchName = req.query.searchName;
+    console.log(searchName);
     const recipes = await recipeManager.getUserRecipes(userId, searchName);
+    console.log(recipes);
     res.status(200).json({ message: "User recipes retrieved successfully!", result: recipes });
 });
 

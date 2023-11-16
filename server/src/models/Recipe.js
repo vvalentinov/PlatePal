@@ -13,7 +13,7 @@ const recipeSchema = new mongoose.Schema({
     name: {
         type: String,
         required: [true, errors.recipeNameRequiredError],
-        minLength: [5, errors.recipeNameMinLengthError(5)],
+        minLength: [2, errors.recipeNameMinLengthError(2)],
         maxLength: [100, errors.recipeNameMaxLengthError(100)]
     },
     description: {
@@ -58,13 +58,6 @@ const recipeSchema = new mongoose.Schema({
         type: mongoose.Types.ObjectId,
         required: [true, errors.recipeCategoryRequiredError],
         ref: CategoryModelName,
-    },
-    comments: {
-        type: [{
-            type: mongoose.Types.ObjectId,
-            ref: CommentModelName,
-        }],
-        default: [],
     },
     averageRating: {
         type: Number,
