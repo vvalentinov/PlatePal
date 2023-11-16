@@ -28,22 +28,12 @@ import {
 
 import useForm from '../../hooks/useForm';
 
-const UserRecipesList = () => {
-    const onSearchFormSubmit = () => {
-        if (formValues.search) {
-            navigate(`${currentURL}?search=${formValues.search}`);
-        } else {
-            navigate(`${currentURL}`);
-        }
-        setSearchQuery(formValues.search);
-    };
+import { recipeNameValidator } from '../../utils/validatorUtil';
 
-    const {
-        formValues,
-        updateSearchQuery,
-        onChangeHandler,
-        onSubmit
-    } = useForm({ 'search': '' }, onSearchFormSubmit);
+const UserRecipesList = () => {
+    const [recipeNameErr, setRecipeNameErr] = useState('');
+
+    const onRecipeNameBlur = () => setRecipeNameErr(recipeNameValidator(formValues.search));
 
     const navigate = useNavigate();
 
@@ -61,6 +51,31 @@ const UserRecipesList = () => {
 
     const searchInputText = `Search recipe by name in ${title.toLowerCase()}`;
 
+    const onSearchFormSubmit = () => {
+        const recipeNameErrMsg = recipeNameValidator(formValues.search);
+        if (recipeNameErrMsg) {
+            setRecipeNameErr(recipeNameErrMsg);
+            return;
+        }
+
+        setRecipeNameErr('');
+
+        if (formValues.search) {
+            navigate(`${currentURL}?search=${formValues.search}`);
+        } else {
+            navigate(`${currentURL}`);
+        }
+
+        setSearchQuery(formValues.search);
+    };
+
+    const {
+        formValues,
+        updateSearchQuery,
+        onChangeHandler,
+        onSubmit
+    } = useForm({ 'search': '' }, onSearchFormSubmit);
+
     useEffect(() => {
         const searchValue = searchParams.get('search');
         if (searchValue) {
@@ -75,18 +90,21 @@ const UserRecipesList = () => {
         setTitle('All Recipes');
         setRecipeTypeState('all');
         setSearchQuery('');
+        setRecipeNameErr('');
     };
 
     const getUserApprovedRecipes = () => {
         setTitle('Approved Recipes');
         setRecipeTypeState('approved');
         setSearchQuery('');
+        setRecipeNameErr('');
     };
 
     const getUserUnapprovedRecipes = () => {
         setTitle('Unapproved Recipes');
         setRecipeTypeState('unapproved');
         setSearchQuery('');
+        setRecipeNameErr('');
     };
 
     return (
@@ -131,15 +149,14 @@ const UserRecipesList = () => {
                             className='border border-2 border-dark'
                             onChange={onChangeHandler}
                             value={formValues.search}
+                            onBlur={onRecipeNameBlur}
                             name='search'
                         />
-                        <Button
-                            type='submit'
-                            bsPrefix={styles.searchBtn}
-                            id="button-addon2">
+                        <Button type='submit' bsPrefix={styles.searchBtn} id="button-addon2">
                             <FontAwesomeIcon size='lg' icon={faMagnifyingGlass} />
                         </Button>
                     </InputGroup>
+                    {recipeNameErr && <p className='text-start text-danger'>{recipeNameErr}</p>}
                 </Form>
             </div>
             <h2 className='text-center'>{title}</h2>

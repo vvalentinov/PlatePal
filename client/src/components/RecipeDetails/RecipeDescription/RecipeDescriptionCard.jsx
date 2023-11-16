@@ -22,7 +22,7 @@ const RecipeDescriptionCard = ({
     description,
     cookingTime,
     category,
-    comments,
+    // comments,
     averageRating,
     userRating,
     ratings
@@ -37,6 +37,7 @@ const RecipeDescriptionCard = ({
                 <Card.Title><FontAwesomeIcon icon={faNewspaper} className='me-2' />Recipe Description:</Card.Title>
                 <Card.Text>
                     {description}
+                    {/* cdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfdscdfsfdsfds */}
                 </Card.Text>
                 <Card.Title>
                     <FontAwesomeIcon icon={faRectangleList} className='me-2' />Category: {category.name}
@@ -44,9 +45,9 @@ const RecipeDescriptionCard = ({
                 <Card.Title>
                     <FontAwesomeIcon icon={faClock} className='me-2' />Recipe Cooking Time: {cookingTime} minutes
                 </Card.Title>
-                <Card.Title>
+                {/* <Card.Title>
                     <FontAwesomeIcon icon={faComments} className='me-2' />Comments: {comments.length}
-                </Card.Title>
+                </Card.Title> */}
                 <Card.Title>
                     <FontAwesomeIcon icon={faStar} className='me-2' />
                     Recipe Average Rating: {averageRating} / 5.0 - (Total votes: {ratings.length})

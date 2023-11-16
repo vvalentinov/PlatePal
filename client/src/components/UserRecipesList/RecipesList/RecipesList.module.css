@@ -9,6 +9,7 @@
 .noRecipesCard {
     flex-basis: 80%;
     border: solid 2px black;
+    text-align: justify;
 }
 
 .noRecipesCardHeader {

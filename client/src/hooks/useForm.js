@@ -13,9 +13,11 @@ const useForm = (initialFormValues, onSubmitHandler) => {
         setFormValues((state) => ({ ...state, [name]: files[0] }));
     };
 
-    const onRecipeStarHandler = (name, value) => setFormValues((state) => ({ ...state, [name]: Number(value) }));
+    const onRecipeStarHandler = (name, value) =>
+        setFormValues((state) => ({ ...state, [name]: Number(value) }));
 
-    const updateSearchQuery = (searchValue) => setFormValues((state) => ({ ...state, search: searchValue }));
+    const updateSearchQuery = (searchValue) =>
+        setFormValues((state) => ({ ...state, search: searchValue }));
 
     const onSubmit = (e) => {
         e.preventDefault();

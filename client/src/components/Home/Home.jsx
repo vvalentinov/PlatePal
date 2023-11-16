@@ -16,9 +16,9 @@ import { faUser } from '@fortawesome/free-solid-svg-icons';
 const Home = () => {
     const { isAuthenticated, isAdmin } = useContext(AuthContext);
 
-    // useEffect(() => {
-    //     window.scrollTo(0, 0);
-    // }, []);
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
     return (
         <>

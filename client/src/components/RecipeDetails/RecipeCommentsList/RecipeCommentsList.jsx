@@ -1,12 +1,14 @@
 import styles from './RecipeCommentsList.module.css';
 
 import Card from 'react-bootstrap/Card';
+import Button from 'react-bootstrap/Button';
 
 import { AuthContext } from '../../../contexts/AuthContext';
 import { useContext, useState, useEffect } from 'react';
 
 import EditCommentBtn from './EditCommentBtn/EditCommentBtn';
 import DeleteCommentBtn from './DeleteCommentBtn/DeleteCommentBtn';
+import PostRecipeComment from '../PostRecipeComment/PostRecipeComment';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faThumbsUp as regularIcon } from '@fortawesome/free-regular-svg-icons';
@@ -15,87 +17,113 @@ import { faThumbsUp as solidIcon } from '@fortawesome/free-solid-svg-icons';
 import { commentServiceFactory } from '../../../services/commentService';
 import { useService } from '../../../hooks/useService';
 
-import ToastNotification from '../../Toast/ToastNotification';
+import { getFormattedDate } from './getFormattedDateUtil';
 
-const RecipeCommentsList = ({
-    comments,
-    handleCommentEdit,
-    handleCommentDelete,
-    recipeId
-}) => {
-    const [toast, setToast] = useState('');
+import NoCommentsCard from './../NoCommentsCard/NoCommentsCard';
+
+const RecipeCommentsList = ({ recipeId }) => {
+    const commentService = useService(commentServiceFactory);
 
     const { userId, isAuthenticated } = useContext(AuthContext);
 
-    const commentService = useService(commentServiceFactory);
+    const [comments, setComments] = useState([]);
 
-    const formattedDate = (comment) => {
-        const dateObj = new Date(comment.createdAt);
-        return dateObj.toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-        })
-    };
+    useEffect(() => {
+        commentService.getAll(recipeId)
+            .then(res => setComments(res.result))
+            .catch(error => console.log(error.message));
+    }, [recipeId]);
 
-    useEffect(() => window.scrollTo(0, 0), [toast]);
-
-    const isCommentLiked = (comment) => comment.likes.includes(userId);
+    const isCommentLiked = (comment) => comment.userLikes.includes(userId);
 
     const onCommentLike = (commentId) => {
-        setToast('');
-
-        commentService.like('non-existing')
-            .then(res => handleCommentEdit(res.result, commentId))
-            .catch(error => setToast(error.message))
-            .finnaly(() => setToast(''));
+        commentService.like(commentId)
+            .then(res => setComments(comments =>
+                comments.map(comment => (comment._id === commentId) ? res.result : comment)))
+            .catch(error => console.log(error.message));
     };
+
+    const onCommentEdit = (newComment, commentId) => setComments(comments =>
+        comments.map(comment => (comment._id === commentId) ? newComment : comment));
+
+    const onCommentDelete = (commentId) => setComments(state =>
+        state.filter(comment => comment._id !== commentId));
+
+    const getSortedCommentsHandler = () => {
+        commentService.getSortedCommentsByLikes(recipeId)
+            .then(res => setComments(res.result))
+            .catch(error => console.log(error.message));
+    };
+
+    const getUserCommentsHandler = () => {
+        commentService.getUserComments(recipeId)
+            .then(res => setComments(res.result))
+            .catch(error => console.log(error));
+    };
+
+    const onCommentSubmit = (newComment) => setComments((comments) => [newComment, ...comments]);
+
+    const isCommentAuthor = (commentUserId) => commentUserId === userId || !isAuthenticated;
 
     return (
         <>
-            {toast && <ToastNotification isSuccessfull={false} message={toast} />}
-            {comments.map(x => (
-                <Card className={styles.card} key={x._id}>
-                    <Card.Header className={styles.cardHeader}>
-                        <div className={styles.commentInfoContainer}>
-                            <span>{x.user.username}</span>
-                            <span>({formattedDate(x)})</span>
-                            <span className={styles.thumbsUpContainer}>
-                                <FontAwesomeIcon
-                                    size='lg'
-                                    onClick={() => {
-                                        x.user._id !== userId &&
-                                            isAuthenticated &&
-                                            onCommentLike(x._id)
-                                    }}
-                                    className={
-                                        (x.user._id === userId || !isAuthenticated) ?
-                                            styles.thumbsUpIconAuthor :
-                                            styles.thumbsUpIcon}
-                                    icon={isCommentLiked(x) ? solidIcon : regularIcon} />
-                                ({x.likes.length})
-                            </span>
-                        </div>
-                        {userId && userId === x.user._id && (
-                            <div className={styles.commentBtnsContainer}>
-                                <EditCommentBtn
-                                    handleCommentEdit={handleCommentEdit}
-                                    commentId={x._id}
-                                    recipeId={recipeId}
-                                    text={x.text} />
-                                <DeleteCommentBtn
-                                    commentId={x._id}
-                                    handleCommentDelete={handleCommentDelete} />
-                            </div>
-                        )}
-                    </Card.Header>
-                    <Card.Body className={styles.cardBody}>
-                        <Card.Text>
-                            {x.text}
-                        </Card.Text>
-                    </Card.Body>
-                </Card>
-            ))}
+            {isAuthenticated && <PostRecipeComment recipeId={recipeId} onCommentSubmit={onCommentSubmit} />}
+
+            {comments.length === 0 && <NoCommentsCard />}
+            {comments.length > 0 && (
+                <>
+                    {isAuthenticated && <div className={styles.container}>
+                        <Button bsPrefix={styles.sortFilterCommentsBtn} onClick={getSortedCommentsHandler}>
+                            Sort All Comments By Likes Desc
+                        </Button>
+                        <Button bsPrefix={styles.sortFilterCommentsBtn} onClick={getUserCommentsHandler}>
+                            Show my comments
+                        </Button>
+                    </div>}
+
+                    {comments.map(x => (
+                        <Card className={styles.card} key={x._id}>
+                            <Card.Header className={styles.cardHeader}>
+                                <div className={styles.commentInfoContainer}>
+                                    <span>{x.user.username}</span>
+                                    <span>({getFormattedDate(x.createdAt)})</span>
+                                    <span className={styles.thumbsUpContainer}>
+                                        <FontAwesomeIcon
+                                            size='lg'
+                                            onClick={() => {
+                                                x.user._id !== userId &&
+                                                    isAuthenticated &&
+                                                    onCommentLike(x._id)
+                                            }}
+                                            className={isCommentAuthor(x.user._id) ?
+                                                styles.thumbsUpIconAuthor :
+                                                styles.thumbsUpIcon}
+                                            icon={isCommentLiked(x) ? solidIcon : regularIcon} />
+                                        ({x.userLikes.length})
+                                    </span>
+                                </div>
+                                {userId && userId === x.user._id && (
+                                    <div className={styles.commentBtnsContainer}>
+                                        <EditCommentBtn
+                                            onCommentEdit={onCommentEdit}
+                                            commentId={x._id}
+                                            recipeId={recipeId}
+                                            text={x.text} />
+                                        <DeleteCommentBtn
+                                            commentId={x._id}
+                                            onCommentDelete={onCommentDelete} />
+                                    </div>
+                                )}
+                            </Card.Header>
+                            <Card.Body className={styles.cardBody}>
+                                <Card.Text>{x.text}</Card.Text>
+                            </Card.Body>
+                        </Card>
+                    ))}
+                </>
+            )}
+
+
         </>
     );
 };

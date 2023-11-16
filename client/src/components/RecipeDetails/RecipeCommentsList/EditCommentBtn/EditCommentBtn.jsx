@@ -17,8 +17,8 @@ import useForm from '../../../../hooks/useForm';
 const EditCommentBtn = ({
     commentId,
     text,
-    handleCommentEdit,
-    recipeId
+    recipeId,
+    onCommentEdit
 }) => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -28,7 +28,7 @@ const EditCommentBtn = ({
 
     const onEditFormSubmit = () => {
         commentService.edit(commentId, { recipeId, text: formValues.text })
-            .then(res => handleCommentEdit(res.result, commentId))
+            .then(res => onCommentEdit(res.result, commentId))
             .catch(error => console.log(error))
             .finally(() => handleClose());
     };

@@ -40,3 +40,24 @@
     align-items: center;
     gap: 0.5rem;
 }
+
+.sortFilterCommentsBtn {
+    background-color: #93DC80;
+    color: black;
+    border: solid 2px black;
+    border-radius: 15px;
+    padding: 0.5rem 1rem;
+    flex-basis: 50%;
+}
+
+.sortFilterCommentsBtn:hover {
+    color: white;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    width: 100%;
+    padding: 0 10rem;
+}

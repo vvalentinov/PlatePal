@@ -28,6 +28,7 @@
     border-radius: 15px;
     text-transform: uppercase;
     border: solid 3px black;
+    width: 100%;
 }
 
 .commentButton {
@@ -45,4 +46,20 @@
 
 .modalButton {
     padding: 0.5rem 0;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+}
+
+.postCommentCard {
+    flex-basis: 80%;
+
+    border: solid 2px black;
+    background-color: #2C3E50;
+    color: white;
+    text-align: justify;
+    padding: 1rem;
+    border-radius: 15px;
 }

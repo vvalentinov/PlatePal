@@ -11,6 +11,10 @@
     justify-content: center;
 }
 
+.createRecipeCardBody:hover {
+    color: #93DC80;
+}
+
 .createRecipeCard a {
     text-decoration: none;
 }
@@ -29,4 +33,8 @@
     text-transform: uppercase;
     border-radius: 15px;
     border: solid 3px #93DC80;
+}
+
+.createRecipeButton:hover {
+    color: black;
 }

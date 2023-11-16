@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
+import Card from 'react-bootstrap/Card';
 
 import { useState } from 'react';
 
@@ -25,7 +26,8 @@ const PostRecipeComment = ({ recipeId, onCommentSubmit }) => {
     const onFormSubmit = (data) => {
         commentService.create({ ...data, recipeId, createdAt: new Date() })
             .then(res => onCommentSubmit(res.result))
-            .catch(error => console.log(error));
+            .catch(error => console.log(error))
+            .finally(() => formValues.text = '');
     };
 
     const {
@@ -36,9 +38,19 @@ const PostRecipeComment = ({ recipeId, onCommentSubmit }) => {
 
     return (
         <>
-            <Button bsPrefix={styles.commentButton} onClick={handleShow}>
-                Post Comment<FontAwesomeIcon className='ms-2' icon={faComment} />
-            </Button>
+            <div className={styles.container}>
+                <Card className={styles.postCommentCard}>
+                    <Card.Body>
+                        <Card.Text>
+                            We value your thoughts and insights! Your comments can add a personal touch to the recipe, sharing your unique experience and tips. Whether it's a modification you made, an ingredient you love, or just your overall impression, your comments contribute to our vibrant culinary community. Don't hesitate to share your thoughts below – your comment might be the inspiration someone else is looking for! Let's make this cooking journey even more delightful together.
+                        </Card.Text>
+                        <Button bsPrefix={styles.commentButton} onClick={handleShow}>
+                            Post Comment<FontAwesomeIcon className='ms-2' icon={faComment} />
+                        </Button>
+                    </Card.Body>
+                </Card>
+            </div>
+
             <Modal size='lg' centered show={show} onHide={handleClose}>
                 <Modal.Header className={styles.modalHeader} closeButton>
                     <Modal.Title>Post Comment</Modal.Title>

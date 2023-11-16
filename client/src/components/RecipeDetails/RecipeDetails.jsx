@@ -4,10 +4,8 @@ import ApproveRecipe from './ApproveRecipe/ApproveRecipe';
 import RecipeDescriptionCard from './RecipeDescription/RecipeDescriptionCard';
 import RecipeIngredientsContainer from './RecipeIngredients/RecipeIngredientsContainer';
 import RecipeStepsContainer from './RecipeSteps/RecipeStepsContainer';
-import PostRecipeComment from './PostRecipeComment/PostRecipeComment';
 import RecipeStarRating from './RecipeStarRating/RecipeStarRating';
 import RecipeCommentsList from './RecipeCommentsList/RecipeCommentsList';
-import NoCommentsCard from './NoCommentsCard/NoCommentsCard';
 import BackToTopArrow from '../BackToTopArrow/BackToTopArrow';
 import ToastNotification from '../Toast/ToastNotification';
 import CustomSpinner from '../Spinner/Spinner';
@@ -39,38 +37,15 @@ const RecipeDetails = () => {
             .finally(() => setIsSpinnerLoading(false));
     }, [recipeId]);
 
-    const handleCommentSubmit = (newComment) => setRecipe((state) =>
+    const handleRatingSubmit = (result) => setRecipe((state) =>
     ({
         ...state,
-        comments: [...state.comments, newComment]
+        averageRating: result.averageRating,
+        userRating: result.rateValue
     }));
 
-    const handleCommentEdit = (newComment, oldCommentId) => setRecipe((state) => {
-        return {
-            ...state,
-            comments: state.comments.map(comment => {
-                if (comment && comment._id === oldCommentId) {
-                    return newComment;
-                }
-                return comment;
-            })
-        };
-    });
-
-    const handleCommentDelete = (commentId) => setRecipe((state) => ({
-        ...state,
-        comments: recipe.comments.filter(comment => comment._id !== commentId)
-    }))
-
-    const handleRatingSubmit = (result) => {
-        setRecipe((state) => ({
-            ...state,
-            averageRating: result.averageRating,
-            userRating: result.rateValue
-        }));
-    };
-
-    const handleApprovingRecipe = (result) => setRecipe((state) => ({ ...state, isApproved: result.isApproved }));
+    const handleApprovingRecipe = (result) => setRecipe((state) =>
+        ({ ...state, isApproved: result.isApproved }));
 
     return (
         <>
@@ -84,18 +59,16 @@ const RecipeDetails = () => {
                     </div>
                     <div className={styles.recipeCommentStarContainer}>
                         {
-                            !recipe.isApproved &&
-                            isAdmin &&
-                            <ApproveRecipe recipeId={recipeId} handleApprovingRecipe={handleApprovingRecipe} />
+                            !recipe.isApproved && isAdmin &&
+                            <ApproveRecipe
+                                recipeId={recipeId}
+                                handleApprovingRecipe={handleApprovingRecipe} />
                         }
                         {isAuthenticated && (
-                            <>
-                                <PostRecipeComment recipeId={recipeId} onCommentSubmit={handleCommentSubmit} />
-                                <RecipeStarRating
-                                    recipeId={recipeId}
-                                    onRatingSubmit={handleRatingSubmit}
-                                    userRating={recipe.userRating} />
-                            </>
+                            <RecipeStarRating
+                                recipeId={recipeId}
+                                onRatingSubmit={handleRatingSubmit}
+                                userRating={recipe.userRating} />
                         )}
                     </div>
                     <div className={styles.youtubeVideoSection}>
@@ -106,21 +79,7 @@ const RecipeDetails = () => {
                         <RecipeStepsContainer steps={recipe.steps} />
                     </div>
                     <section id='comments' className={styles.commentsSection}>
-                        {
-                            recipe.comments.length > 0 ?
-                                (
-                                    <>
-                                        <h2>Comments:</h2>
-                                        <RecipeCommentsList
-                                            comments={recipe.comments}
-                                            handleCommentEdit={handleCommentEdit}
-                                            handleCommentDelete={handleCommentDelete}
-                                            recipeId={recipeId}
-                                        />
-                                    </>
-                                ) :
-                                <NoCommentsCard />
-                        }
+                        <RecipeCommentsList recipeId={recipeId} />
                     </section>
                     <BackToTopArrow />
                 </>

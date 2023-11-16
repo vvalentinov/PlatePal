@@ -11,7 +11,7 @@ import { useService } from '../../../../hooks/useService';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan } from '@fortawesome/free-regular-svg-icons';
 
-const DeleteCommentBtn = ({ handleCommentDelete, commentId }) => {
+const DeleteCommentBtn = ({ onCommentDelete, commentId }) => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -20,7 +20,7 @@ const DeleteCommentBtn = ({ handleCommentDelete, commentId }) => {
 
     const onDelete = () => {
         commentService.delete(commentId)
-            .then(res => handleCommentDelete(res.result._id))
+            .then(res => onCommentDelete(res.result._id))
             .catch(error => console.log(error));
     };
 

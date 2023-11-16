@@ -1,12 +1,8 @@
 .card {
     flex-basis: 50%;
     font-size: 1.4rem;
-    border: solid 2px #93DC80;
+    border: solid 4px #93DC80;
     text-align: justify;
-}
-
-.card:hover {
-    box-shadow: 5px 5px 2px #93DC80;
 }
 
 .card a {
@@ -37,4 +33,8 @@
     text-transform: uppercase;
     border-radius: 15px;
     border: solid 3px #93DC80;
+}
+
+.createCategoryButton:hover {
+    color: black;
 }
