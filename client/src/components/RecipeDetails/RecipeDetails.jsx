@@ -53,10 +53,11 @@ const RecipeDetails = () => {
             {toastMessage && <ToastNotification message={toastMessage} />}
             {recipe && (
                 <>
-                    <div className={styles.container}>
+                    <section className={styles.container}>
                         <img src={recipe.image.url} alt={`Recipe Image: ${recipe.name}`} />
                         <RecipeDescriptionCard {...recipe} />
-                    </div>
+                    </section>
+
                     <div className={styles.recipeCommentStarContainer}>
                         {
                             !recipe.isApproved && isAdmin &&
@@ -71,9 +72,18 @@ const RecipeDetails = () => {
                                 userRating={recipe.userRating} />
                         )}
                     </div>
-                    <div className={styles.youtubeVideoSection}>
-                        {recipe.youtubeLink && <iframe src={recipe.youtubeLink} allowFullScreen></iframe>}
-                    </div>
+
+                    {recipe.youtubeLink && (
+                        <div className={styles.youtubeVideoSection}>
+                            <iframe src={recipe.youtubeLink} allowFullScreen></iframe>
+                            <div>
+                                <p>
+                                    Experience the art of cooking in real-time! Dive into the heart of this delectable recipe with our exclusive YouTube video. Watch as expert chefs guide you through the intricate steps, sharing valuable tips and techniques that bring this culinary masterpiece to life. Immerse yourself in the sights and sounds of the kitchen, from the sizzle of the pan to the aromatic symphony of spices. This video is your backstage pass to culinary excellence, offering a visual feast that complements the detailed instructions. Enhance your cooking journey and embark on a flavorful adventure with our immersive YouTube experience. Hit play, and let the culinary magic unfold before your eyes!
+                                </p>
+                            </div>
+                        </div>
+                    )}
+
                     <div className={styles.recipeInfoContainer}>
                         <RecipeIngredientsContainer ingredients={recipe.ingredients} />
                         <RecipeStepsContainer steps={recipe.steps} />

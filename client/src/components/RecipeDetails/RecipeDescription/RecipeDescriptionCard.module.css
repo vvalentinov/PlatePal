@@ -1,13 +1,13 @@
 .recipeCard {
     width: 65%;
-    border: solid #93DC80;
+    border: solid black 3px;
 }
 
 .recipeCardHeader {
-    border-bottom: solid 2px black;
+    border-bottom: solid 3px black;
     font-size: 1.5rem;
-    background-color: #18A392;
-    color: white;
+    background-color: #93DC80;
+    color: black;
 }
 
 .recipeCardBody {
@@ -20,5 +20,21 @@
 }
 
 .icon {
+    color: #93DC80;
+}
+
+.recipeOwnerSpan {
+    font-style: italic;
+}
+
+.commentsLink,
+.categoryLink {
+    text-decoration: underline;
+    font-style: italic;
+    color: white;
+}
+
+.commentsLink:hover,
+.categoryLink:hover {
     color: #93DC80;
 }

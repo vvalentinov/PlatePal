@@ -6,6 +6,7 @@
     border-radius: 15px;
     text-transform: uppercase;
     border: solid 3px black;
+    width: 100%;
 }
 
 .approveRecipeBtn {
@@ -24,7 +25,6 @@
     font-size: 1.3rem;
     text-align: center;
 }
-
 
 .modalBody,
 .modalBtnContainer {
@@ -46,4 +46,13 @@
 
 .modalBtn:hover {
     color: white;
+}
+
+.card {
+    width: 70%;
+    background-color: #2C3E50;
+    color: white;
+    font-size: 1.4rem;
+    text-align: justify;
+    border: solid 4px #93DC80;
 }

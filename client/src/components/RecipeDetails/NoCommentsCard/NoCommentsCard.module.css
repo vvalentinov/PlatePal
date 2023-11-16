@@ -7,6 +7,7 @@
 }
 
 .cardHeader {
-    background-color: #18a392;
-    border-bottom: solid 4px #93DC80;
+    background-color: #93DC80;
+    border-bottom: solid 2px black;
+    color: black;
 }

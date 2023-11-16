@@ -2,25 +2,24 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 4rem;
-    margin-bottom: 6rem;
     gap: 3rem;
     padding: 0 6rem;
+    background-color: #31837B;
+    height: calc(100vh - 80px);
 }
 
 .container img {
     width: 35%;
     border: solid 3px black;
     border-radius: 15px;
-    box-shadow: 5px 5px;
 }
 
 .recipeInfoContainer {
     display: flex;
     justify-content: center;
-    gap: 5rem;
-    margin: 3rem 0;
-    padding: 1rem 3rem;
+    gap: 2rem;
+    padding: 3rem 4rem;
+    background-color: #B9CCE2;
 }
 
 .commentsSection {
@@ -28,27 +27,43 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    margin: 2rem 0;
     font-size: 1.5rem;
     gap: 3rem;
+    padding: 2rem 0;
+    background-color: #008F92;
 }
 
 .youtubeVideoSection {
     display: flex;
     justify-content: center;
+    align-items: center;
+    gap: 3rem;
+    padding: 3rem;
+    background-color: #D5F4FF;
 }
 
 .youtubeVideoSection iframe {
-    width: 60%;
+    flex-basis: 60%;
     height: 35rem;
     border-radius: 15px;
 }
 
+.youtubeVideoSection div {
+    flex-basis: 40%;
+}
+
+.youtubeVideoSection div p {
+    font-size: 1.4rem;
+    text-align: justify;
+    font-style: italic;
+}
+
 .recipeCommentStarContainer {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 5rem;
-    text-align: center;
-    margin-bottom: 5rem;
+    padding: 2rem 0;
+    gap: 2rem;
+    background-color: #31837b;
 }
