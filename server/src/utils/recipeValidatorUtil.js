@@ -8,12 +8,17 @@ exports.recipeValidator = async (data) => {
         throw new Error('Recipe with given name already exists!');
     }
 
+    const regex = new RegExp(/^[0-9a-fA-F]{24}$/);
+    if (!regex.test(data.recipeCategory)) {
+        throw new Error('Invalid category id format!');
+    }
+
     const category = await getById(data.recipeCategory);
     if (!category) {
         throw new Error('Category does not exist!');
     }
 
-    if (data.youtubeLink) {
+    if (data.youtubeLink && data.youtubeLink !== 'undefined') {
         const regex = new RegExp(/^(https?:\/\/)?(www\.)?youtube\.com\/embed\/([\w-]+)(\S+)?$/);
 
         if (regex.test(data.youtubeLink) == false) {

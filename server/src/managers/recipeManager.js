@@ -57,11 +57,7 @@ exports.getAll = async (categoryName) => {
         throw new Error('Invalid recipe category!');
     }
 
-    const recipes = await Recipe.find
-        ({
-            category: category._id,
-            isApproved: true
-        })
+    const recipes = await Recipe.find({ category: category._id, isApproved: true })
         .select('_id image name')
         .lean();
 
@@ -75,14 +71,10 @@ exports.approveRecipe = (recipeId) => Recipe.findByIdAndUpdate(
     { isApproved: true },
     { new: true });
 
-function escapeRegExp(string) {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
 exports.getUserRecipes = (userId, searchName) => Recipe.find(
     {
         owner: userId,
-        name: new RegExp(escapeRegExp(searchName), 'i'),
+        name: new RegExp(searchName, 'i'),
     }
 ).select('_id image name');
 
@@ -91,7 +83,7 @@ exports.getUserApprovedRecipes = (userId, searchName) => Recipe.find(
     {
         owner: userId,
         isApproved: true,
-        name: new RegExp(escapeRegExp(searchName), 'i'),
+        name: new RegExp(searchName, 'i'),
     }
 ).select('_id image name');
 
@@ -99,6 +91,6 @@ exports.getUserUnapprovedRecipes = (userId, searchName) => Recipe.find(
     {
         owner: userId,
         isApproved: false,
-        name: new RegExp(escapeRegExp(searchName), 'i'),
+        name: new RegExp(searchName, 'i'),
     }
 ).select('_id image name');

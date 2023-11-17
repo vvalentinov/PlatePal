@@ -2,19 +2,15 @@ const mongoose = require('mongoose');
 
 const errors = require('../constants/errorMessages/recipeErrors');
 
-const {
-    RecipeModelName,
-    CategoryModelName,
-    UserModelName,
-    CommentModelName
-} = require('../constants/dbModelsNames');
+const modelsNames = require('../constants/dbModelsNames');
 
 const recipeSchema = new mongoose.Schema({
     name: {
         type: String,
         required: [true, errors.recipeNameRequiredError],
         minLength: [2, errors.recipeNameMinLengthError(2)],
-        maxLength: [100, errors.recipeNameMaxLengthError(100)]
+        maxLength: [100, errors.recipeNameMaxLengthError(100)],
+        match: [/^[a-zA-Z0-9\s]*$/, 'Recipe name must contain only letters, numbers or spaces!']
     },
     description: {
         type: String,
@@ -52,12 +48,12 @@ const recipeSchema = new mongoose.Schema({
     owner: {
         type: mongoose.Types.ObjectId,
         required: [true, errors.recipeOwnerRequiredError],
-        ref: UserModelName,
+        ref: modelsNames.UserModelName,
     },
     category: {
         type: mongoose.Types.ObjectId,
         required: [true, errors.recipeCategoryRequiredError],
-        ref: CategoryModelName,
+        ref: modelsNames.CategoryModelName,
     },
     averageRating: {
         type: Number,
@@ -75,6 +71,6 @@ const recipeSchema = new mongoose.Schema({
     },
 });
 
-const Recipe = mongoose.model(RecipeModelName, recipeSchema);
+const Recipe = mongoose.model(modelsNames.RecipeModelName, recipeSchema);
 
 module.exports = Recipe;

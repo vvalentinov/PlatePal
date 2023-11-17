@@ -1,19 +1,28 @@
 const Comment = require('../models/Comment');
 
-const recipeManager = require('./recipeManager');
 const userManager = require('./userManager');
 
+const { checkIfRecipeExists } = require('../utils/checkIfRecipeExistsUtil');
+
 exports.create = async (commentData, userId) => {
+    await checkIfRecipeExists(commentData.recipeId);
+
+    const regex = new RegExp(/^[0-9a-fA-F]{24}$/);
+    if (!regex.test(userId)) {
+        throw new Error('Invalid user id format!');
+    }
+
+    const user = await userManager.getById(userId);
+    if (!user) {
+        throw new Error('No user with given id found!');
+    }
+
     const comment = await Comment.create({
         text: commentData.text,
         recipeId: commentData.recipeId,
         user: userId,
         createdAt: commentData.createdAt
     });
-
-    const recipe = await recipeManager.getById(commentData.recipeId);
-    recipe.comments.push(comment._id);
-    await recipe.save();
 
     return comment.populate('user', 'username');
 };
@@ -83,4 +92,7 @@ exports.getUserComments = (userId, recipeId) => Comment.find(
     {
         recipeId,
         user: userId
-    }).populate('user', 'username');
+    })
+    .populate('user', 'username')
+    .sort({ 'createdAt': 'descending' })
+    .exec();;

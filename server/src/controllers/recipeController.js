@@ -4,6 +4,7 @@ const multer = require('multer');
 
 const { isAuthenticated } = require('../middlewares/authMiddleware');
 const { isAdmin } = require('../middlewares/isAdminMiddleware');
+const { isRecipeNameCorrectFormat } = require('../middlewares/recipeNameMiddleware');
 
 const {
     createRecipeRoute,
@@ -23,6 +24,7 @@ router.post(
         const image = req.file;
         const data = req.body;
         const owner = req.user._id;
+
         try {
             const result = await recipeManager.create(data, image, owner);
             res.status(200).json({ message: "Recipe created successfully!", result });
@@ -63,27 +65,37 @@ router.put('/approve/:recipeId', isAdmin, async (req, res) => {
     res.status(200).json({ message: "Recipe approved successfully!", result: recipe });
 });
 
-router.get('/user-recipes', isAuthenticated, async (req, res) => {
-    const userId = req.user._id;
-    const searchName = req.query.searchName;
-    console.log(searchName);
-    const recipes = await recipeManager.getUserRecipes(userId, searchName);
-    console.log(recipes);
-    res.status(200).json({ message: "User recipes retrieved successfully!", result: recipes });
-});
+router.get(
+    '/user-recipes',
+    isAuthenticated,
+    isRecipeNameCorrectFormat,
+    async (req, res) => {
+        const userId = req.user._id;
+        const searchName = req.query.searchName;
+        const recipes = await recipeManager.getUserRecipes(userId, searchName);
+        res.status(200).json({ message: "User recipes retrieved successfully!", result: recipes });
+    });
 
-router.get('/user-recipes/approved', isAuthenticated, async (req, res) => {
-    const userId = req.user._id;
-    const searchName = req.query.searchName;
-    const recipes = await recipeManager.getUserApprovedRecipes(userId, searchName);
-    res.status(200).json({ message: "User approved recipes retrieved successfully!", result: recipes });
-});
+router.get(
+    '/user-recipes/approved',
+    isAuthenticated,
+    isRecipeNameCorrectFormat,
+    async (req, res) => {
+        const userId = req.user._id;
+        const searchName = req.query.searchName;
+        const recipes = await recipeManager.getUserApprovedRecipes(userId, searchName);
+        res.status(200).json({ message: "User approved recipes retrieved successfully!", result: recipes });
+    });
 
-router.get('/user-recipes/unapproved', isAuthenticated, async (req, res) => {
-    const userId = req.user._id;
-    const searchName = req.query.searchName;
-    const recipes = await recipeManager.getUserUnapprovedRecipes(userId, searchName);
-    res.status(200).json({ message: "User unapproved recipes retrieved successfully!", result: recipes });
-});
+router.get(
+    '/user-recipes/unapproved',
+    isAuthenticated,
+    isRecipeNameCorrectFormat,
+    async (req, res) => {
+        const userId = req.user._id;
+        const searchName = req.query.searchName;
+        const recipes = await recipeManager.getUserUnapprovedRecipes(userId, searchName);
+        res.status(200).json({ message: "User unapproved recipes retrieved successfully!", result: recipes });
+    });
 
 module.exports = router;
