@@ -16,18 +16,28 @@ import { commentServiceFactory } from '../../../services/commentService';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment } from '@fortawesome/free-solid-svg-icons';
 
+import ToastNotification from './../../Toast/ToastNotification';
+
 const PostRecipeComment = ({ recipeId, onCommentSubmit }) => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+    const [toastMsg, setToastMsg] = useState('');
+
     const commentService = useService(commentServiceFactory);
 
     const onFormSubmit = (data) => {
+        setToastMsg('');
         commentService.create({ ...data, recipeId, createdAt: new Date() })
             .then(res => onCommentSubmit(res.result))
-            .catch(error => console.log(error))
-            .finally(() => formValues.text = '');
+            .catch(error => {
+                setToastMsg(error.message);
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }).finally(() => onChangeHandler({ target: { name: 'text', value: '' } }));
     };
 
     const {
@@ -38,6 +48,7 @@ const PostRecipeComment = ({ recipeId, onCommentSubmit }) => {
 
     return (
         <>
+            {toastMsg && <ToastNotification isSuccessfull={false} message={toastMsg} />}
             <div className={styles.container}>
                 <Card className={styles.postCommentCard}>
                     <Card.Body>

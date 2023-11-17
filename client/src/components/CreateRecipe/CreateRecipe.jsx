@@ -29,9 +29,13 @@ import RecipeSteps from './RecipeSteps/RecipeSteps';
 
 import { extractRecipeFormData } from '../../utils/extractRecipeInfoUtil';
 
+import ToastNotification from '../Toast/ToastNotification';
+
 const CreateRecipe = () => {
     const [categories, setCategories] = useState([]);
     const [isRequestInProgress, setIsRequestInProgress] = useState(false);
+
+    const [toastMsg, setToastMsg] = useState('');
 
     const navigate = useNavigate();
 
@@ -66,6 +70,7 @@ const CreateRecipe = () => {
     const categoryService = useService(categoryServiceFactory);
 
     const onFormSubmit = async (data) => {
+        setToastMsg('');
         setIsRequestInProgress(true);
 
         const formData = extractRecipeFormData(data);
@@ -76,61 +81,70 @@ const CreateRecipe = () => {
             navigate(paths.homePath);
         } catch (error) {
             setIsRequestInProgress(false);
-            console.log(error);
+            setToastMsg(error.message);
+            window.scrollTo(0, 0);
         }
     };
 
     return (
-        <div className={styles.container}>
-            <Form method="POST" onSubmit={handleSubmit(onFormSubmit)} className={styles.form}>
-                <h2 className="text-center my-4">Create Recipe!</h2>
+        <>
+            {toastMsg && <ToastNotification isSuccessfull={false} message={toastMsg} />}
+            <div className={styles.container}>
+                <Form method="POST" onSubmit={handleSubmit(onFormSubmit)} className={styles.form}>
+                    <h2 className="text-center my-4">Create Recipe!</h2>
 
-                <RecipeName errors={errors} control={control} />
-                <RecipeCategory control={control} categories={categories} />
-                <RecipeImageFile control={control} errors={errors} />
-                <RecipeDescription control={control} errors={errors} />
-                <RecipeYoutubeLink control={control} errors={errors} />
-                <RecipeCookTime control={control} errors={errors} />
-                <RecipeIngredients
-                    errors={errors}
-                    control={control}
-                    ingredients={ingredients}
-                    remove={ingredientsRemove} />
+                    <RecipeName errors={errors} control={control} />
+                    <RecipeCategory control={control} categories={categories} />
+                    <RecipeImageFile control={control} errors={errors} />
+                    <RecipeDescription control={control} errors={errors} />
+                    <RecipeYoutubeLink control={control} errors={errors} />
+                    <RecipeCookTime control={control} errors={errors} />
+                    <RecipeIngredients
+                        errors={errors}
+                        control={control}
+                        ingredients={ingredients}
+                        remove={ingredientsRemove} />
 
-                <div className="d-grid">
-                    <Button
-                        onClick={() => ingredientsAppend({ name: "" })}
-                        type="button"
-                        bsPrefix={styles.blockButton}
-                        size="lg">
-                        Add Recipe Ingredient
-                    </Button>
-                </div>
+                    <div className="d-grid">
+                        <Button
+                            onClick={() => ingredientsAppend({ name: "" })}
+                            type="button"
+                            bsPrefix={styles.blockButton}
+                            size="lg">
+                            Add Recipe Ingredient
+                        </Button>
+                    </div>
 
-                <RecipeSteps errors={errors} control={control} steps={steps} remove={stepsRemove} />
+                    <RecipeSteps
+                        errors={errors}
+                        control={control}
+                        steps={steps}
+                        remove={stepsRemove}
+                    />
 
-                <div className="d-grid">
-                    <Button
-                        onClick={() => stepsAppend({ name: "" }, {})}
-                        type="button"
-                        bsPrefix={styles.blockButton}
-                        size="lg">
-                        Add Recipe Step
-                    </Button>
-                </div>
+                    <div className="d-grid">
+                        <Button
+                            onClick={() => stepsAppend({ name: "" }, {})}
+                            type="button"
+                            bsPrefix={styles.blockButton}
+                            size="lg">
+                            Add Recipe Step
+                        </Button>
+                    </div>
 
-                <div className="d-grid gap-2">
-                    {isRequestInProgress ? (
-                        <Button disabled bsPrefix={styles.blockButton} size="lg">
-                            <Spinner as="span" animation="grow" role="status" aria-hidden="true" />
-                            Creating Recipe...
-                        </Button>) : (
-                        <Button type="submit" bsPrefix={styles.blockButton} size="lg">
-                            Create Recipe
-                        </Button>)}
-                </div>
-            </Form>
-        </div>
+                    <div className="d-grid gap-2">
+                        {isRequestInProgress ? (
+                            <Button disabled bsPrefix={styles.blockButton} size="lg">
+                                <Spinner as="span" animation="grow" role="status" aria-hidden="true" />
+                                Creating Recipe...
+                            </Button>) : (
+                            <Button type="submit" bsPrefix={styles.blockButton} size="lg">
+                                Create Recipe
+                            </Button>)}
+                    </div>
+                </Form>
+            </div>
+        </>
     );
 };
 

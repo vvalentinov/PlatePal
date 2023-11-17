@@ -30,8 +30,12 @@ import useForm from '../../hooks/useForm';
 
 import { recipeNameValidator } from '../../utils/validatorUtil';
 
+import ToastNotification from '../Toast/ToastNotification';
+
 const UserRecipesList = () => {
     const [recipeNameErr, setRecipeNameErr] = useState('');
+
+    const [toast, setToast] = useState('');
 
     const onRecipeNameBlur = () => setRecipeNameErr(recipeNameValidator(formValues.search));
 
@@ -52,6 +56,7 @@ const UserRecipesList = () => {
     const searchInputText = `Search recipe by name in ${title.toLowerCase()}`;
 
     const onSearchFormSubmit = () => {
+        setToast('');
         const recipeNameErrMsg = recipeNameValidator(formValues.search);
         if (recipeNameErrMsg) {
             setRecipeNameErr(recipeNameErrMsg);
@@ -68,6 +73,8 @@ const UserRecipesList = () => {
 
         setSearchQuery(formValues.search);
     };
+
+    const handleToast = (message) => setToast(message);
 
     const {
         formValues,
@@ -91,6 +98,7 @@ const UserRecipesList = () => {
         setRecipeTypeState('all');
         setSearchQuery('');
         setRecipeNameErr('');
+        setToast('');
     };
 
     const getUserApprovedRecipes = () => {
@@ -98,6 +106,7 @@ const UserRecipesList = () => {
         setRecipeTypeState('approved');
         setSearchQuery('');
         setRecipeNameErr('');
+        setToast('');
     };
 
     const getUserUnapprovedRecipes = () => {
@@ -105,10 +114,12 @@ const UserRecipesList = () => {
         setRecipeTypeState('unapproved');
         setSearchQuery('');
         setRecipeNameErr('');
+        setToast('');
     };
 
     return (
         <>
+            {toast && <ToastNotification message={toast} isSuccessfull={false} />}
             <div className={styles.buttonsContainer}>
                 <Link className={styles.link} to='/recipes/user-recipes/approved'>
                     <Button
@@ -160,7 +171,10 @@ const UserRecipesList = () => {
                 </Form>
             </div>
             <h2 className='text-center'>{title}</h2>
-            <RecipesList recipeType={recipeTypeState} searchQuery={searchQuery} />
+            <RecipesList
+                handleToast={handleToast}
+                recipeType={recipeTypeState}
+                searchQuery={searchQuery} />
         </>
     );
 };

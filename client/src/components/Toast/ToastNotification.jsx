@@ -17,7 +17,7 @@ function ToastNotification({ message, isSuccessfull }) {
                 className={`${styles.toast} border-2 border-black`}
                 show={show}
                 onClose={toggleShowA}
-                delay={8000}
+                delay={10000}
                 autohide
                 bg={isSuccessfull ? 'success' : 'danger'}>
                 <Toast.Header className='border-bottom border-2 border-black'>

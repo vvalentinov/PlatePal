@@ -61,26 +61,29 @@ const RecipeCommentsList = ({ recipeId }) => {
             .catch(error => console.log(error));
     };
 
-    const onCommentSubmit = (newComment) => setComments((comments) => [newComment, ...comments]);
+    const onCommentSubmit = (newComment) => setComments((state) => [newComment, ...state]);
 
     const isCommentAuthor = (commentUserId) => commentUserId === userId || !isAuthenticated;
 
     return (
         <>
-            {isAuthenticated && <PostRecipeComment recipeId={recipeId} onCommentSubmit={onCommentSubmit} />}
-
-            {comments.length === 0 && <NoCommentsCard />}
-            {comments.length > 0 && (
+            {isAuthenticated && (
                 <>
-                    {isAuthenticated && <div className={styles.container}>
-                        <Button bsPrefix={styles.sortFilterCommentsBtn} onClick={getSortedCommentsHandler}>
-                            Sort All Comments By Likes Desc
-                        </Button>
-                        <Button bsPrefix={styles.sortFilterCommentsBtn} onClick={getUserCommentsHandler}>
-                            Show my comments
-                        </Button>
-                    </div>}
-
+                    <PostRecipeComment recipeId={recipeId} onCommentSubmit={onCommentSubmit} />
+                    {comments.length > 0 && (
+                        <div className={styles.container}>
+                            <Button bsPrefix={styles.sortFilterCommentsBtn} onClick={getSortedCommentsHandler}>
+                                Sort All Comments By Likes Desc
+                            </Button>
+                            <Button bsPrefix={styles.sortFilterCommentsBtn} onClick={getUserCommentsHandler}>
+                                Show my comments
+                            </Button>
+                        </div>
+                    )}
+                </>
+            )}
+            {comments.length > 0 ? (
+                <>
                     {comments.map(x => (
                         <Card className={styles.card} key={x._id}>
                             <Card.Header className={styles.cardHeader}>
@@ -121,9 +124,7 @@ const RecipeCommentsList = ({ recipeId }) => {
                         </Card>
                     ))}
                 </>
-            )}
-
-
+            ) : <NoCommentsCard />}
         </>
     );
 };

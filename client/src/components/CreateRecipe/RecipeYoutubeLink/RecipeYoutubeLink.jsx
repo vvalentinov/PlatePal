@@ -16,6 +16,7 @@ const RecipeYoutubeLink = ({ control, errors }) => {
                     control={control}
                     name="recipeYoutubeLink"
                     rules={{
+                        required: false,
                         pattern: {
                             value: /^(https?:\/\/)?(www\.)?youtube\.com\/embed\/([\w-]+)(\S+)?$/,
                             message: 'Invalid embedded youtube video link!'
