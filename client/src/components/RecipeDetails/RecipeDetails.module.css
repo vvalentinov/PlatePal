@@ -56,6 +56,9 @@
     font-size: 1.4rem;
     text-align: justify;
     font-style: italic;
+    border: solid 3px black;
+    padding: 1rem;
+    border-radius: 10px;
 }
 
 .recipeCommentStarContainer {

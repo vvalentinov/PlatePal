@@ -19,7 +19,8 @@
     flex-basis: 33.3%;
 }
 
-.button {
+.button,
+.activeButton {
     background-color: #93DC80;
     padding: 1rem 2rem;
     font-size: 1.3rem;
@@ -28,8 +29,15 @@
     width: 100%;
 }
 
-.button:hover,
-.button:active {
+.button {
+    color: black;
+}
+
+.button:hover {
+    color: white;
+}
+
+.activeButton {
     color: white;
 }
 

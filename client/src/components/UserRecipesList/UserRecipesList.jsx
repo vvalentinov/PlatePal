@@ -124,7 +124,10 @@ const UserRecipesList = () => {
                 <Link className={styles.link} to='/recipes/user-recipes/approved'>
                     <Button
                         onClick={getUserApprovedRecipes}
-                        bsPrefix={styles.button}
+                        bsPrefix={
+                            recipeType === 'approved' ?
+                                styles.activeButton :
+                                styles.button}
                         size='lg'>
                         <FontAwesomeIcon className='me-1' icon={faCircleCheck} />
                         Approved Recipes
@@ -133,7 +136,10 @@ const UserRecipesList = () => {
                 <Link className={styles.link} to='/recipes/user-recipes/unapproved'>
                     <Button
                         onClick={getUserUnapprovedRecipes}
-                        bsPrefix={styles.button}
+                        bsPrefix={
+                            recipeType === 'unapproved' ?
+                                styles.activeButton :
+                                styles.button}
                         size='lg'>
                         <FontAwesomeIcon className='me-1' icon={faCircleXmark} />
                         Unapproved Recipes
@@ -142,7 +148,10 @@ const UserRecipesList = () => {
                 <Link className={styles.link} to='/recipes/user-recipes/all'>
                     <Button
                         onClick={getAllUserRecipes}
-                        bsPrefix={styles.button}
+                        bsPrefix={
+                            recipeType === 'all' ?
+                                styles.activeButton :
+                                styles.button}
                         size='lg'>
                         <FontAwesomeIcon className='me-1' icon={faList} />
                         All Recipes

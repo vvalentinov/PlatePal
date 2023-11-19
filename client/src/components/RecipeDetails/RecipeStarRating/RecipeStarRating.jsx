@@ -51,7 +51,7 @@ const RecipeStarRating = ({
             <Card className={styles.card}>
                 <Card.Body>
                     <Card.Text>
-                        Dear Food Enthusiasts, Your feedback is the secret ingredient to making our recipe community even more delicious! Have you tried a recipe that left your taste buds dancing? Share the love by giving it a star rating from one to five. Your ratings not only help fellow foodies discover the most delightful dishes but also empower our talented chefs to keep serving up culinary masterpieces. Whether it's a savory delight or a sweet treat, let your voice be heard and inspire others to embark on a culinary adventure. Your stars matter, and they make our recipe collection a flavorful tapestry of shared experiences. So, don your virtual chef's hat and sprinkle some stars on the recipes that stole your heart. Happy cooking and happy rating!
+                        Dear Food Enthusiasts, Your feedback is the secret ingredient to enhancing our recipe community! Have you savored a dish that tantalized your taste buds? Share the love with a star rating (one to five). Your ratings guide fellow foodies to delightful dishes and inspire chefs to craft more culinary masterpieces. Whether savory or sweet, let your voice inspire others on this flavorful culinary adventure. Happy cooking and happy rating!
                     </Card.Text>
                     <Button bsPrefix={styles.starButton} onClick={handleShow}>
                         Star Recipe<FontAwesomeIcon className='ms-2' icon={faStar} />

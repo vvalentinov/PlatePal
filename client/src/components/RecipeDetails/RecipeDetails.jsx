@@ -1,6 +1,7 @@
 import styles from './RecipeDetails.module.css';
 
 import ApproveRecipe from './ApproveRecipe/ApproveRecipe';
+import DeleteRecipe from './DeleteRecipe/DeleteRecipe';
 import RecipeDescriptionCard from './RecipeDescription/RecipeDescriptionCard';
 import RecipeIngredientsContainer from './RecipeIngredients/RecipeIngredientsContainer';
 import RecipeStepsContainer from './RecipeSteps/RecipeStepsContainer';
@@ -11,7 +12,7 @@ import ToastNotification from '../Toast/ToastNotification';
 import CustomSpinner from '../Spinner/Spinner';
 
 import { useEffect, useState, useContext } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 import { AuthContext } from '../../contexts/AuthContext';
 
@@ -19,16 +20,26 @@ import { recipeServiceFactory } from '../../services/recipeService';
 
 import { useService } from '../../hooks/useService';
 
+import {
+    userDeleteRecipeText,
+    adminDeleteRecipeText,
+    youtubeVideoText
+} from '../../constants/cardTextMessages';
+
 const RecipeDetails = () => {
+    const navigate = useNavigate();
+
     const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
     const [toastMessage, setToastMessage] = useState('');
     const [recipe, setRecipe] = useState();
 
-    const { isAuthenticated, isAdmin } = useContext(AuthContext);
+    const { isAuthenticated, isAdmin, userId } = useContext(AuthContext);
 
     const { recipeId } = useParams();
 
     const recipeService = useService(recipeServiceFactory);
+
+    const isRecipeOwner = recipe && userId === recipe.owner._id;
 
     useEffect(() => {
         recipeService.getRecipe(recipeId)
@@ -47,6 +58,10 @@ const RecipeDetails = () => {
     const handleApprovingRecipe = (result) => setRecipe((state) =>
         ({ ...state, isApproved: result.isApproved }));
 
+    // const handleRecipeDelete = (recipe) => setRecipe((state) => state.filter(x => x._id !== recipe._id));
+
+    const handleRecipeDelete = () => navigate('/');
+
     return (
         <>
             {isSpinnerLoading && <CustomSpinner />}
@@ -58,29 +73,41 @@ const RecipeDetails = () => {
                         <RecipeDescriptionCard {...recipe} />
                     </section>
 
-                    <div className={styles.recipeCommentStarContainer}>
-                        {
-                            !recipe.isApproved && isAdmin &&
-                            <ApproveRecipe
-                                recipeId={recipeId}
-                                handleApprovingRecipe={handleApprovingRecipe} />
-                        }
-                        {isAuthenticated && (
+                    {isAuthenticated && (
+                        <div className={styles.recipeCommentStarContainer}>
+                            {
+                                !recipe.isApproved && isAdmin &&
+                                <ApproveRecipe
+                                    recipeId={recipeId}
+                                    handleApprovingRecipe={handleApprovingRecipe} />
+                            }
                             <RecipeStarRating
                                 recipeId={recipeId}
                                 onRatingSubmit={handleRatingSubmit}
                                 userRating={recipe.userRating} />
-                        )}
-                    </div>
+                            {
+                                isRecipeOwner &&
+                                <DeleteRecipe
+                                    handleRecipeDelete={handleRecipeDelete}
+                                    text={userDeleteRecipeText}
+                                    recipeId={recipeId}
+                                />
+                            }
+                            {
+                                isAdmin &&
+                                !isRecipeOwner &&
+                                <DeleteRecipe
+                                    handleRecipeDelete={handleRecipeDelete}
+                                    text={adminDeleteRecipeText}
+                                    recipeId={recipeId} />
+                            }
+                        </div>
+                    )}
 
-                    {recipe.youtubeLink && (
+                    {recipe.youtubeLink !== 'undefined' && (
                         <div className={styles.youtubeVideoSection}>
                             <iframe src={recipe.youtubeLink} allowFullScreen></iframe>
-                            <div>
-                                <p>
-                                    Experience the art of cooking in real-time! Dive into the heart of this delectable recipe with our exclusive YouTube video. Watch as expert chefs guide you through the intricate steps, sharing valuable tips and techniques that bring this culinary masterpiece to life. Immerse yourself in the sights and sounds of the kitchen, from the sizzle of the pan to the aromatic symphony of spices. This video is your backstage pass to culinary excellence, offering a visual feast that complements the detailed instructions. Enhance your cooking journey and embark on a flavorful adventure with our immersive YouTube experience. Hit play, and let the culinary magic unfold before your eyes!
-                                </p>
-                            </div>
+                            <div><p>{youtubeVideoText}</p></div>
                         </div>
                     )}
 

@@ -1,0 +1,58 @@
+.deleteRecipeBtn,
+.deleteRecipeBtn:hover,
+.deleteRecipeBtn:active {
+    font-size: 1.5rem;
+    background-color: #93DC80;
+    border-radius: 15px;
+    text-transform: uppercase;
+    border: solid 3px black;
+    width: 100%;
+}
+
+.deleteRecipeBtn {
+    padding: 1rem 2rem;
+}
+
+.deleteRecipeBtn:hover {
+    color: white;
+}
+
+.modalHeader {
+    background-color: #93DC80;
+}
+
+.modalBody {
+    font-size: 1.3rem;
+    text-align: center;
+}
+
+.modalBody,
+.modalBtnContainer {
+    background-color: #2C3E50;
+    color: white;
+}
+
+.modalBtnContainer {
+    padding: 1rem;
+}
+
+.modalBtn {
+    background-color: #93DC80;
+    padding: 0.5rem 0;
+    border-radius: 15px;
+    text-transform: uppercase;
+    font-size: 1.2rem;
+}
+
+.modalBtn:hover {
+    color: red;
+}
+
+.card {
+    width: 70%;
+    background-color: #2C3E50;
+    color: white;
+    font-size: 1.4rem;
+    text-align: justify;
+    border: solid 4px #93DC80;
+}

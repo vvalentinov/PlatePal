@@ -19,7 +19,7 @@ const ApproveRecipe = ({ recipeId, handleApprovingRecipe }) => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    const onFormSubmit = () => {
+    const onApproveRecipeClick = () => {
         handleClose();
 
         fetch(`http://localhost:3000/recipe/approve/${recipeId}`, {
@@ -56,7 +56,7 @@ const ApproveRecipe = ({ recipeId, handleApprovingRecipe }) => {
                     <p>Are you sure you want to approve this recipe?</p>
                 </Modal.Body>
                 <div className={`d-grid ${styles.modalBtnContainer}`}>
-                    <Button onClick={onFormSubmit} bsPrefix={styles.modalBtn} size="lg">
+                    <Button onClick={onApproveRecipeClick} bsPrefix={styles.modalBtn} size="lg">
                         Approve
                     </Button>
                 </div>
