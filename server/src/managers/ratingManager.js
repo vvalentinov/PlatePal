@@ -21,9 +21,10 @@ exports.rateRecipe = async (recipeId, userId, value) => {
         recipe.ratings.push(newRating._id);
     }
 
-    const averageRating = await calcAvgRating(recipe);
+    const averageRating = (await calcAvgRating(recipe)).toFixed(1);
     recipe.averageRating = averageRating;
     await recipe.save();
+
 
     return { averageRating, rateValue: value };
 };

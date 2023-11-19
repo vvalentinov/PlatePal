@@ -6,7 +6,7 @@ const errors = require('../constants/errorMessages/starRatingErrors');
 
 const starRatingSchema = new mongoose.Schema({
     value: {
-        type: [Number, errors.ratingValueTypeError],
+        type: Number,
         required: [true, errors.ratingValueRequiredError],
         min: [1, errors.ratingValueError(1, 5)],
         max: [5, errors.ratingValueError(1, 5)],

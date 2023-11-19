@@ -23,6 +23,8 @@ exports.getPopulatedRecipe = async (recipeId, userId) => {
         .populate('category', 'name')
         .lean();
 
+    populatedRecipe.averageRating = populatedRecipe.averageRating.toFixed(1);
+
     if (userId) {
         const rating = await getRating(userId, recipeId);
         populatedRecipe = { ...populatedRecipe, userRating: rating };

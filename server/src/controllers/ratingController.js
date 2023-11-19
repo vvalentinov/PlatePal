@@ -1,12 +1,10 @@
 const router = require('express').Router();
 
 const ratingManager = require('../managers/ratingManager');
-const recipeManager = require('../managers/recipeManager');
 
 const { isAuthenticated } = require('../middlewares/authMiddleware');
 
 const { getErrorMessage } = require('../utils/errorMessageUtil');
-const { checkIfRecipeExists } = require('../utils/checkIfRecipeExistsUtil');
 
 router.post(
     '/rate-recipe/:recipeId',
