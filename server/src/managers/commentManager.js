@@ -85,7 +85,10 @@ exports.likeComment = async (commentId, userId) => {
 
 exports.getSortedComments = async (recipeId) => await Comment.find({ recipeId })
     .populate('user', 'username')
-    .sort({ 'likesCount': -1, 'createdAt': 'descending' })
+    .sort({
+        'likesCount': -1,
+        'createdAt': 'descending'
+    })
     .exec();
 
 exports.getUserComments = (userId, recipeId) => Comment.find(

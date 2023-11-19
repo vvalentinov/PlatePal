@@ -2,11 +2,13 @@ const Recipe = require('../models/Recipe');
 
 const { getByName } = require('./categoryManager');
 const { getRating } = require('./ratingManager');
+const { getById } = require('./userManager');
 
 const { uploadImage } = require('../utils/cloudinaryUtil');
 const { validateImageFile } = require('../utils/imageFileValidatiorUtil');
 const { recipeValidator } = require('../utils/recipeValidatorUtil');
 const { checkIfRecipeExists } = require('../utils/checkIfRecipeExistsUtil');
+const { deleteImage } = require('../utils/cloudinaryUtil');
 
 exports.getById = async (recipeId) => {
     await checkIfRecipeExists(recipeId);
@@ -94,3 +96,24 @@ exports.getUserUnapprovedRecipes = (userId, searchName) => Recipe.find(
         name: new RegExp(searchName, 'i'),
     }
 ).select('_id image name');
+
+exports.deleteRecipe = async (userId, recipeId) => {
+    await checkIfRecipeExists(recipeId);
+
+    const recipe = await Recipe.findById(recipeId);
+
+    const user = await getById(userId);
+    if (!user) {
+        throw new Error('User with given id doesn\'t exist!');
+    }
+
+    if (!user.isAdmin && (recipe.owner._id).toString() !== userId) {
+        throw new Error('You have to be either the recipe owner or an admin to delete this recipe!');
+    }
+
+    await deleteImage(recipe.image.publicId);
+
+    const deletedRecipe = await Recipe.findOneAndDelete({ _id: recipeId });
+
+    return deletedRecipe;
+};

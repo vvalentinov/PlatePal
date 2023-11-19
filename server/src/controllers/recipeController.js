@@ -98,4 +98,16 @@ router.get(
         res.status(200).json({ message: "User unapproved recipes retrieved successfully!", result: recipes });
     });
 
+router.delete('/delete/:recipeId', isAuthenticated, async (req, res) => {
+    const recipeId = req.params.recipeId;
+    const userId = req.user._id;
+
+    try {
+        const result = await recipeManager.deleteRecipe(userId, recipeId);
+        res.status(200).json({ message: 'Recipe deleted successfully!', result });
+    } catch (error) {
+        res.status(400).json({ message: getErrorMessage(error) });
+    }
+});
+
 module.exports = router;
