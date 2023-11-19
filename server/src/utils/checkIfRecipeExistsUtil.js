@@ -1,13 +1,17 @@
 const Recipe = require('../models/Recipe');
 
+const { mongooseObjectIdFormatRegex } = require('../constants/regexes/regexes');
+
+const { recipeInvalidIdFormat, recipeNotFoundWithId } = require('../constants/errorMessages/recipeErrors');
+
 exports.checkIfRecipeExists = async (recipeId) => {
-    const regex = new RegExp(/^[0-9a-fA-F]{24}$/);
+    const regex = new RegExp(mongooseObjectIdFormatRegex);
     if (!regex.test(recipeId)) {
-        throw new Error('Invalid recipe id format!');
+        throw new Error(recipeInvalidIdFormat);
     }
 
     const recipeExists = await Recipe.exists({ _id: recipeId });
     if (!recipeExists) {
-        throw new Error('Recipe with given id not found!');
+        throw new Error(recipeNotFoundWithId);
     }
 };

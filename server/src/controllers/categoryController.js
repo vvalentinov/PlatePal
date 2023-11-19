@@ -35,4 +35,9 @@ router.get(routes.getAllRoute, async (req, res) => {
     }
 });
 
+router.get(routes.getCategoryList, async (req, res) => {
+    const result = await categoryManager.getCategoryList();
+    res.status(200).json({ message: 'Category list retrieved successfully!', result });
+});
+
 module.exports = router;

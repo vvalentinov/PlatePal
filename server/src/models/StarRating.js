@@ -1,24 +1,28 @@
 const mongoose = require('mongoose');
 
+const modelNames = require('../constants/dbModelsNames');
+
+const errors = require('../constants/errorMessages/starRatingErrors');
+
 const starRatingSchema = new mongoose.Schema({
     value: {
-        type: Number,
-        required: true,
-        min: 1,
-        max: 5,
+        type: [Number, errors.ratingValueTypeError],
+        required: [true, errors.ratingValueRequiredError],
+        min: [1, errors.ratingValueError(1, 5)],
+        max: [5, errors.ratingValueError(1, 5)],
     },
     userId: {
         type: mongoose.Types.ObjectId,
-        ref: 'User',
-        required: true,
+        ref: modelNames.UserModelName,
+        required: [true, errors.ratingUserIdRequiredError],
     },
     recipeId: {
         type: mongoose.Types.ObjectId,
-        ref: 'Recipe',
-        required: true,
+        ref: modelNames.RecipeModelName,
+        required: [true, errors.ratingRecipeIdRequiredError],
     },
 });
 
-const StarRating = mongoose.model('StarRating', starRatingSchema);
+const StarRating = mongoose.model(modelNames.StarRatingModelName, starRatingSchema);
 
 module.exports = StarRating;

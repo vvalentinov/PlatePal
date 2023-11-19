@@ -6,18 +6,14 @@ const { isAuthenticated } = require('../middlewares/authMiddleware');
 const { isAdmin } = require('../middlewares/isAdminMiddleware');
 const { isRecipeNameCorrectFormat } = require('../middlewares/recipeNameMiddleware');
 
-const {
-    createRecipeRoute,
-    getRecipesInCategoryRoute,
-    getRecipeDetailsRoute,
-} = require('../constants/routeNames/recipeRoutes');
+const routes = require('../constants/routeNames/recipeRoutes');
 
 const recipeManager = require('../managers/recipeManager');
 
 const { getErrorMessage } = require('../utils/errorMessageUtil');
 
 router.post(
-    createRecipeRoute,
+    routes.createRecipeRoute,
     isAuthenticated,
     multer().single('recipeFile'),
     async (req, res) => {
@@ -33,7 +29,7 @@ router.post(
         }
     });
 
-router.get(getRecipesInCategoryRoute, async (req, res) => {
+router.get(routes.getRecipesInCategoryRoute, async (req, res) => {
     const category = req.params.categoryName;
     try {
         const result = await recipeManager.getAll(category);
@@ -43,7 +39,7 @@ router.get(getRecipesInCategoryRoute, async (req, res) => {
     }
 });
 
-router.get(getRecipeDetailsRoute, async (req, res) => {
+router.get(routes.getRecipeDetailsRoute, async (req, res) => {
     const recipeId = req.params.recipeId;
     const userId = req.user?._id;
     try {
@@ -54,19 +50,19 @@ router.get(getRecipeDetailsRoute, async (req, res) => {
     }
 });
 
-router.get('/unapproved', isAdmin, async (req, res) => {
-    const recipes = await recipeManager.genUnapproved();
+router.get(routes.getUnapprovedRecipesRoute, isAdmin, async (req, res) => {
+    const recipes = await recipeManager.getUnapproved();
     res.status(200).json({ message: "Unapproved recipes retrieved!", result: recipes });
 });
 
-router.put('/approve/:recipeId', isAdmin, async (req, res) => {
+router.put(routes.approveRecipeRoute, isAdmin, async (req, res) => {
     const recipeId = req.params.recipeId;
     const recipe = await recipeManager.approveRecipe(recipeId);
     res.status(200).json({ message: "Recipe approved successfully!", result: recipe });
 });
 
 router.get(
-    '/user-recipes',
+    routes.getAllUserRecipesRoute,
     isAuthenticated,
     isRecipeNameCorrectFormat,
     async (req, res) => {
@@ -77,7 +73,7 @@ router.get(
     });
 
 router.get(
-    '/user-recipes/approved',
+    routes.getApprovedUserRecipesRoute,
     isAuthenticated,
     isRecipeNameCorrectFormat,
     async (req, res) => {
@@ -88,7 +84,7 @@ router.get(
     });
 
 router.get(
-    '/user-recipes/unapproved',
+    routes.getUnapprovedUserRecipesRoute,
     isAuthenticated,
     isRecipeNameCorrectFormat,
     async (req, res) => {
@@ -98,7 +94,7 @@ router.get(
         res.status(200).json({ message: "User unapproved recipes retrieved successfully!", result: recipes });
     });
 
-router.delete('/delete/:recipeId', isAuthenticated, async (req, res) => {
+router.delete(routes.deleteRecipeRoute, isAuthenticated, async (req, res) => {
     const recipeId = req.params.recipeId;
     const userId = req.user._id;
 

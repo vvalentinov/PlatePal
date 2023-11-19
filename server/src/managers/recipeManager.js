@@ -36,19 +36,24 @@ exports.create = async (data, recipeImage, owner) => {
 
     validateImageFile(recipeImage);
 
-    const { public_id, secure_url } = await uploadImage(recipeImage.buffer, 'Recipes');
-
     const recipe = await Recipe.create({
         name: data.recipeName,
         description: data.recipeDescription,
-        image: { publicId: public_id, url: secure_url },
         cookingTime: data.recipeCookingTime,
+        prepTime: data.recipePrepTime,
+        servings: data.recipeServings,
         ingredients: data.ingredients,
         steps: data.steps,
         youtubeLink: data.youtubeLink,
         category: data.recipeCategory,
         owner,
     });
+
+    const { public_id, secure_url } = await uploadImage(recipeImage.buffer, 'Recipes');
+    recipe.image.publicId = public_id;
+    recipe.image.url = secure_url;
+
+    await recipe.save();
 
     return recipe;
 };
@@ -66,7 +71,7 @@ exports.getAll = async (categoryName) => {
     return recipes;
 };
 
-exports.genUnapproved = () => Recipe.find({ isApproved: false }).lean();
+exports.getUnapproved = () => Recipe.find({ isApproved: false }).lean();
 
 exports.approveRecipe = (recipeId) => Recipe.findByIdAndUpdate(
     recipeId,

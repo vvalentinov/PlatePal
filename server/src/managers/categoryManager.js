@@ -27,3 +27,5 @@ exports.getAll = () => Category.find({});
 exports.getById = (categoryId) => Category.findById(categoryId);
 
 exports.getByName = (categoryName) => Category.findOne({ name: categoryName });
+
+exports.getCategoryList = () => Category.find({}).select('_id name');

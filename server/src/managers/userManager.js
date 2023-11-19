@@ -5,12 +5,17 @@ const { validateUserPassword } = require('../utils/bcryptUtil');
 
 const userErrors = require('../constants/errorMessages/userErrors');
 
-const { createSession } = require('../utils/createSessionUtil');
-
 const jwt = require('../lib/jwt');
 const { JWT_SECRET } = require('../constants/jwtConstants');
 
 const revokedTokens = new Set();
+
+const createSession = (user, token) => ({
+    userId: user._id,
+    username: user.username,
+    isAdmin: user.isAdmin,
+    token,
+});
 
 exports.register = async (userData) => {
     const userWithUsername = await User.findOne({ username: userData.username });

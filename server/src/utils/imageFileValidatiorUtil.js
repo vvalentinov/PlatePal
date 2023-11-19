@@ -1,6 +1,10 @@
 const path = require('path');
 
 exports.validateImageFile = (file) => {
+    if (!file) {
+        throw new Error('Image file is required!');
+    }
+
     const imageExt = path.extname(file.originalname);
     if (imageExt != '.png' &&
         imageExt != '.jpg' &&

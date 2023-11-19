@@ -1,52 +1,56 @@
 const Recipe = require('../models/Recipe');
 
-const { getById } = require('../managers/categoryManager');
+const categoryManager = require('../managers/categoryManager');
+
+const recipeErrors = require('../constants/errorMessages/recipeErrors');
+const categoryErrors = require('../constants/errorMessages/categoryErrors');
+const regexes = require('../constants/regexes/regexes');
 
 exports.recipeValidator = async (data) => {
-    const recipeWithName = await Recipe.findOne({ name: data.recipeName });
-    if (recipeWithName) {
-        throw new Error('Recipe with given name already exists!');
+    const recipe = await Recipe.findOne({ name: data.recipeName });
+    if (recipe) {
+        throw new Error(recipeErrors.recipeWithNameExistError);
     }
 
-    const regex = new RegExp(/^[0-9a-fA-F]{24}$/);
+    const regex = new RegExp(regexes.recipeNameRegex);
     if (!regex.test(data.recipeCategory)) {
-        throw new Error('Invalid category id format!');
+        throw new Error(categoryErrors.categoryInvalidIdFormat);
     }
 
-    const category = await getById(data.recipeCategory);
+    const category = await categoryManager.getById(data.recipeCategory);
     if (!category) {
-        throw new Error('Category does not exist!');
+        throw new Error(categoryErrors.categoryInvalidError);
     }
 
-    if (data.youtubeLink && data.youtubeLink !== 'undefined') {
-        const regex = new RegExp(/^(https?:\/\/)?(www\.)?youtube\.com\/embed\/([\w-]+)(\S+)?$/);
+    if (data.youtubeLink) {
+        const regex = new RegExp(regexes.recipeYoutubeLinkRegex);
 
         if (regex.test(data.youtubeLink) == false) {
-            throw new Error('Invalid embedded youtube link format!');
+            throw new Error(recipeErrors.recipeYoutubeLinkFormatError);
         }
     }
 
     if (!data.ingredients) {
-        throw new Error('Recipe Ingredients list is empty!');
+        throw new Error(recipeErrors.recipeIngredientsRequiredError);
     }
 
     if (data.ingredients.length < 2 || data.ingredients.length > 30) {
-        throw new Error('Recipe ingredients must be between 2 and 30!');
+        throw new Error(recipeErrors.recipeIngredientsCountError(2, 30));
     }
 
-    if (data.ingredients.some(x => x.length < 5 || x.length > 100)) {
-        throw new Error('Recipe ingredient must be between 5 and 100 characters long!');
+    if (data.ingredients.some(x => x.length < 2 || x.length > 100)) {
+        throw new Error(recipeErrors.recipeIngredientLengthError(2, 100));
     }
 
     if (!data.steps) {
-        throw new Error('Recipe Steps list is empty!');
+        throw new Error(recipeErrors.recipeStepsRequiredError);
     }
 
     if (data.steps.length < 2 || data.steps.length > 30) {
-        throw new Error('Recipe steps must be between 2 and 30!');
+        throw new Error(recipeErrors.recipeStepsCountError(2, 30));
     }
 
     if (data.steps.some(x => x.length < 5 || x.length > 200)) {
-        throw new Error('Recipe step must be between 5 and 200 characters long!');
+        throw new Error(recipeErrors.recipeStepLengthError(5, 200));
     }
 };

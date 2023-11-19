@@ -6,3 +6,7 @@ exports.categoryDescriptionLengthError = (min, max) => `Category description mus
 
 exports.categoryPublicIdRequiredError = 'Category image file must have a public ID!';
 exports.categoryURLRequiredError = 'Category image file must have a url!';
+
+exports.categoryInvalidIdFormat = 'Invalid category id format!';
+
+exports.categoryInvalidError = 'Category does not exist!';

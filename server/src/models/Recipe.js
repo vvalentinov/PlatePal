@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 
 const errors = require('../constants/errorMessages/recipeErrors');
-
 const modelsNames = require('../constants/dbModelsNames');
+const regexes = require('../constants/regexes/regexes');
 
 const recipeSchema = new mongoose.Schema({
     name: {
@@ -10,7 +10,7 @@ const recipeSchema = new mongoose.Schema({
         required: [true, errors.recipeNameRequiredError],
         minLength: [2, errors.recipeNameMinLengthError(2)],
         maxLength: [100, errors.recipeNameMaxLengthError(100)],
-        match: [/^[a-zA-Z0-9\s]*$/, 'Recipe name must contain only letters, numbers or spaces!']
+        match: [regexes.recipeNameRegex, errors.recipeNameMatchError]
     },
     description: {
         type: String,
@@ -19,20 +19,26 @@ const recipeSchema = new mongoose.Schema({
         maxLength: [530, errors.recipeDescriptionMaxLengthError(530)]
     },
     image: {
-        publicId: {
-            type: String,
-            required: true,
-        },
-        url: {
-            type: String,
-            required: true,
-        },
+        publicId: { type: String },
+        url: { type: String },
     },
     cookingTime: {
         type: Number,
         required: [true, errors.recipeCookingTimeRequiredError],
         min: [5, errors.recipeCookingTimeMinError(5)],
         max: [1440, errors.recipeCookingTimeMaxError(1440)]
+    },
+    prepTime: {
+        type: Number,
+        required: [true, errors.recipePrepTimeRequiredError],
+        min: [5, errors.recipePrepTimeRangeError(5, 1440)],
+        max: [1440, errors.recipePrepTimeRangeError(5, 1440)]
+    },
+    servings: {
+        type: Number,
+        required: [true, errors.recipeServingsRequiredError],
+        min: [1, errors.recipeServingsRangeError(1, 100)],
+        max: [100, errors.recipeServingsRangeError(1, 100)]
     },
     ingredients: [{
         type: String,
@@ -44,6 +50,7 @@ const recipeSchema = new mongoose.Schema({
     }],
     youtubeLink: {
         type: String,
+        match: [regexes.recipeYoutubeLinkRegex, errors.recipeYoutubeLinkFormatError]
     },
     owner: {
         type: mongoose.Types.ObjectId,
@@ -62,7 +69,7 @@ const recipeSchema = new mongoose.Schema({
     },
     ratings: [{
         type: mongoose.Types.ObjectId,
-        ref: 'StarRating',
+        ref: modelsNames.StarRatingModelName,
     }],
     isApproved: {
         type: Boolean,
