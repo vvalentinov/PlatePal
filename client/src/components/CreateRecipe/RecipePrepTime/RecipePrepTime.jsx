@@ -3,18 +3,18 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 
 import { Controller } from "react-hook-form";
 
-import { recipeCookingTimeRules } from '../../../utils/errorRules';
+import { recipePrepTimeRules } from '../../../utils/errorRules';
 
-const RecipeCookTime = ({ control, errors }) => {
+const RecipePrepTime = ({ control, errors }) => {
     return (
         <FloatingLabel
-            controlId="floatingTimeInput"
-            label="Cook Time (minutes)"
+            controlId="floatingPrepTimeInput"
+            label="Prep Time (minutes)"
             className="mb-4">
             <Controller
                 control={control}
-                name="recipeCookTime"
-                rules={recipeCookingTimeRules}
+                name="recipePrepTime"
+                rules={recipePrepTimeRules}
                 render={({ field: { onChange, onBlur } }) =>
                     <Form.Control
                         min={5}
@@ -23,14 +23,14 @@ const RecipeCookTime = ({ control, errors }) => {
                         type="number"
                         onChange={onChange}
                         onBlur={onBlur}
-                        placeholder="Recipe Cook Time"
-                        className={`${errors.recipeCookTime ? 'border-danger' : 'border-dark'}`}
+                        placeholder="Recipe Prep Time"
+                        className={`${errors.recipePrepTime ? 'border-danger' : 'border-dark'}`}
                     />
                 }
             />
-            {errors.recipeCookTime && (<p className="text-start text-danger">{errors.recipeCookTime.message}</p>)}
+            {errors.recipePrepTime && (<p className="text-start text-danger">{errors.recipePrepTime.message}</p>)}
         </FloatingLabel>
     );
 };
 
-export default RecipeCookTime;
+export default RecipePrepTime;

@@ -22,7 +22,7 @@ const DeleteRecipe = ({ recipeId, handleRecipeDelete, text }) => {
             headers: { 'Content-Type': 'application/json', 'X-Authorization': token }
         })
             .then(res => res.json())
-            .then(res => handleRecipeDelete())
+            .then(res => handleRecipeDelete(res))
             .catch(err => console.log(err.message));
     };
 

@@ -7,17 +7,15 @@ import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 
+import { recipeStepRules } from "../../../utils/errorRules";
+
 const RecipeSteps = ({ steps, control, remove, errors }) => {
     return steps.map((field, index) => (
         <div key={field.id}>
             <Controller
                 control={control}
                 name={`steps[${index}].name`}
-                rules={{
-                    required: { value: true, message: `Step ${index + 1} must not be empty!` },
-                    minLength: { value: 5, message: `Step ${index + 1} must be at least 5 characters long!` },
-                    maxLength: { value: 200, message: `Step ${index + 1} must not exceed 200 characters!` }
-                }}
+                rules={recipeStepRules}
                 render={({ field: { onChange, onBlur } }) => (
                     <InputGroup className={errors.steps?.[index]?.name ? "" : "mb-3"}>
                         <Form.Control

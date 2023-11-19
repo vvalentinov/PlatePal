@@ -58,9 +58,14 @@ const RecipeDetails = () => {
     const handleApprovingRecipe = (result) => setRecipe((state) =>
         ({ ...state, isApproved: result.isApproved }));
 
-    // const handleRecipeDelete = (recipe) => setRecipe((state) => state.filter(x => x._id !== recipe._id));
+    const handleRecipeDelete = (result) => {
+        const toast = {
+            toastMsg: result.message,
+            isSuccessfull: true
+        };
 
-    const handleRecipeDelete = () => navigate('/');
+        navigate('/', { state: toast })
+    }
 
     return (
         <>

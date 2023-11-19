@@ -6,10 +6,18 @@
     color: white;
     font-family: "Playpen Sans";
     border: solid 3.5px #93DC80;
+    text-align: justify;
 }
 
 .welcomeCardHeader {
     background-color: #18A392;
+    padding: 1rem 0;
+    padding-left: 1.5rem;
+    font-size: 1.5rem;
+}
+
+.welcomeCardBody {
+    padding: 1.5rem;
 }
 
 @media only screen and (max-width: 1300px) {

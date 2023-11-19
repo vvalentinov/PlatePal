@@ -7,17 +7,15 @@ import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 
+import { recipeIngredientRules } from "../../../utils/errorRules";
+
 const RecipeIngredients = ({ ingredients, control, remove, errors }) => {
     return ingredients.map((field, index) => (
         <div key={field.id}>
             <Controller
                 control={control}
                 name={`ingredients[${index}].name`}
-                rules={{
-                    required: { value: true, message: "Ingredient must not be empty!" },
-                    minLength: { value: 3, message: "Ingredient must be at least 5 characters long!" },
-                    maxLength: { value: 100, message: "Ingredient must not exceed 100 characters!" }
-                }}
+                rules={recipeIngredientRules}
                 render={({ field: { onChange, onBlur } }) => (
                     <InputGroup className={errors.ingredients?.[index]?.name ? "" : "mb-3"}>
                         <Form.Control

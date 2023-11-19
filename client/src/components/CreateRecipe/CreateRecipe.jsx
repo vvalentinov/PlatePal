@@ -9,6 +9,8 @@ import RecipeCategory from './RecipeCategory/RecipeCategory';
 import RecipeImageFile from './RecipeImageFile/RecipeImageFile';
 import RecipeDescription from './RecipeDescription/RecipeDescription';
 import RecipeCookTime from './RecipeCookTime/RecipeCookTime';
+import RecipePrepTime from './RecipePrepTime/RecipePrepTime';
+import RecipeServings from './RecipeServings/RecipeServings';
 import RecipeIngredients from './RecipeIngredients/RecipeIngredients';
 import RecipeYoutubeLink from './RecipeYoutubeLink/RecipeYoutubeLink';
 
@@ -31,6 +33,8 @@ import { extractRecipeFormData } from '../../utils/extractRecipeInfoUtil';
 
 import ToastNotification from '../Toast/ToastNotification';
 
+import BackToTopArrow from '../BackToTopArrow/BackToTopArrow';
+
 const CreateRecipe = () => {
     const [categories, setCategories] = useState([]);
     const [isRequestInProgress, setIsRequestInProgress] = useState(false);
@@ -42,8 +46,8 @@ const CreateRecipe = () => {
     useEffect(() => {
         window.scrollTo(0, 0);
         categoryService
-            .getAll()
-            .then(res => setCategories(res))
+            .getCategoryList()
+            .then(res => setCategories(res.result))
             .catch(error => console.log(error));
     }, []);
 
@@ -76,9 +80,14 @@ const CreateRecipe = () => {
         const formData = extractRecipeFormData(data);
 
         try {
-            await recipeService.create(formData);
+            const result = await recipeService.create(formData);
             setIsRequestInProgress(false);
-            navigate(paths.homePath);
+            const toast = {
+                toastMsg: result.message,
+                isSuccessfull: true
+            };
+
+            navigate(paths.homePath, { state: toast });
         } catch (error) {
             setIsRequestInProgress(false);
             setToastMsg(error.message);
@@ -91,7 +100,7 @@ const CreateRecipe = () => {
             {toastMsg && <ToastNotification isSuccessfull={false} message={toastMsg} />}
             <div className={styles.container}>
                 <Form method="POST" onSubmit={handleSubmit(onFormSubmit)} className={styles.form}>
-                    <h2 className="text-center my-4">Create Recipe!</h2>
+                    <h2 className={styles.heading}>Create Recipe</h2>
 
                     <RecipeName errors={errors} control={control} />
                     <RecipeCategory control={control} categories={categories} />
@@ -99,6 +108,8 @@ const CreateRecipe = () => {
                     <RecipeDescription control={control} errors={errors} />
                     <RecipeYoutubeLink control={control} errors={errors} />
                     <RecipeCookTime control={control} errors={errors} />
+                    <RecipePrepTime control={control} errors={errors} />
+                    <RecipeServings control={control} errors={errors} />
                     <RecipeIngredients
                         errors={errors}
                         control={control}
@@ -144,6 +155,7 @@ const CreateRecipe = () => {
                     </div>
                 </Form>
             </div>
+            <BackToTopArrow />
         </>
     );
 };

@@ -3,21 +3,23 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 
 import { Controller } from "react-hook-form";
 
+import { recipeDescriptionRules } from '../../../utils/errorRules';
+
 const RecipeDescription = ({ control, errors }) => {
     return (
         <FloatingLabel controlId="floatingTextarea2" label="Description" className="mb-4">
             <Controller
                 control={control}
                 name="recipeDescription"
-                rules={{ required: { value: true, message: "Recipe Description is required!" } }}
+                rules={recipeDescriptionRules}
                 render={({ field: { onChange, onBlur } }) =>
                     <Form.Control
-                        className={`${errors.recipeDescription ? 'border-danger' : 'border-dark'}`}
                         as="textarea"
+                        className={`${errors.recipeDescription ? 'border-danger' : 'border-dark'}`}
                         onChange={onChange}
                         onBlur={onBlur}
                         placeholder="Leave a comment here"
-                        style={{ height: '180px' }}
+                        style={{ height: '250px', fontSize: '1.5rem' }}
                     />
                 } />
             {errors.recipeDescription && (<p className="text-start text-danger">{errors.recipeDescription.message}</p>)}

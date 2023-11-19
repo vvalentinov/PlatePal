@@ -3,7 +3,7 @@ import Toast from 'react-bootstrap/Toast';
 import ToastContainer from 'react-bootstrap/ToastContainer';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons';
+import { faTriangleExclamation, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 
 import styles from './ToastNotification.module.css';
 
@@ -21,7 +21,7 @@ function ToastNotification({ message, isSuccessfull }) {
                 autohide
                 bg={isSuccessfull ? 'success' : 'danger'}>
                 <Toast.Header className='border-bottom border-2 border-black'>
-                    <FontAwesomeIcon icon={faTriangleExclamation} className='me-2' />
+                    <FontAwesomeIcon icon={isSuccessfull ? faCheckCircle : faTriangleExclamation} className='me-2' />
                     <strong className="me-auto">
                         {isSuccessfull ? 'Successful operation!' : 'Ooops! Something went wrong!'}
                     </strong>

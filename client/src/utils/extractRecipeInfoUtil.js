@@ -3,12 +3,19 @@ export const extractRecipeFormData = (data) => {
     const steps = data.steps.map(step => step.name);
 
     const formData = new FormData();
+
+    if (data.recipeYoutubeLink) {
+        formData.append("youtubeLink", data.recipeYoutubeLink);
+    }
+
     formData.append("recipeFile", data.recipeFile);
     formData.append("recipeName", data.recipeName);
     formData.append("recipeDescription", data.recipeDescription);
-    formData.append("recipeCookingTime", data.recipeCookTime);
+    formData.append("recipeCookingTime", Number(data.recipeCookTime));
+    formData.append("recipePrepTime", Number(data.recipePrepTime));
+    formData.append("recipeServings", Number(data.recipeServings));
     formData.append("recipeCategory", data.recipeCategory);
-    formData.append("youtubeLink", data.recipeYoutubeLink);
+
     ingredients.forEach((ingredient, index) => formData.append(`ingredients[${index}]`, ingredient));
     steps.forEach((step, index) => formData.append(`steps[${index}]`, step));
 

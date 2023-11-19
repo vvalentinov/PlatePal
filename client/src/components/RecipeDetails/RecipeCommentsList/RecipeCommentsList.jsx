@@ -70,16 +70,20 @@ const RecipeCommentsList = ({ recipeId }) => {
             {isAuthenticated && (
                 <>
                     <PostRecipeComment recipeId={recipeId} onCommentSubmit={onCommentSubmit} />
-                    {comments.length > 0 && (
-                        <div className={styles.container}>
-                            <Button bsPrefix={styles.sortFilterCommentsBtn} onClick={getSortedCommentsHandler}>
-                                Sort All Comments By Likes Desc
-                            </Button>
-                            <Button bsPrefix={styles.sortFilterCommentsBtn} onClick={getUserCommentsHandler}>
-                                Show my comments
-                            </Button>
-                        </div>
-                    )}
+
+                    <div className={styles.container}>
+                        <Button
+                            bsPrefix={styles.sortFilterCommentsBtn}
+                            onClick={getSortedCommentsHandler}>
+                            Sort All Comments By Likes Desc
+                        </Button>
+                        <Button
+                            bsPrefix={styles.sortFilterCommentsBtn}
+                            onClick={getUserCommentsHandler}>
+                            Show my comments
+                        </Button>
+                    </div>
+
                 </>
             )}
             {comments.length > 0 ? (

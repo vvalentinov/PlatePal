@@ -3,6 +3,8 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 
 import { Controller } from "react-hook-form";
 
+import { recipeNameRules } from '../../../utils/errorRules';
+
 const RecipeName = ({ control, errors }) => {
     return (
         <FloatingLabel
@@ -12,7 +14,7 @@ const RecipeName = ({ control, errors }) => {
             <Controller
                 control={control}
                 name="recipeName"
-                rules={{ required: { value: true, message: "Recipe Name is required!" } }}
+                rules={recipeNameRules}
                 render={({ field: { onChange, onBlur } }) =>
                     <Form.Control
                         autoComplete="on"
