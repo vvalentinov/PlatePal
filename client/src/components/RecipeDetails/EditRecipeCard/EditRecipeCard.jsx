@@ -5,17 +5,21 @@ import Card from 'react-bootstrap/Card';
 
 import { editRecipeCardText } from '../../../constants/cardTextMessages';
 
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const EditRecipeCard = ({ recipeId }) => {
+    const navigate = useNavigate();
+
+    const onEditRecipeBtnClick = () => navigate(`/recipe/edit/${recipeId}`);
+
     return (
         <Card className={styles.card}>
             <Card.Body>
                 <Card.Text>
                     {editRecipeCardText}
                 </Card.Text>
-                <Button bsPrefix={styles.editRecipeBtn}>
-                    <Link to={`/recipe/edit/${recipeId}`}>Edit Recipe</Link>
+                <Button onClick={onEditRecipeBtnClick} bsPrefix={styles.editRecipeBtn}>
+                    Edit Recipe
                 </Button>
             </Card.Body>
         </Card>

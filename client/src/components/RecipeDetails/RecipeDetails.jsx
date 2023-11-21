@@ -12,7 +12,7 @@ import ToastNotification from '../Toast/ToastNotification';
 import CustomSpinner from '../Spinner/Spinner';
 
 import { useEffect, useState, useContext } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 
 import { AuthContext } from '../../contexts/AuthContext';
 

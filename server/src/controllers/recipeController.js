@@ -138,18 +138,22 @@ router.get('/get-edit-details/:recipeId', async (req, res) => {
     res.status(200).json({ message: 'Recipe edit details!', result });
 });
 
-router.put('/edit/:recipeId', isAuthenticated, multer().single('recipeFile'), async (req, res) => {
-    const recipeId = req.params.recipeId;
-    const image = req.file;
-    const data = req.body;
-    const owner = req.user._id;
+router.put(
+    '/edit/:recipeId',
+    isAuthenticated,
+    multer().single('recipeFile'),
+    async (req, res) => {
+        const recipeId = req.params.recipeId;
+        const image = req.file;
+        const data = req.body;
+        const owner = req.user._id;
 
-    try {
-        const result = await recipeManager.edit(recipeId, data, image, owner);
-        res.status(200).json({ message: 'Recipe edited successfully!', result });
-    } catch (error) {
-        res.status(400).json({ message: getErrorMessage(error) });
-    }
-});
+        try {
+            const result = await recipeManager.edit(recipeId, data, image, owner);
+            res.status(200).json({ message: 'Recipe edited successfully!', result });
+        } catch (error) {
+            res.status(400).json({ message: getErrorMessage(error) });
+        }
+    });
 
 module.exports = router;

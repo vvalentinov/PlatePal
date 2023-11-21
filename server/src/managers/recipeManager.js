@@ -11,8 +11,14 @@ const { checkIfRecipeExists } = require('../utils/checkIfRecipeExistsUtil');
 const { deleteImage } = require('../utils/cloudinaryUtil');
 
 const categoryErrors = require('../constants/errorMessages/categoryErrors');
+const recipeErrors = require('../constants/errorMessages/recipeErrors');
 
 exports.create = async (data, recipeImage, owner) => {
+    const recipeWithName = await Recipe.findOne({ name: data.recipeName });
+    if (recipeWithName) {
+        throw new Error(recipeErrors.recipeWithNameExistError);
+    }
+
     await recipeValidator(data);
 
     validateImageFile(recipeImage);
@@ -42,7 +48,6 @@ exports.create = async (data, recipeImage, owner) => {
 exports.edit = async (recipeId, data, recipeImage, owner) => {
     await checkIfRecipeExists(recipeId);
     await recipeValidator(data);
-    validateImageFile(recipeImage);
 
     const recipe = await Recipe.findByIdAndUpdate(
         recipeId,
@@ -56,17 +61,22 @@ exports.edit = async (recipeId, data, recipeImage, owner) => {
             steps: data.steps,
             youtubeLink: data.youtubeLink,
             category: data.recipeCategory,
+            owner
         },
         { new: true }
     );
 
-    await deleteImage(recipe.image.publicId);
+    if (recipeImage) {
+        validateImageFile(recipeImage);
+        await deleteImage(recipe.image.publicId);
 
-    const { public_id, secure_url } = await uploadImage(recipeImage.buffer, 'Recipes');
-    recipe.image.publicId = public_id;
-    recipe.image.url = secure_url;
+        const { public_id, secure_url } = await uploadImage(recipeImage.buffer, 'Recipes');
+        recipe.image.publicId = public_id;
+        recipe.image.url = secure_url;
 
-    await recipe.save();
+        await recipe.save();
+    }
+
 
     return recipe;
 };

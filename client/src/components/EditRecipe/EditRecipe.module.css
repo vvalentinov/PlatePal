@@ -1,5 +1,5 @@
 .form {
-    width: 75%;
+    width: 65%;
     text-align: center;
     border: solid 2px black;
     margin: 1.5rem 0;
@@ -50,4 +50,15 @@
 .blockButton:hover,
 .blockButton:disabled {
     color: white;
+}
+
+.imgContainer {
+    /* border: solid 2px black; */
+    margin-bottom: 2rem;
+}
+
+.imgContainer img {
+    height: 20rem;
+    width: 50%;
+    border-radius: 15px;
 }

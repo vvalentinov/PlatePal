@@ -19,11 +19,6 @@
     padding: 1rem 2rem;
 }
 
-.editRecipeBtn:hover a {
+.editRecipeBtn:hover {
     color: white;
-}
-
-.editRecipeBtn a {
-    text-decoration: none;
-    color: black;
 }

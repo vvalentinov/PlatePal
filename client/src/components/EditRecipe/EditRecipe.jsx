@@ -3,6 +3,7 @@ import styles from './EditRecipe.module.css';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
+import Image from 'react-bootstrap/Image';
 
 import RecipeName from '../CreateRecipe/RecipeName/RecipeName';
 import RecipeCategory from '../CreateRecipe/RecipeCategory/RecipeCategory';
@@ -39,6 +40,7 @@ const EditRecipe = () => {
     const [preselectedCategory, setPreselectedCategory] = useState({});
     const [isRequestInProgress, setIsRequestInProgress] = useState(false);
     const [toastMsg, setToastMsg] = useState('');
+    const [imageUrl, setImageUrl] = useState('');
 
     const recipeService = useService(recipeServiceFactory);
 
@@ -74,6 +76,7 @@ const EditRecipe = () => {
                     ingredients: res.result[0].recipe.ingredients.map(x => ({ name: x })),
                     steps: res.result[0].recipe.steps.map(x => ({ name: x }))
                 });
+                setImageUrl(res.result[0].recipe.image.url);
             }).catch(err => console.log(err));
 
         window.scrollTo(0, 0);
@@ -116,15 +119,19 @@ const EditRecipe = () => {
             <Form method="POST" onSubmit={handleSubmit(onFormSubmit)} className={styles.form}>
                 <h2 className={styles.heading}>Edit Recipe</h2>
 
-                {/* <img src={recipe.image.url} /> */}
+                {imageUrl && (
+                    <div className={styles.imgContainer}>
+                        <Image src={imageUrl} fluid />
+                    </div>
+                )}
 
-                <RecipeName errors={errors} control={control} />
+                < RecipeName errors={errors} control={control} />
                 <RecipeCategory
                     selectedCategory={preselectedCategory}
                     control={control}
                     categories={categories}
                 />
-                <RecipeImageFile control={control} errors={errors} />
+                <RecipeImageFile control={control} errors={errors} isEdit={true} />
                 <RecipeDescription control={control} errors={errors} />
                 <RecipeYoutubeLink control={control} errors={errors} />
                 <RecipeCookTime control={control} errors={errors} />

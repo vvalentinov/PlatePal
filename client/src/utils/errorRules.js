@@ -8,6 +8,15 @@ export const fileRules = {
     }
 };
 
+export const editRecipeFileRules = {
+    validate: (value) => {
+        if (value && value.type !== 'image/png' && value.type !== 'image/jpeg') {
+            return "Incorrect extension! Allowed extensions: .png, .jpeg and .jpg!"
+        }
+        return true;
+    }
+};
+
 export const recipeNameRules = {
     required: { value: true, message: 'Recipe Name is required!' },
     minLength: { value: 2, message: 'Recipe Name must be between 2 and 100 characters long!' },

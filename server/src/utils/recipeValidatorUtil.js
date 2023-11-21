@@ -7,11 +7,6 @@ const categoryErrors = require('../constants/errorMessages/categoryErrors');
 const regexes = require('../constants/regexes/regexes');
 
 exports.recipeValidator = async (data) => {
-    const recipe = await Recipe.findOne({ name: data.recipeName });
-    if (recipe) {
-        throw new Error(recipeErrors.recipeWithNameExistError);
-    }
-
     const regex = new RegExp(regexes.recipeNameRegex);
     if (!regex.test(data.recipeCategory)) {
         throw new Error(categoryErrors.categoryInvalidIdFormat);
