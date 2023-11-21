@@ -12,7 +12,7 @@ export const recipeNameRules = {
     required: { value: true, message: 'Recipe Name is required!' },
     minLength: { value: 2, message: 'Recipe Name must be between 2 and 100 characters long!' },
     maxLength: { value: 100, message: 'Recipe Name must be between 2 and 100 characters long!' },
-    pattern: { value: /^[a-zA-Z0-9\s]*$/, message: 'Recipe Name must contain only letters, numbers and spaces!' }
+    pattern: { value: /^[a-zA-Z0-9\s-]*$/, message: 'Recipe Name must contain only letters, numbers and spaces!' }
 };
 
 export const recipeDescriptionRules = {

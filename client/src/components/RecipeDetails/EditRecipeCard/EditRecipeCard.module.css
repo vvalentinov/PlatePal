@@ -1,0 +1,29 @@
+.card {
+    width: 70%;
+    background-color: #2C3E50;
+    color: white;
+    font-size: 1.4rem;
+    text-align: justify;
+    border: solid 4px #93DC80;
+}
+
+.editRecipeBtn,
+.editRecipeBtn:hover,
+.editRecipeBtn:active {
+    font-size: 1.5rem;
+    background-color: #93DC80;
+    border-radius: 15px;
+    text-transform: uppercase;
+    border: solid 3px black;
+    width: 100%;
+    padding: 1rem 2rem;
+}
+
+.editRecipeBtn:hover a {
+    color: white;
+}
+
+.editRecipeBtn a {
+    text-decoration: none;
+    color: black;
+}

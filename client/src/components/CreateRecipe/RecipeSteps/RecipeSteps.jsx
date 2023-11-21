@@ -16,7 +16,7 @@ const RecipeSteps = ({ steps, control, remove, errors }) => {
                 control={control}
                 name={`steps[${index}].name`}
                 rules={recipeStepRules}
-                render={({ field: { onChange, onBlur } }) => (
+                render={({ field: { onChange, onBlur, value } }) => (
                     <InputGroup className={errors.steps?.[index]?.name ? "" : "mb-3"}>
                         <Form.Control
                             name={`step[${index}]`}
@@ -25,6 +25,7 @@ const RecipeSteps = ({ steps, control, remove, errors }) => {
                             aria-describedby="basic-addon2"
                             onChange={onChange}
                             onBlur={onBlur}
+                            value={value || ''}
                             size="lg"
                             className={errors.steps?.[index]?.name ? "border border-3 border-danger" : ""}
                         />

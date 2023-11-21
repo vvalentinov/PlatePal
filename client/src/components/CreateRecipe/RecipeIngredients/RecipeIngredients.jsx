@@ -10,13 +10,13 @@ import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { recipeIngredientRules } from "../../../utils/errorRules";
 
 const RecipeIngredients = ({ ingredients, control, remove, errors }) => {
-    return ingredients.map((field, index) => (
-        <div key={field.id}>
+    return ingredients.map((x, index) => (
+        <div key={x.id}>
             <Controller
                 control={control}
                 name={`ingredients[${index}].name`}
                 rules={recipeIngredientRules}
-                render={({ field: { onChange, onBlur } }) => (
+                render={({ field: { onChange, onBlur, value } }) => (
                     <InputGroup className={errors.ingredients?.[index]?.name ? "" : "mb-3"}>
                         <Form.Control
                             name={`ingredient[${index}]`}
@@ -25,6 +25,7 @@ const RecipeIngredients = ({ ingredients, control, remove, errors }) => {
                             aria-describedby="basic-addon2"
                             onChange={onChange}
                             onBlur={onBlur}
+                            value={value || ''}
                             size="lg"
                             className={errors.ingredients?.[index]?.name ? "border border-3 border-danger" : ""}
                         />

@@ -15,7 +15,7 @@ const RecipePrepTime = ({ control, errors }) => {
                 control={control}
                 name="recipePrepTime"
                 rules={recipePrepTimeRules}
-                render={({ field: { onChange, onBlur } }) =>
+                render={({ field: { onChange, onBlur, value } }) =>
                     <Form.Control
                         min={5}
                         max={1440}
@@ -23,6 +23,7 @@ const RecipePrepTime = ({ control, errors }) => {
                         type="number"
                         onChange={onChange}
                         onBlur={onBlur}
+                        value={value || ''}
                         placeholder="Recipe Prep Time"
                         className={`${errors.recipePrepTime ? 'border-danger' : 'border-dark'}`}
                     />

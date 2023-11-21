@@ -30,10 +30,7 @@ const RecipeStarRating = ({
         ratingService.rateRecipe(recipeId, { rateValue: formValues.ratingBtn })
             .then(res => onRatingSubmit(res.result))
             .catch(error => console.log(error))
-            .finally(() => window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            }));
+            .finally(() => window.scrollTo(0, 0));
     };
 
     const isRadioSelected = (value) => formValues.ratingBtn === value;

@@ -15,7 +15,7 @@ const RecipeServings = ({ control, errors }) => {
                 control={control}
                 name="recipeServings"
                 rules={recipeServingsRules}
-                render={({ field: { onChange, onBlur } }) =>
+                render={({ field: { onChange, onBlur, value } }) =>
                     <Form.Control
                         min={1}
                         max={100}
@@ -23,6 +23,7 @@ const RecipeServings = ({ control, errors }) => {
                         type="number"
                         onChange={onChange}
                         onBlur={onBlur}
+                        value={value || ''}
                         placeholder="Recipe Servings"
                         className={`${errors.recipeServings ? 'border-danger' : 'border-dark'}`}
                     />

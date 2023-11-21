@@ -7,20 +7,18 @@ import { recipeNameRules } from '../../../utils/errorRules';
 
 const RecipeName = ({ control, errors }) => {
     return (
-        <FloatingLabel
-            controlId="floatingNameInput"
-            label="Name"
-            className="mb-4">
+        <FloatingLabel controlId="floatingNameInput" label="Name" className="mb-4">
             <Controller
                 control={control}
                 name="recipeName"
                 rules={recipeNameRules}
-                render={({ field: { onChange, onBlur } }) =>
+                render={({ field: { onChange, onBlur, value } }) =>
                     <Form.Control
                         autoComplete="on"
                         type="text"
                         onChange={onChange}
                         onBlur={onBlur}
+                        value={value || ''}
                         placeholder="Recipe Name"
                         className={`${errors.recipeName ? 'border-danger' : 'border-dark'}`}
                     />

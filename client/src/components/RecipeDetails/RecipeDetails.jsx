@@ -25,13 +25,17 @@ import {
     adminDeleteRecipeText,
     youtubeVideoText
 } from '../../constants/cardTextMessages';
+import EditRecipeCard from './EditRecipeCard/EditRecipeCard';
 
 const RecipeDetails = () => {
     const navigate = useNavigate();
 
     const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
-    const [toastMessage, setToastMessage] = useState('');
+
     const [recipe, setRecipe] = useState();
+
+    const [errorToast, setErrorToast] = useState('');
+    const [successToast, setSuccessToast] = useState('');
 
     const { isAuthenticated, isAdmin, userId } = useContext(AuthContext);
 
@@ -44,7 +48,7 @@ const RecipeDetails = () => {
     useEffect(() => {
         recipeService.getRecipe(recipeId)
             .then(res => setRecipe(res.result))
-            .catch(error => setToastMessage(error.message))
+            .catch(error => setErrorToast(error.message))
             .finally(() => setIsSpinnerLoading(false));
     }, [recipeId]);
 
@@ -52,11 +56,13 @@ const RecipeDetails = () => {
     ({
         ...state,
         averageRating: result.averageRating,
-        userRating: result.rateValue
+        userRating: result.rateValue,
+        ratings: result.ratings
     }));
 
-    const handleApprovingRecipe = (result) => setRecipe((state) =>
-        ({ ...state, isApproved: result.isApproved }));
+    const handleApprovingRecipe = (result) => {
+        setRecipe((state) => ({ ...state, isApproved: result.isApproved }));
+    }
 
     const handleRecipeDelete = (result) => {
         const toast = {
@@ -70,7 +76,13 @@ const RecipeDetails = () => {
     return (
         <>
             {isSpinnerLoading && <CustomSpinner />}
-            {toastMessage && <ToastNotification message={toastMessage} />}
+            {errorToast && <ToastNotification
+                customFunc={() => setErrorToast('')}
+                message={errorToast} />}
+            {successToast && <ToastNotification
+                isSuccessfull={true}
+                customFunc={() => setSuccessToast('')}
+                message={successToast} />}
             {recipe && (
                 <>
                     <section className={styles.container}>
@@ -83,6 +95,9 @@ const RecipeDetails = () => {
                             {
                                 !recipe.isApproved && isAdmin &&
                                 <ApproveRecipe
+                                    showToast={(message, isSucc) =>
+                                        isSucc ? setSuccessToast(message) : setErrorToast(message)
+                                    }
                                     recipeId={recipeId}
                                     handleApprovingRecipe={handleApprovingRecipe} />
                             }
@@ -105,6 +120,9 @@ const RecipeDetails = () => {
                                     handleRecipeDelete={handleRecipeDelete}
                                     text={adminDeleteRecipeText}
                                     recipeId={recipeId} />
+                            }
+                            {
+                                isRecipeOwner && <EditRecipeCard recipeId={recipeId} />
                             }
                         </div>
                     )}

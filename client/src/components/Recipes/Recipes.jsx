@@ -19,7 +19,7 @@ const Recipes = () => {
 
     return (
         <div className={styles.container}>
-            {recipes.map(x => <RecipeCardLink
+            {recipes && recipes.map(x => <RecipeCardLink
                 key={x._id}
                 recipe={x}
                 link={`/recipe/details/${x._id}`} />

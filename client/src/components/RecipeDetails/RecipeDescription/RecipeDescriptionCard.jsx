@@ -16,7 +16,8 @@ import {
     faNewspaper,
     faStar,
     faUser,
-    faRectangleList
+    faRectangleList,
+    faComment
 } from '@fortawesome/free-solid-svg-icons';
 
 const RecipeDescriptionCard = ({
@@ -73,7 +74,7 @@ const RecipeDescriptionCard = ({
                         className={styles.commentsLink}
                         smooth
                         to={`/recipe/details/${_id}#comments`}>
-                        Go to Comments
+                        Go to Comments<FontAwesomeIcon className='ms-2' icon={faComment} />
                     </HashLink>
                 </Card.Title>
             </Card.Body>

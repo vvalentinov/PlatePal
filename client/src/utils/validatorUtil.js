@@ -77,7 +77,7 @@ export const recipeNameValidator = (name) => {
         return 'Recipe name must be between 2 and 100 characters long!';
     }
 
-    const regex = new RegExp(/^[a-zA-Z0-9\s]*$/);
+    const regex = new RegExp(/^[a-zA-Z0-9\s-]*$/);
     if (!regex.test(name)) {
         return 'Recipe name must contain only letters, numbers or spaces!';
     }

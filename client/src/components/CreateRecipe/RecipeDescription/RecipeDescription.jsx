@@ -12,12 +12,13 @@ const RecipeDescription = ({ control, errors }) => {
                 control={control}
                 name="recipeDescription"
                 rules={recipeDescriptionRules}
-                render={({ field: { onChange, onBlur } }) =>
+                render={({ field: { onChange, onBlur, value } }) =>
                     <Form.Control
                         as="textarea"
                         className={`${errors.recipeDescription ? 'border-danger' : 'border-dark'}`}
                         onChange={onChange}
                         onBlur={onBlur}
+                        value={value || ''}
                         placeholder="Leave a comment here"
                         style={{ height: '250px', fontSize: '1.5rem' }}
                     />

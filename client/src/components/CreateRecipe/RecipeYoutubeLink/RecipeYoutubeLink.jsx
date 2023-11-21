@@ -18,12 +18,13 @@ const RecipeYoutubeLink = ({ control, errors }) => {
                     control={control}
                     name="recipeYoutubeLink"
                     rules={recipeYoutubeLinkRules}
-                    render={({ field: { onChange, onBlur } }) =>
+                    render={({ field: { onChange, onBlur, value } }) =>
                         <Form.Control
                             type='url'
                             className={`${errors.recipeYoutubeLink ? 'border-danger' : 'border-dark'}`}
                             onChange={onChange}
                             onBlur={onBlur}
+                            value={value || ''}
                             placeholder="Youtube link here..."
                         />
                     } />
