@@ -26,7 +26,7 @@ exports.rateRecipe = async (recipeId, userId, value) => {
     await recipe.save();
 
 
-    return { averageRating, rateValue: value };
+    return { averageRating, rateValue: value, ratings: recipe.ratings };
 };
 
 exports.getRating = async (userId, recipeId) => {

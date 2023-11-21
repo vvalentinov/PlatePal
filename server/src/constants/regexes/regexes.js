@@ -1,4 +1,4 @@
-exports.recipeNameRegex = /^[a-zA-Z0-9\s]*$/;
+exports.recipeNameRegex = /^[a-zA-Z0-9\s-]*$/;
 
 exports.recipeYoutubeLinkRegex = /^(https?:\/\/)?(www\.)?youtube\.com\/embed\/([\w-]+)(\S+)?$/;
 

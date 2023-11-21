@@ -25,7 +25,7 @@ exports.recipeValidator = async (data) => {
     if (data.youtubeLink) {
         const regex = new RegExp(regexes.recipeYoutubeLinkRegex);
 
-        if (regex.test(data.youtubeLink) == false) {
+        if (!regex.test(data.youtubeLink)) {
             throw new Error(recipeErrors.recipeYoutubeLinkFormatError);
         }
     }
