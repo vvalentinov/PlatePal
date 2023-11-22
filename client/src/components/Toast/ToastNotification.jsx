@@ -7,14 +7,14 @@ import { faTriangleExclamation, faCheckCircle } from '@fortawesome/free-solid-sv
 
 import styles from './ToastNotification.module.css';
 
-function ToastNotification({ message, isSuccessfull, customFunc }) {
+function ToastNotification({ message, isSuccessfull, onExited }) {
     const [show, setShow] = useState(true);
     const toggleShowA = () => setShow(!show);
 
     return (
         <ToastContainer position='top-end'>
             <Toast
-                onExited={customFunc}
+                onExited={onExited}
                 className={`${styles.toast} border-2 border-black`}
                 show={show}
                 onClose={toggleShowA}

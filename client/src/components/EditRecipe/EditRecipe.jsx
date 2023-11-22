@@ -5,16 +5,16 @@ import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 import Image from 'react-bootstrap/Image';
 
-import RecipeName from '../CreateRecipe/RecipeName/RecipeName';
-import RecipeCategory from '../CreateRecipe/RecipeCategory/RecipeCategory';
-import RecipeImageFile from '../CreateRecipe/RecipeImageFile/RecipeImageFile';
-import RecipeDescription from '../CreateRecipe/RecipeDescription/RecipeDescription';
-import RecipeCookTime from '../CreateRecipe/RecipeCookTime/RecipeCookTime';
-import RecipePrepTime from '../CreateRecipe/RecipePrepTime/RecipePrepTime';
-import RecipeServings from '../CreateRecipe/RecipeServings/RecipeServings';
-import RecipeIngredients from '../CreateRecipe/RecipeIngredients/RecipeIngredients';
-import RecipeSteps from '../CreateRecipe/RecipeSteps/RecipeSteps';
-import RecipeYoutubeLink from '../CreateRecipe/RecipeYoutubeLink/RecipeYoutubeLink';
+import RecipeName from '../RecipeFormInputs/RecipeName/RecipeName';
+import RecipeCategory from '../RecipeFormInputs/RecipeCategory/RecipeCategory';
+import RecipeImageFile from '../RecipeFormInputs/RecipeImageFile/RecipeImageFile';
+import RecipeDescription from '../RecipeFormInputs/RecipeDescription/RecipeDescription';
+import RecipeCookTime from '../RecipeFormInputs/RecipeCookTime/RecipeCookTime';
+import RecipePrepTime from '../RecipeFormInputs/RecipePrepTime/RecipePrepTime';
+import RecipeServings from '../RecipeFormInputs/RecipeServings/RecipeServings';
+import RecipeIngredients from '../RecipeFormInputs/RecipeIngredients/RecipeIngredients';
+import RecipeSteps from '../RecipeFormInputs/RecipeSteps/RecipeSteps';
+import RecipeYoutubeLink from '../RecipeFormInputs/RecipeYoutubeLink/RecipeYoutubeLink';
 
 import { useForm } from "react-hook-form";
 
@@ -43,8 +43,6 @@ const EditRecipe = () => {
     const [imageUrl, setImageUrl] = useState('');
 
     const recipeService = useService(recipeServiceFactory);
-
-    // const [recipe, setRecipe] = useState({});
 
     const { recipeId } = useParams();
     const navigate = useNavigate();
@@ -137,6 +135,8 @@ const EditRecipe = () => {
                 <RecipeCookTime control={control} errors={errors} />
                 <RecipePrepTime control={control} errors={errors} />
                 <RecipeServings control={control} errors={errors} />
+
+                <h3 className='text-white mb-4 text-uppercase'>Ingredients</h3>
                 <RecipeIngredients
                     errors={errors}
                     control={control}
@@ -153,6 +153,7 @@ const EditRecipe = () => {
                     </Button>
                 </div>
 
+                <h3 className='text-white mb-4 text-uppercase'>Steps</h3>
                 <RecipeSteps
                     errors={errors}
                     control={control}

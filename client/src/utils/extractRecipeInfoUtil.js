@@ -1,7 +1,4 @@
 export const extractRecipeFormData = (data) => {
-    const ingredients = data.ingredients.map(ingredient => ingredient.name);
-    const steps = data.steps.map(step => step.name);
-
     const formData = new FormData();
 
     if (data.recipeYoutubeLink) {
@@ -16,8 +13,15 @@ export const extractRecipeFormData = (data) => {
     formData.append("recipeServings", Number(data.recipeServings));
     formData.append("recipeCategory", data.recipeCategory);
 
-    ingredients.forEach((ingredient, index) => formData.append(`ingredients[${index}]`, ingredient));
-    steps.forEach((step, index) => formData.append(`steps[${index}]`, step));
+    if (data.ingredients) {
+        const ingredients = data.ingredients.map(ingredient => ingredient.name);
+        ingredients.forEach((ingredient, index) => formData.append(`ingredients[${index}]`, ingredient));
+    }
+
+    if (data.steps) {
+        const steps = data.steps.map(step => step.name);
+        steps.forEach((step, index) => formData.append(`steps[${index}]`, step));
+    }
 
     return formData;
 };

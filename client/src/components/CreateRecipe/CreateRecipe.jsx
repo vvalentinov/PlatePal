@@ -4,59 +4,57 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 
-import RecipeName from './RecipeName/RecipeName';
-import RecipeCategory from './RecipeCategory/RecipeCategory';
-import RecipeImageFile from './RecipeImageFile/RecipeImageFile';
-import RecipeDescription from './RecipeDescription/RecipeDescription';
-import RecipeCookTime from './RecipeCookTime/RecipeCookTime';
-import RecipePrepTime from './RecipePrepTime/RecipePrepTime';
-import RecipeServings from './RecipeServings/RecipeServings';
-import RecipeIngredients from './RecipeIngredients/RecipeIngredients';
-import RecipeYoutubeLink from './RecipeYoutubeLink/RecipeYoutubeLink';
+import RecipeName from '../RecipeFormInputs/RecipeName/RecipeName';
+import RecipeCategory from '../RecipeFormInputs/RecipeCategory/RecipeCategory';
+import RecipeImageFile from '../RecipeFormInputs/RecipeImageFile/RecipeImageFile';
+import RecipeDescription from '../RecipeFormInputs/RecipeDescription/RecipeDescription';
+import RecipeCookTime from '../RecipeFormInputs/RecipeCookTime/RecipeCookTime';
+import RecipePrepTime from '../RecipeFormInputs/RecipePrepTime/RecipePrepTime';
+import RecipeServings from '../RecipeFormInputs/RecipeServings/RecipeServings';
+import RecipeIngredients from '../RecipeFormInputs/RecipeIngredients/RecipeIngredients';
+import RecipeSteps from '../RecipeFormInputs/RecipeSteps/RecipeSteps';
+import RecipeYoutubeLink from '../RecipeFormInputs/RecipeYoutubeLink/RecipeYoutubeLink';
+import ToastNotification from '../Toast/ToastNotification';
+import BackToTopArrow from '../BackToTopArrow/BackToTopArrow';
 
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 
 import { recipeServiceFactory } from '../../services/recipeService';
 import { categoryServiceFactory } from '../../services/categoryService';
 import { useService } from '../../hooks/useService';
-
-import { useNavigate } from 'react-router-dom';
-
-import * as paths from '../../constants/pathNames';
-
 import useDynamicFieldArray from '../../hooks/useDynamicFieldArray';
-
-import { useEffect, useState } from 'react';
-import RecipeSteps from './RecipeSteps/RecipeSteps';
-
 import { extractRecipeFormData } from '../../utils/extractRecipeInfoUtil';
-
-import ToastNotification from '../Toast/ToastNotification';
-
-import BackToTopArrow from '../BackToTopArrow/BackToTopArrow';
+import * as paths from '../../constants/pathNames';
 
 const CreateRecipe = () => {
     const [categories, setCategories] = useState([]);
     const [isRequestInProgress, setIsRequestInProgress] = useState(false);
-
     const [toastMsg, setToastMsg] = useState('');
 
-    const navigate = useNavigate();
+    const recipeService = useService(recipeServiceFactory);
+    const categoryService = useService(categoryServiceFactory);
 
-    useEffect(() => {
-        window.scrollTo(0, 0);
-        categoryService
-            .getCategoryList()
-            .then(res => setCategories(res.result))
-            .catch(error => console.log(error));
-    }, []);
+    const navigate = useNavigate();
 
     const {
         watch,
         handleSubmit,
         control,
+        reset,
         formState: { errors },
-    } = useForm({ mode: "onBlur" });
+    } = useForm({ mode: "onBlur", defaultValues: {} });
+
+    useEffect(() => {
+        categoryService
+            .getCategoryList()
+            .then(res => setCategories(res.result))
+            .catch(error => console.log(error))
+            .finally(() => window.scrollTo(0, 0));
+    }, []);
+
+    useEffect(() => reset({ recipeCategory: categories[0]?._id }), [categories]);
 
     const {
         controlledFields: ingredients,
@@ -70,11 +68,9 @@ const CreateRecipe = () => {
         remove: stepsRemove
     } = useDynamicFieldArray(control, 'steps', watch);
 
-    const recipeService = useService(recipeServiceFactory);
-    const categoryService = useService(categoryServiceFactory);
+    const onToastExited = () => setToastMsg('');
 
     const onFormSubmit = async (data) => {
-        setToastMsg('');
         setIsRequestInProgress(true);
 
         const formData = extractRecipeFormData(data);
@@ -82,11 +78,7 @@ const CreateRecipe = () => {
         try {
             const result = await recipeService.create(formData);
             setIsRequestInProgress(false);
-            const toast = {
-                toastMsg: result.message,
-                isSuccessfull: true
-            };
-
+            const toast = { toastMsg: result.message, isSuccessfull: true };
             navigate(paths.homePath, { state: toast });
         } catch (error) {
             setIsRequestInProgress(false);
@@ -97,7 +89,7 @@ const CreateRecipe = () => {
 
     return (
         <>
-            {toastMsg && <ToastNotification isSuccessfull={false} message={toastMsg} />}
+            {toastMsg && <ToastNotification onExited={onToastExited} isSuccessfull={false} message={toastMsg} />}
             <div className={styles.container}>
                 <Form method="POST" onSubmit={handleSubmit(onFormSubmit)} className={styles.form}>
                     <h2 className={styles.heading}>Create Recipe</h2>
@@ -110,11 +102,9 @@ const CreateRecipe = () => {
                     <RecipeCookTime control={control} errors={errors} />
                     <RecipePrepTime control={control} errors={errors} />
                     <RecipeServings control={control} errors={errors} />
-                    <RecipeIngredients
-                        errors={errors}
-                        control={control}
-                        ingredients={ingredients}
-                        remove={ingredientsRemove} />
+
+                    <h3 className='text-white text-uppercase mb-4'>Ingredients</h3>
+                    <RecipeIngredients errors={errors} control={control} ingredients={ingredients} remove={ingredientsRemove} />
 
                     <div className="d-grid">
                         <Button
@@ -125,7 +115,7 @@ const CreateRecipe = () => {
                             Add Recipe Ingredient
                         </Button>
                     </div>
-
+                    <h3 className='text-white text-uppercase mb-4'>Steps</h3>
                     <RecipeSteps
                         errors={errors}
                         control={control}

@@ -2,6 +2,7 @@ import styles from './RecipeDetails.module.css';
 
 import ApproveRecipe from './ApproveRecipe/ApproveRecipe';
 import DeleteRecipe from './DeleteRecipe/DeleteRecipe';
+import EditRecipeCard from './EditRecipeCard/EditRecipeCard';
 import RecipeDescriptionCard from './RecipeDescription/RecipeDescriptionCard';
 import RecipeIngredientsContainer from './RecipeIngredients/RecipeIngredientsContainer';
 import RecipeStepsContainer from './RecipeSteps/RecipeStepsContainer';
@@ -20,26 +21,21 @@ import { recipeServiceFactory } from '../../services/recipeService';
 
 import { useService } from '../../hooks/useService';
 
-import {
-    userDeleteRecipeText,
-    adminDeleteRecipeText,
-    youtubeVideoText
-} from '../../constants/cardTextMessages';
-import EditRecipeCard from './EditRecipeCard/EditRecipeCard';
+import * as cardTexts from '../../constants/cardTextMessages';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faClock, faUtensils } from '@fortawesome/free-solid-svg-icons';
 
 const RecipeDetails = () => {
-    const navigate = useNavigate();
-
-    const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
-
-    const [recipe, setRecipe] = useState();
-
-    const [errorToast, setErrorToast] = useState('');
-    const [successToast, setSuccessToast] = useState('');
-
     const { isAuthenticated, isAdmin, userId } = useContext(AuthContext);
 
+    const navigate = useNavigate();
     const { recipeId } = useParams();
+
+    const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
+    const [recipe, setRecipe] = useState();
+    const [errorToast, setErrorToast] = useState('');
+    const [successToast, setSuccessToast] = useState('');
 
     const recipeService = useService(recipeServiceFactory);
 
@@ -52,7 +48,7 @@ const RecipeDetails = () => {
             .finally(() => setIsSpinnerLoading(false));
     }, [recipeId]);
 
-    const handleRatingSubmit = (result) => setRecipe((state) =>
+    const handleRatingRecipe = (result) => setRecipe((state) =>
     ({
         ...state,
         averageRating: result.averageRating,
@@ -64,24 +60,20 @@ const RecipeDetails = () => {
         setRecipe((state) => ({ ...state, isApproved: result.isApproved }));
     }
 
-    const handleRecipeDelete = (result) => {
-        const toast = {
-            toastMsg: result.message,
-            isSuccessfull: true
-        };
-
+    const handleDeletingRecipe = (result) => {
+        const toast = { toastMsg: result.message, isSuccessfull: true };
         navigate('/', { state: toast })
-    }
+    };
 
     return (
         <>
             {isSpinnerLoading && <CustomSpinner />}
             {errorToast && <ToastNotification
-                customFunc={() => setErrorToast('')}
+                onExited={() => setErrorToast('')}
                 message={errorToast} />}
             {successToast && <ToastNotification
                 isSuccessfull={true}
-                customFunc={() => setSuccessToast('')}
+                onExited={() => setSuccessToast('')}
                 message={successToast} />}
             {recipe && (
                 <>
@@ -90,26 +82,45 @@ const RecipeDetails = () => {
                         <RecipeDescriptionCard {...recipe} />
                     </section>
 
+                    <section className={styles.recipePropertiesContainer}>
+                        <div className={styles.recipeProperty}>
+                            <span>
+                                <FontAwesomeIcon icon={faClock} className='me-2' />
+                                Prep Time: {recipe.prepTime} minutes
+                            </span>
+                        </div>
+                        <div className={styles.recipeProperty}>
+                            <span>
+                                <FontAwesomeIcon icon={faClock} className='me-2' />
+                                Cook Time: {recipe.cookingTime} minutes
+                            </span>
+                        </div>
+                        <div className={styles.recipeProperty}>
+                            <span>
+                                <FontAwesomeIcon icon={faUtensils} className='me-2' />
+                                Servings: {recipe.servings} servings
+                            </span>
+                        </div>
+                    </section>
+
                     {isAuthenticated && (
                         <div className={styles.recipeCommentStarContainer}>
                             {
                                 !recipe.isApproved && isAdmin &&
                                 <ApproveRecipe
-                                    showToast={(message, isSucc) =>
-                                        isSucc ? setSuccessToast(message) : setErrorToast(message)
-                                    }
+                                    showToast={(message, isSucc) => isSucc ? setSuccessToast(message) : setErrorToast(message)}
                                     recipeId={recipeId}
                                     handleApprovingRecipe={handleApprovingRecipe} />
                             }
                             <RecipeStarRating
                                 recipeId={recipeId}
-                                onRatingSubmit={handleRatingSubmit}
+                                onRatingSubmit={handleRatingRecipe}
                                 userRating={recipe.userRating} />
                             {
                                 isRecipeOwner &&
                                 <DeleteRecipe
-                                    handleRecipeDelete={handleRecipeDelete}
-                                    text={userDeleteRecipeText}
+                                    handleRecipeDelete={handleDeletingRecipe}
+                                    text={cardTexts.userDeleteRecipeText}
                                     recipeId={recipeId}
                                 />
                             }
@@ -117,8 +128,8 @@ const RecipeDetails = () => {
                                 isAdmin &&
                                 !isRecipeOwner &&
                                 <DeleteRecipe
-                                    handleRecipeDelete={handleRecipeDelete}
-                                    text={adminDeleteRecipeText}
+                                    handleRecipeDelete={handleDeletingRecipe}
+                                    text={cardTexts.adminDeleteRecipeText}
                                     recipeId={recipeId} />
                             }
                             {
@@ -130,7 +141,7 @@ const RecipeDetails = () => {
                     {recipe.youtubeLink !== 'undefined' && (
                         <div className={styles.youtubeVideoSection}>
                             <iframe src={recipe.youtubeLink} allowFullScreen></iframe>
-                            <div><p>{youtubeVideoText}</p></div>
+                            <div><p>{cardTexts.youtubeVideoText}</p></div>
                         </div>
                     )}
 

@@ -13,7 +13,7 @@ export const recipeServiceFactory = (token) => {
         getUnapprovedUserRecipes: (searchQuery) => request.get(`${baseUrl}/user-recipes/unapproved?searchName=${searchQuery}`),
         approveRecipe: (recipeId) => request.put(`${baseUrl}/approve/${recipeId}`),
         getEditDetails: (recipeId) => request.get(`${baseUrl}/get-edit-details/${recipeId}`),
-        edit: (recipeId, data) => request.put(`${baseUrl}/edit/${recipeId}`, data)
-        // getEditCategories
+        edit: (recipeId, data) => request.put(`${baseUrl}/edit/${recipeId}`, data),
+        delete: (recipeId) => request.delete(`${baseUrl}/delete/${recipeId}`)
     }
 };

@@ -70,3 +70,24 @@
     gap: 2rem;
     background-color: #31837b;
 }
+
+.recipePropertiesContainer {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    padding: 3rem 4rem;
+    background-color: #31837b;
+}
+
+.recipeProperty {
+    flex-basis: 33.33%;
+    border: solid 2px black;
+    border-radius: 15px;
+    font-size: 2rem;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    background-color: #93DC80;
+}

@@ -20,6 +20,7 @@ const RecipeImageFile = ({ control, errors, isEdit }) => {
             setImage('');
         }
     };
+
     return (
         <Form.Group controlId="formFile" className="mb-4">
             <Controller

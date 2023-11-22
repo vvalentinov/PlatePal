@@ -12,7 +12,7 @@ const RecipeCategory = ({ control, categories, selectedCategory }) => {
                 <FloatingLabel controlId="floatingSelect" label="Choose recipe category:">
                     <Form.Select
                         onChange={onChange}
-                        value={value || ''}
+                        value={value}
                         aria-label="Floating label select example"
                         className="mb-4 border border-dark"
                         size="lg">

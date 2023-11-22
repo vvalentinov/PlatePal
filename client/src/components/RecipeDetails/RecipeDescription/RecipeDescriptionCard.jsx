@@ -12,7 +12,6 @@ import { HashLink } from 'react-router-hash-link';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-    faClock,
     faNewspaper,
     faStar,
     faUser,
@@ -25,7 +24,6 @@ const RecipeDescriptionCard = ({
     name,
     owner,
     description,
-    cookingTime,
     category,
     averageRating,
     userRating,
@@ -45,9 +43,6 @@ const RecipeDescriptionCard = ({
                 <Card.Title>
                     <FontAwesomeIcon icon={faRectangleList} className='me-2' />
                     Category: <Link className={styles.categoryLink} to={`/recipe/all/${category.name}`}>{category.name}</Link>
-                </Card.Title>
-                <Card.Title>
-                    <FontAwesomeIcon icon={faClock} className='me-2' />Recipe Cooking Time: {cookingTime} minutes
                 </Card.Title>
                 <Card.Title>
                     <FontAwesomeIcon icon={faStar} className='me-2' />

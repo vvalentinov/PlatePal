@@ -1,7 +1,9 @@
 const mongoose = require('mongoose');
 
 const errors = require('../constants/errorMessages/recipeErrors');
+
 const modelsNames = require('../constants/dbModelsNames');
+
 const regexes = require('../constants/regexes/regexes');
 
 const recipeSchema = new mongoose.Schema({
@@ -22,17 +24,17 @@ const recipeSchema = new mongoose.Schema({
         publicId: { type: String },
         url: { type: String },
     },
-    cookingTime: {
-        type: Number,
-        required: [true, errors.recipeCookingTimeRequiredError],
-        min: [5, errors.recipeCookingTimeMinError(5)],
-        max: [1440, errors.recipeCookingTimeMaxError(1440)]
-    },
     prepTime: {
         type: Number,
         required: [true, errors.recipePrepTimeRequiredError],
         min: [5, errors.recipePrepTimeRangeError(5, 1440)],
         max: [1440, errors.recipePrepTimeRangeError(5, 1440)]
+    },
+    cookingTime: {
+        type: Number,
+        required: [true, errors.recipeCookingTimeRequiredError],
+        min: [5, errors.recipeCookingTimeMinError(5)],
+        max: [1440, errors.recipeCookingTimeMaxError(1440)]
     },
     servings: {
         type: Number,

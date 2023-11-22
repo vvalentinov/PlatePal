@@ -14,11 +14,7 @@ import { approveRecipeCardText } from '../../../constants/cardTextMessages';
 import { recipeServiceFactory } from '../../../services/recipeService';
 import { useService } from '../../../hooks/useService';
 
-const ApproveRecipe = ({
-    recipeId,
-    handleApprovingRecipe,
-    showToast
-}) => {
+const ApproveRecipe = ({ recipeId, handleApprovingRecipe, showToast }) => {
     const recipeService = useService(recipeServiceFactory);
 
     const [show, setShow] = useState(false);
