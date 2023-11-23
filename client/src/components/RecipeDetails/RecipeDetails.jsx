@@ -62,7 +62,7 @@ const RecipeDetails = () => {
 
     const handleDeletingRecipe = (result) => {
         const toast = { toastMsg: result.message, isSuccessfull: true };
-        navigate('/', { state: toast })
+        navigate('/', { state: toast });
     };
 
     return (

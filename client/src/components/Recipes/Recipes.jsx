@@ -1,30 +1,44 @@
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import styles from './Recipes.module.css';
 
 import RecipeCardLink from '../RecipeCardLink/RecipeCardLink';
 
-import styles from './Recipes.module.css';
+import { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+
+import { recipeServiceFactory } from '../../services/recipeService';
+import { useService } from '../../hooks/useService';
+
+import { categoriesListPath } from '../../constants/pathNames';
 
 const Recipes = () => {
     const { category } = useParams();
+    const navigate = useNavigate();
 
     const [recipes, setRecipes] = useState([]);
 
+    const recipeService = useService(recipeServiceFactory);
+
     useEffect(() => {
-        fetch(`http://localhost:3000/recipe/all/${category}`)
-            .then(res => res.json())
+        recipeService.getAllInCategory(category)
             .then(res => setRecipes(res.result))
-            .catch(error => console.log(error));
-    }, []);
+            .catch(error => {
+                const state = { toastMsg: error.message, isSuccessfull: false };
+                navigate(categoriesListPath, { state });
+            });
+    }, [category]);
 
     return (
-        <div className={styles.container}>
-            {recipes && recipes.map(x => <RecipeCardLink
-                key={x._id}
-                recipe={x}
-                link={`/recipe/details/${x._id}`} />
-            )}
-        </div>
+        <>
+            {recipes.length > 0 ? (
+                <div className={styles.container}>
+                    {recipes.map(recipe => <RecipeCardLink
+                        key={recipe._id}
+                        recipe={recipe}
+                        link={`/recipe/details/${recipe._id}`} />
+                    )}
+                </div>
+            ) : <p>No Recipes Yet...</p>}
+        </>
     );
 };
 

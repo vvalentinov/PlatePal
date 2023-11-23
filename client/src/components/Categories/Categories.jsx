@@ -1,23 +1,24 @@
 import styles from './Categories.module.css';
 
-import { useEffect, useState } from 'react';
-
-import { categoryServiceFactory } from '../../services/categoryService';
-import { useService } from '../../hooks/useService';
-
 import Card from 'react-bootstrap/Card';
 
 import CustomSpinner from '../Spinner/Spinner';
-
-import { Link } from 'react-router-dom';
-
 import BackToTopArrow from '../BackToTopArrow/BackToTopArrow';
+import ToastNotification from '../Toast/ToastNotification';
+
+import { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+
+import { categoryServiceFactory } from '../../services/categoryService';
+import { useService } from '../../hooks/useService';
 
 const Categories = () => {
     const [categories, setCategories] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
     const categoryService = useService(categoryServiceFactory);
+
+    const { state } = useLocation();
 
     useEffect(() => {
         categoryService.getAll()
@@ -27,30 +28,36 @@ const Categories = () => {
     }, []);
 
     return (
-        <section>
-            <h2 className='text-center my-2'>{
-                isLoading ? 'Category List - Loading...' : 'Category List'
-            }</h2>
-            {isLoading && <CustomSpinner />}
-            {categories.map(x => (
-                <div key={x._id} className={styles.container}>
-                    <div className={styles.imageContainer}>
-                        <Link className={styles.link} to={`/recipe/all/${x.name}`}>
-                            <img className={styles.categoryImg} src={x.image.url} alt="" />
-                        </Link>
+        <>
+            {state && <ToastNotification
+                onExited={() => window.history.replaceState(null, "")}
+                message={state.toastMsg}
+                isSuccessfull={false} />}
+            <section>
+                <h2 className='text-center my-2'>{
+                    isLoading ? 'Category List - Loading...' : 'Category List'
+                }</h2>
+                {isLoading && <CustomSpinner />}
+                {categories.map(x => (
+                    <div key={x._id} className={styles.container}>
+                        <div className={styles.imageContainer}>
+                            <Link className={styles.link} to={`/recipe/all/${x.name}`}>
+                                <img className={styles.categoryImg} src={x.image.url} alt="" />
+                            </Link>
+                        </div>
+                        <Card className={styles.card}>
+                            <Card.Header className={styles.cardHeader}>{x.name}</Card.Header>
+                            <Card.Body className={styles.cardBody}>
+                                <Card.Text className='fs-5'>
+                                    {x.description}
+                                </Card.Text>
+                            </Card.Body>
+                        </Card>
                     </div>
-                    <Card className={styles.card}>
-                        <Card.Header className={styles.cardHeader}>{x.name}</Card.Header>
-                        <Card.Body className={styles.cardBody}>
-                            <Card.Text className='fs-5'>
-                                {x.description}
-                            </Card.Text>
-                        </Card.Body>
-                    </Card>
-                </div>
-            ))}
-            <BackToTopArrow />
-        </section>
+                ))}
+                <BackToTopArrow />
+            </section>
+        </>
     );
 };
 

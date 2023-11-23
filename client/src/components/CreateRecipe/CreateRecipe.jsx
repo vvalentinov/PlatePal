@@ -89,9 +89,17 @@ const CreateRecipe = () => {
 
     return (
         <>
-            {toastMsg && <ToastNotification onExited={onToastExited} isSuccessfull={false} message={toastMsg} />}
+            {toastMsg &&
+                <ToastNotification
+                    onExited={onToastExited}
+                    isSuccessfull={false}
+                    message={toastMsg} />}
             <div className={styles.container}>
-                <Form method="POST" onSubmit={handleSubmit(onFormSubmit)} className={styles.form}>
+                <Form
+                    method="POST"
+                    onSubmit={handleSubmit(onFormSubmit)}
+                    className={styles.form}>
+
                     <h2 className={styles.heading}>Create Recipe</h2>
 
                     <RecipeName errors={errors} control={control} />
@@ -134,12 +142,23 @@ const CreateRecipe = () => {
                     </div>
 
                     <div className="d-grid gap-2">
-                        {isRequestInProgress ? (
-                            <Button disabled bsPrefix={styles.blockButton} size="lg">
-                                <Spinner as="span" animation="grow" role="status" aria-hidden="true" />
+                        {isRequestInProgress ?
+                            (<Button
+                                disabled
+                                bsPrefix={styles.blockButton}
+                                size="lg">
+                                <Spinner
+                                    as="span"
+                                    animation="grow"
+                                    role="status"
+                                    aria-hidden="true"
+                                />
                                 Creating Recipe...
-                            </Button>) : (
-                            <Button type="submit" bsPrefix={styles.blockButton} size="lg">
+                            </Button>) :
+                            (<Button
+                                type="submit"
+                                bsPrefix={styles.blockButton}
+                                size="lg">
                                 Create Recipe
                             </Button>)}
                     </div>

@@ -17,7 +17,6 @@ import UnapprovedRecipesList from './components/UnapprovedRecipesList/Unapproved
 import EditRecipe from './components/EditRecipe/EditRecipe';
 import UserRecipesList from './components/UserRecipesList/UserRecipesList';
 
-
 import { AuthProvider } from './contexts/AuthContext';
 
 import { Route, Routes } from 'react-router-dom';

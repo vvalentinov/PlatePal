@@ -87,7 +87,11 @@ exports.getAll = async (categoryName) => {
         throw new Error(categoryErrors.categoryInvalidError);
     }
 
-    const recipes = await Recipe.find({ category: category._id, isApproved: true })
+    const recipes = await Recipe.find
+        ({
+            category: category._id,
+            isApproved: true
+        })
         .select('_id image name')
         .lean();
 

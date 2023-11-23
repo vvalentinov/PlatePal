@@ -26,18 +26,21 @@ const recipeSchema = new mongoose.Schema({
     },
     prepTime: {
         type: Number,
+        cast: 'Prep Time must be a number!',
         required: [true, errors.recipePrepTimeRequiredError],
         min: [5, errors.recipePrepTimeRangeError(5, 1440)],
         max: [1440, errors.recipePrepTimeRangeError(5, 1440)]
     },
     cookingTime: {
         type: Number,
+        cast: 'Cooking Time must be a number!',
         required: [true, errors.recipeCookingTimeRequiredError],
         min: [5, errors.recipeCookingTimeMinError(5)],
         max: [1440, errors.recipeCookingTimeMaxError(1440)]
     },
     servings: {
         type: Number,
+        cast: 'Servings must be a number!',
         required: [true, errors.recipeServingsRequiredError],
         min: [1, errors.recipeServingsRangeError(1, 100)],
         max: [100, errors.recipeServingsRangeError(1, 100)]

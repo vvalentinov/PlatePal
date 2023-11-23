@@ -5,13 +5,33 @@ export const extractRecipeFormData = (data) => {
         formData.append("youtubeLink", data.recipeYoutubeLink);
     }
 
-    formData.append("recipeFile", data.recipeFile);
-    formData.append("recipeName", data.recipeName);
-    formData.append("recipeDescription", data.recipeDescription);
-    formData.append("recipeCookingTime", Number(data.recipeCookTime));
-    formData.append("recipePrepTime", Number(data.recipePrepTime));
-    formData.append("recipeServings", Number(data.recipeServings));
-    formData.append("recipeCategory", data.recipeCategory);
+    if (data.recipeName) {
+        formData.append("recipeName", data.recipeName);
+    }
+
+    if (data.recipeFile) {
+        formData.append("recipeFile", data.recipeFile);
+    }
+
+    if (data.recipeDescription) {
+        formData.append("recipeDescription", data.recipeDescription);
+    }
+
+    if (data.recipeCookTime) {
+        formData.append("recipeCookingTime", Number(data.recipeCookTime));
+    }
+
+    if (data.recipePrepTime) {
+        formData.append("recipePrepTime", Number(data.recipePrepTime));
+    }
+
+    if (data.recipeServings) {
+        formData.append("recipeServings", Number(data.recipeServings));
+    }
+
+    if (data.recipeCategory) {
+        formData.append("recipeCategory", data.recipeCategory);
+    }
 
     if (data.ingredients) {
         const ingredients = data.ingredients.map(ingredient => ingredient.name);

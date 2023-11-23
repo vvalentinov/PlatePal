@@ -1,13 +1,12 @@
-const Recipe = require('../models/Recipe');
-
 const categoryManager = require('../managers/categoryManager');
 
 const recipeErrors = require('../constants/errorMessages/recipeErrors');
 const categoryErrors = require('../constants/errorMessages/categoryErrors');
+
 const regexes = require('../constants/regexes/regexes');
 
 exports.recipeValidator = async (data) => {
-    const regex = new RegExp(regexes.recipeNameRegex);
+    const regex = new RegExp(regexes.mongooseObjectIdFormatRegex);
     if (!regex.test(data.recipeCategory)) {
         throw new Error(categoryErrors.categoryInvalidIdFormat);
     }

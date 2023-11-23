@@ -13,7 +13,14 @@ export const useLocalStorage = (key, initialValue) => {
     });
 
     const setLocalStorageState = (value) => {
+        // let resultState = state;
         setState(value);
+
+        let serializedValue
+
+        // if (typeof value === 'function') {
+        //     resultState = value(state)
+        // }
 
         localStorage.setItem(key, JSON.stringify(value));
     };
