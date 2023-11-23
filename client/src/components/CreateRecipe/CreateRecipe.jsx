@@ -68,8 +68,6 @@ const CreateRecipe = () => {
         remove: stepsRemove
     } = useDynamicFieldArray(control, 'steps', watch);
 
-    const onToastExited = () => setToastMsg('');
-
     const onFormSubmit = async (data) => {
         setIsRequestInProgress(true);
 
@@ -91,7 +89,7 @@ const CreateRecipe = () => {
         <>
             {toastMsg &&
                 <ToastNotification
-                    onExited={onToastExited}
+                    onExited={() => setToastMsg('')}
                     isSuccessfull={false}
                     message={toastMsg} />}
             <div className={styles.container}>
@@ -107,12 +105,16 @@ const CreateRecipe = () => {
                     <RecipeImageFile control={control} errors={errors} />
                     <RecipeDescription control={control} errors={errors} />
                     <RecipeYoutubeLink control={control} errors={errors} />
-                    <RecipeCookTime control={control} errors={errors} />
                     <RecipePrepTime control={control} errors={errors} />
+                    <RecipeCookTime control={control} errors={errors} />
                     <RecipeServings control={control} errors={errors} />
 
                     <h3 className='text-white text-uppercase mb-4'>Ingredients</h3>
-                    <RecipeIngredients errors={errors} control={control} ingredients={ingredients} remove={ingredientsRemove} />
+                    <RecipeIngredients
+                        errors={errors}
+                        control={control}
+                        ingredients={ingredients}
+                        remove={ingredientsRemove} />
 
                     <div className="d-grid">
                         <Button

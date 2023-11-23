@@ -9,12 +9,12 @@ export const fileRules = {
 };
 
 export const editRecipeFileRules = {
-    validate: (value) => {
-        if (value && value.type !== 'image/png' && value.type !== 'image/jpeg') {
-            return "Incorrect extension! Allowed extensions: .png, .jpeg and .jpg!"
-        }
-        return true;
-    }
+    // validate: (value) => {
+    //     if (value && value.type !== 'image/png' && value.type !== 'image/jpeg') {
+    //         return "Incorrect extension! Allowed extensions: .png, .jpeg and .jpg!"
+    //     }
+    //     return true;
+    // }
 };
 
 export const recipeNameRules = {
@@ -31,11 +31,11 @@ export const recipeDescriptionRules = {
 };
 
 export const recipeYoutubeLinkRules = {
-    required: false,
-    pattern: {
-        value: /^(https?:\/\/)?(www\.)?youtube\.com\/embed\/([\w-]+)(\S+)?$/,
-        message: 'Invalid embedded youtube video link!'
-    }
+    // required: false,
+    // pattern: {
+    //     value: /^(https?:\/\/)?(www\.)?youtube\.com\/embed\/([\w-]+)(\S+)?$/,
+    //     message: 'Invalid embedded youtube video link!'
+    // }
 };
 
 export const recipeCookingTimeRules = {
@@ -59,7 +59,8 @@ export const recipeServingsRules = {
 export const recipeIngredientRules = {
     // required: { value: true, message: "Ingredient must not be empty!" },
     // minLength: { value: 2, message: "Ingredient must be at least 2 characters long!" },
-    // maxLength: { value: 100, message: "Ingredient must not exceed 100 characters!" }
+    // maxLength: { value: 100, message: "Ingredient must not exceed 100 characters!" },
+    // pattern: { value: /^[a-zA-Z0-9\s-]*$/, message: 'Ingredient must contain only letters, numbers and spaces!' }
 };
 
 export const recipeStepRules = {

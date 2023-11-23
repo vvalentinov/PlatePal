@@ -16,8 +16,6 @@ import { useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 
-import CustomNavLink from './CustomNavLink/CustomNavLink';
-
 const Navigation = () => {
     const { username, isAuthenticated } = useContext(AuthContext);
 
@@ -40,16 +38,16 @@ const Navigation = () => {
                             to={paths.categoriesListPath}>
                             Categories
                         </NavLink>
-                        {isAuthenticated && (
+                        {/* {isAuthenticated && (
                             <CustomNavLink to='/recipes/user-recipes/all'>
                                 My Recipes
                             </CustomNavLink>
-                        )}
+                        )} */}
                     </Nav>
                     {isAuthenticated && (
                         <Nav className="fs-4">
                             <Navbar.Text bsPrefix={styles.navbarText}>
-                                Logged in as: <Link className={styles.link}>{username}</Link>
+                                Logged in as: <Link to='/user/profile' className={styles.link}>{username}</Link>
                             </Navbar.Text>
                             <Button bsPrefix={styles.logoutButton} className="px-3 py-1">
                                 <Link to={paths.logoutPath}>

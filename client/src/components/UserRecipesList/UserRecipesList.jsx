@@ -1,11 +1,13 @@
 import styles from './UserRecipesList.module.css';
 
-import { useState, useEffect } from 'react';
-
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 
+import RecipesList from './RecipesList/RecipesList';
+import ToastNotification from '../Toast/ToastNotification';
+
+import { useState, useEffect } from 'react';
 import {
     useParams,
     useSearchParams,
@@ -14,9 +16,9 @@ import {
     Link
 } from 'react-router-dom';
 
-import RecipesList from './RecipesList/RecipesList';
-
 import { extractTitle } from '../../utils/extractInitialTitle';
+import { recipeNameValidator } from '../../utils/validatorUtil';
+import useForm from '../../hooks/useForm';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -26,32 +28,21 @@ import {
     faMagnifyingGlass
 } from '@fortawesome/free-solid-svg-icons';
 
-import useForm from '../../hooks/useForm';
-
-import { recipeNameValidator } from '../../utils/validatorUtil';
-
-import ToastNotification from '../Toast/ToastNotification';
-
 const UserRecipesList = () => {
-    const [recipeNameErr, setRecipeNameErr] = useState('');
+    const { recipeType } = useParams();
 
+    const [recipeNameErr, setRecipeNameErr] = useState('');
     const [toast, setToast] = useState('');
+    const [recipeTypeState, setRecipeTypeState] = useState(recipeType);
+    const [title, setTitle] = useState(extractTitle(recipeType));
+    const [searchQuery, setSearchQuery] = useState('');
 
     const onRecipeNameBlur = () => setRecipeNameErr(recipeNameValidator(formValues.search));
 
+    const [searchParams, setSearchParams] = useSearchParams();
     const navigate = useNavigate();
-
     const location = useLocation();
     const currentURL = location.pathname;
-
-    const { recipeType } = useParams();
-
-    const [searchParams, setSearchParams] = useSearchParams();
-
-    const [title, setTitle] = useState(extractTitle(recipeType));
-
-    const [recipeTypeState, setRecipeTypeState] = useState(recipeType);
-    const [searchQuery, setSearchQuery] = useState('');
 
     const searchInputText = `Search recipe by name in ${title.toLowerCase()}`;
 

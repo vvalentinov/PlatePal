@@ -1,8 +1,7 @@
 import Form from 'react-bootstrap/Form';
 
-import { Controller } from "react-hook-form";
-
 import { useState } from 'react';
+import { Controller } from "react-hook-form";
 
 import { fileRules, editRecipeFileRules } from '../../../utils/errorRules';
 
@@ -37,17 +36,19 @@ const RecipeImageFile = ({ control, errors, isEdit }) => {
                             handleFileChange(event);
                             onChange(event.target.files[0]);
                         }}
-                        // onChange={(event) => { onChange(event.target.files[0]); }}
                         onBlur={onBlur}
                     />
                 )}
             />
             {errors.recipeFile && (<p className="text-start text-danger">{errors.recipeFile.message}</p>)}
 
-            {/* Display the image preview */}
             {image && !errors.recipeFile && (
                 <div className="mt-2">
-                    <img src={image} alt="Preview" style={{ maxWidth: '100%', maxHeight: '200px' }} />
+                    <img src={image} alt="Preview" style={{
+                        width: '50%',
+                        maxHeight: '400px',
+                        borderRadius: '15px'
+                    }} />
                 </div>
             )}
         </Form.Group>

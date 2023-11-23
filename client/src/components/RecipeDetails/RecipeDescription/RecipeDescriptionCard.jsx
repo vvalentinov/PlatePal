@@ -27,7 +27,8 @@ const RecipeDescriptionCard = ({
     category,
     averageRating,
     userRating,
-    ratings
+    ratings,
+    isRecipeOwner
 }) => {
     const { isAuthenticated } = useContext(AuthContext);
     return (
@@ -48,7 +49,7 @@ const RecipeDescriptionCard = ({
                     <FontAwesomeIcon icon={faStar} className='me-2' />
                     Recipe Average Rating: {averageRating} / 5.0 - (Total votes: {ratings.length})
                 </Card.Title>
-                {isAuthenticated && (
+                {isAuthenticated && !isRecipeOwner && (
                     <Card.Title>
                         <FontAwesomeIcon icon={faUser} className='me-2' />
                         {userRating === 0 ?

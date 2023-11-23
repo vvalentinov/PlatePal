@@ -48,6 +48,7 @@ const recipeSchema = new mongoose.Schema({
     ingredients: [{
         type: String,
         required: [true, errors.recipeIngredientsRequiredError],
+        match: [regexes.recipeNameRegex, 'Recipe ingredients must contain only letters, numbers and spaces!']
     }],
     steps: [{
         type: String,
@@ -80,6 +81,11 @@ const recipeSchema = new mongoose.Schema({
         type: Boolean,
         required: true,
         default: false,
+    },
+    createdAt: {
+        type: Date,
+        required: true,
+        default: Date.now
     },
 });
 

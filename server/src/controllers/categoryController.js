@@ -28,8 +28,8 @@ router.post(
 
 router.get(routes.getAllRoute, async (req, res) => {
     try {
-        const result = await categoryManager.getAll().lean();
-        res.status(200).json(result);
+        const result = await categoryManager.getAll();
+        res.status(200).json({ message: "Recipe Categories retrieved successfully!", result });
     } catch (error) {
         res.status(400).json({ message: getErrorMessage(error) });
     }

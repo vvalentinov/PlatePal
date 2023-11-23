@@ -23,3 +23,7 @@
     background-color: #2C3E50;
     color: white;
 }
+
+.noRecipesMessage {
+    font-size: 2.5rem;
+}

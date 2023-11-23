@@ -79,7 +79,7 @@ const RecipeDetails = () => {
                 <>
                     <section className={styles.container}>
                         <img src={recipe.image.url} alt={`Recipe Image: ${recipe.name}`} />
-                        <RecipeDescriptionCard {...recipe} />
+                        <RecipeDescriptionCard {...recipe} isRecipeOwner={isRecipeOwner} />
                     </section>
 
                     <section className={styles.recipePropertiesContainer}>
@@ -108,14 +108,19 @@ const RecipeDetails = () => {
                             {
                                 !recipe.isApproved && isAdmin &&
                                 <ApproveRecipe
-                                    showToast={(message, isSucc) => isSucc ? setSuccessToast(message) : setErrorToast(message)}
+                                    showToast={(message, isSucc) =>
+                                        isSucc ? setSuccessToast(message) : setErrorToast(message)}
                                     recipeId={recipeId}
                                     handleApprovingRecipe={handleApprovingRecipe} />
                             }
-                            <RecipeStarRating
-                                recipeId={recipeId}
-                                onRatingSubmit={handleRatingRecipe}
-                                userRating={recipe.userRating} />
+                            {
+                                !isRecipeOwner &&
+                                <RecipeStarRating
+                                    recipeId={recipeId}
+                                    onRatingSubmit={handleRatingRecipe}
+                                    userRating={recipe.userRating} />
+                            }
+
                             {
                                 isRecipeOwner &&
                                 <DeleteRecipe

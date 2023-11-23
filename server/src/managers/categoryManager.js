@@ -3,8 +3,6 @@ const Category = require('../models/Category');
 const { uploadImage } = require('../utils/cloudinaryUtil');
 const { validateImageFile } = require('../utils/imageFileValidatiorUtil');
 
-const recipeManager = require('../managers/recipeManager');
-
 exports.create = async (data, categoryImage) => {
     const categoryWithName = await Category.findOne({ name: data.categoryName });
     if (categoryWithName) {
@@ -24,10 +22,17 @@ exports.create = async (data, categoryImage) => {
     return category;
 };
 
-exports.getAll = () => Category.find({});
+exports.getAll = () => Category
+    .find({})
+    .sort({ 'name': 'asc' })
+    .lean();
 
 exports.getById = (categoryId) => Category.findById(categoryId);
 
 exports.getByName = (categoryName) => Category.findOne({ name: categoryName });
 
-exports.getCategoryList = () => Category.find({}).select('_id name');
+exports.getCategoryList = () => Category
+    .find({})
+    .sort({ 'name': 'asc' })
+    .select('_id name')
+    .lean();

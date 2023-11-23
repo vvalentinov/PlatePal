@@ -22,7 +22,7 @@ const Categories = () => {
 
     useEffect(() => {
         categoryService.getAll()
-            .then(data => setCategories(data))
+            .then(res => setCategories(res.result))
             .catch(error => console.log(`In error ${error}`))
             .finally(() => { setIsLoading(false); });
     }, []);
@@ -34,9 +34,11 @@ const Categories = () => {
                 message={state.toastMsg}
                 isSuccessfull={false} />}
             <section>
-                <h2 className='text-center my-2'>{
-                    isLoading ? 'Category List - Loading...' : 'Category List'
-                }</h2>
+                <h2 className={styles.heading}>
+                    {
+                        isLoading ? 'Category List - Loading...' : `Category List (${categories.length})`
+                    }
+                </h2>
                 {isLoading && <CustomSpinner />}
                 {categories.map(x => (
                     <div key={x._id} className={styles.container}>

@@ -6,6 +6,26 @@ const categoryErrors = require('../constants/errorMessages/categoryErrors');
 const regexes = require('../constants/regexes/regexes');
 
 exports.recipeValidator = async (data) => {
+    if (!data.recipeName) {
+        throw new Error('Recipe name is required!');
+    }
+
+    if (!data.recipeDescription) {
+        throw new Error('Recipe description is required!');
+    }
+
+    if (!data.recipeCookingTime) {
+        throw new Error('Recipe cooking time is required!');
+    }
+
+    if (!data.recipePrepTime) {
+        throw new Error('Recipe prep time is required!');
+    }
+
+    if (!data.recipeServings) {
+        throw new Error('Recipe servings is required!');
+    }
+
     const regex = new RegExp(regexes.mongooseObjectIdFormatRegex);
     if (!regex.test(data.recipeCategory)) {
         throw new Error(categoryErrors.categoryInvalidIdFormat);

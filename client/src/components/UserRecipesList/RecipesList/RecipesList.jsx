@@ -1,15 +1,15 @@
-import { useState, useEffect } from 'react';
+import styles from './RecipesList.module.css';
 
-import { recipeServiceFactory } from '../../../services/recipeService';
-import { useService } from '../../../hooks/useService';
+import Card from 'react-bootstrap/Card';
 
 import RecipeCardLink from '../../RecipeCardLink/RecipeCardLink';
 
-import styles from './RecipesList.module.css';
-
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import Card from 'react-bootstrap/Card';
+import { recipeServiceFactory } from '../../../services/recipeService';
+import { useService } from '../../../hooks/useService';
+import { noSearchedRecipeFound } from '../../../constants/cardTextMessages';
 
 const RecipesList = ({ recipeType, searchQuery, handleToast }) => {
     const [recipes, setRecipes] = useState([]);
@@ -46,16 +46,20 @@ const RecipesList = ({ recipeType, searchQuery, handleToast }) => {
 
     return (
         <div className={styles.container}>
-            {recipes.length === 0 && (
-                <Card className={styles.noRecipesCard}>
-                    <Card.Header className={styles.noRecipesCardHeader}>Uh-oh! No recipe found with name: {searchQuery}</Card.Header>
-                    <Card.Body className={styles.noRecipesCardBody}>
-                        <Card.Text>
-                            It seems your culinary creativity has outpaced our recipe database. No worries, though! There are countless flavor combinations waiting to be discovered. Feel free to refine your search terms or browse through our diverse collection of recipes for fresh inspiration. If you've got a unique recipe up your sleeve, why not share it with the community? Your next culinary masterpiece could be the talk of the kitchen!
-                        </Card.Text>
-                    </Card.Body>
-                </Card>
-            )}
+            {recipes.length === 0 && searchQuery &&
+                (
+                    <Card className={styles.noRecipesCard}>
+                        <Card.Header className={styles.noRecipesCardHeader}>
+                            Uh-oh! No recipe found!
+                        </Card.Header>
+                        <Card.Body className={styles.noRecipesCardBody}>
+                            <Card.Text>
+                                {noSearchedRecipeFound}
+                            </Card.Text>
+                        </Card.Body>
+                    </Card>
+                )}
+            {recipes.length === 0 && !searchQuery && <p className={styles.noRecipesMessage}>No Recipes Found!</p>}
             {recipes.length > 0 &&
                 recipes.map(recipe => <RecipeCardLink
                     key={recipe._id}

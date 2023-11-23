@@ -16,13 +16,13 @@ import Footer from './components/Footer/Footer';
 import UnapprovedRecipesList from './components/UnapprovedRecipesList/UnapprovedRecipesList';
 import EditRecipe from './components/EditRecipe/EditRecipe';
 import UserRecipesList from './components/UserRecipesList/UserRecipesList';
+import UserProfile from './components/UserProfile/UserProfile';
 
 import { AuthProvider } from './contexts/AuthContext';
 
 import { Route, Routes } from 'react-router-dom';
 
 import * as paths from './constants/pathNames';
-
 import GuestRouteGuard from './components/common/GuestRouteGuard';
 
 const App = () => {
@@ -42,6 +42,7 @@ const App = () => {
                     <Route path={paths.recipeDetailsPath} element={<RecipeDetails />} />
                     <Route path='/recipes/user-recipes/:recipeType?/:search?' element={<UserRecipesList />} />
                     <Route path='/recipe/edit/:recipeId' element={<EditRecipe />} />
+                    <Route path='/user/profile' element={<UserProfile />} />
                     <Route element={<GuestRouteGuard />}>
                         <Route path={paths.recipeCreatePath} element={<CreateRecipe />} />
                         <Route path={paths.logoutPath} element={<Logout />} />
