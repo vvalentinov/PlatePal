@@ -1,6 +1,7 @@
 import styles from './Recipes.module.css';
 
 import RecipeCardLink from '../RecipeCardLink/RecipeCardLink';
+import NoRecipesCard from './NoRecipesCard/NoRecipesCard';
 
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -30,14 +31,19 @@ const Recipes = () => {
     return (
         <>
             {recipes.length > 0 ? (
-                <div className={styles.container}>
+                <div className={styles.recipesContainer}>
                     {recipes.map(recipe => <RecipeCardLink
                         key={recipe._id}
                         recipe={recipe}
                         link={`/recipe/details/${recipe._id}`} />
                     )}
                 </div>
-            ) : <p>No Recipes Yet...</p>}
+            ) : (
+                <div className={styles.noRecipesContainer}>
+                    <h3>No Recipes in {category} category Yet</h3>
+                    <NoRecipesCard />
+                </div>
+            )}
         </>
     );
 };
