@@ -24,7 +24,7 @@ export const recipeServiceFactory = (token) => {
             request.put(`${baseUrl}/edit/${recipeId}`, data),
         delete: (recipeId) =>
             request.delete(`${baseUrl}/delete/${recipeId}`),
-        getAllInCategory: (categoryName) =>
-            request.get(`${baseUrl}/all/${categoryName}`)
+        getAllInCategory: (categoryName, pageNumber) =>
+            request.get(`${baseUrl}/all/${categoryName}?page=${pageNumber}`)
     }
 };
