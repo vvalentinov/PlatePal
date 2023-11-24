@@ -4,7 +4,7 @@ const { generateHash } = require('../utils/bcryptUtil');
 
 const userErrors = require('../constants/errorMessages/userErrors');
 
-const { UserModelName } = require('../constants/dbModelsNames');
+const { UserModelName, RecipeModelName } = require('../constants/dbModelsNames');
 
 const userSchema = new mongoose.Schema({
     username: {
@@ -22,6 +22,10 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         required: true,
     },
+    favouriteRecipes: [{
+        type: mongoose.Types.ObjectId,
+        ref: RecipeModelName
+    }],
 });
 
 userSchema.virtual('repeatPassword').set(function (value) {

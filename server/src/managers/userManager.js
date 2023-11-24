@@ -1,5 +1,7 @@
 const User = require('../models/User');
 
+const recipeManager = require('../managers/recipeManager');
+
 const { generateToken } = require('../utils/generateTokenUtil');
 const { validateUserPassword } = require('../utils/bcryptUtil');
 
@@ -62,3 +64,29 @@ exports.validateToken = async (token) => {
 exports.logout = (token) => revokedTokens.add(token);
 
 exports.getById = (userId) => User.findById(userId);
+
+exports.addRecipeToFavourites = async (userId, recipeId) => {
+    const recipe = await recipeManager.getById(recipeId);
+
+    const user = await User.findById(userId);
+    if (!user) {
+        throw new Error('No user with given id found!');
+    }
+
+    let message = 'Added to favourites successfully!';
+    let result = true;
+
+    let userFavouriteRecipes = user.favouriteRecipes;
+
+    if (user.favouriteRecipes.includes(recipe._id)) {
+        userFavouriteRecipes = user.favouriteRecipes.filter(x => x._id.equals(recipe._id) === false);
+        message = 'Recipe removed from favourites successfully!';
+        result = false;
+    } else {
+        userFavouriteRecipes.push(recipe._id);
+    }
+
+    await User.findByIdAndUpdate(userId, { favouriteRecipes: userFavouriteRecipes });
+
+    return { message, result };
+};

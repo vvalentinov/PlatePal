@@ -1,4 +1,5 @@
 const Recipe = require('../models/Recipe');
+const User = require('../models/User');
 
 const categoryManager = require('./categoryManager');
 const ratingManager = require('./ratingManager');
@@ -117,6 +118,12 @@ exports.getRecipeDetails = async (recipeId, userId) => {
         .populate('category', 'name')
         .lean();
 
+    const user = await userManager.getById(userId);
+    if (user) {
+        const isAdded = user.favouriteRecipes.includes(recipeId);
+        populatedRecipe = { ...populatedRecipe, isAdded };
+    }
+
     populatedRecipe.averageRating = populatedRecipe.averageRating.toFixed(1);
 
     if (userId) {
@@ -222,3 +229,31 @@ exports.getEditRecipeDetails = async (recipeId) => {
         { preselectedCategory }
     ];
 };
+
+// exports.addToFavourites = async (recipeId, userId) => {
+//     await checkIfRecipeExists(recipeId);
+
+//     const recipe = await Recipe.findById(recipeId);
+
+//     const user = await userManager.getById(userId);
+//     if (!user) {
+//         throw new Error('No user with given id found!');
+//     }
+
+//     let message = 'Added to favourites successfully!';
+//     let result = true;
+
+//     let userFavouriteRecipes = user.favouriteRecipes;
+
+//     if (user.favouriteRecipes.includes(recipe._id)) {
+//         userFavouriteRecipes = user.favouriteRecipes.filter(x => x._id.equals(recipe._id) === false);
+//         message = 'Recipe removed from favourites successfully!';
+//         result = false;
+//     } else {
+//         userFavouriteRecipes.push(recipe._id);
+//     }
+
+//     await User.findByIdAndUpdate(userId, { favouriteRecipes: userFavouriteRecipes });
+
+//     return { message, result };
+// };

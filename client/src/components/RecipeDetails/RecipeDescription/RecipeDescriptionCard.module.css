@@ -38,3 +38,16 @@
 .categoryLink:hover {
     color: #93DC80;
 }
+
+.heartIcon {
+    margin-right: 0.5rem;
+}
+
+.heartIconRed {
+    margin-right: 0.5rem;
+    color: red;
+}
+
+.heartIcon:hover {
+    cursor: pointer;
+}

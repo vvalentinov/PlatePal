@@ -37,4 +37,16 @@ router.get(logoutRoute, isAuthenticated, async (req, res) => {
     res.status(200).json({ message: "Logged out successfully!" });
 });
 
+router.put('/add-recipe-to-favourites/:recipeId', isAuthenticated, async (req, res) => {
+    const recipeId = req.params.recipeId;
+    const userId = req.user._id;
+
+    try {
+        const result = await userManager.addRecipeToFavourites(userId, recipeId);
+        res.status(200).json(result);
+    } catch (error) {
+        res.status(400).json({ message: getErrorMessage(error) });
+    }
+});
+
 module.exports = router;

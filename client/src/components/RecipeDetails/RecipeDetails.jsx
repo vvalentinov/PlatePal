@@ -13,7 +13,7 @@ import ToastNotification from '../Toast/ToastNotification';
 import CustomSpinner from '../Spinner/Spinner';
 
 import { useEffect, useState, useContext } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 import { AuthContext } from '../../contexts/AuthContext';
 
@@ -34,6 +34,7 @@ const RecipeDetails = () => {
 
     const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
     const [recipe, setRecipe] = useState();
+    const [isAdded, setIsAdded] = useState(false);
     const [errorToast, setErrorToast] = useState('');
     const [successToast, setSuccessToast] = useState('');
 
@@ -43,10 +44,24 @@ const RecipeDetails = () => {
 
     useEffect(() => {
         recipeService.getRecipe(recipeId)
-            .then(res => setRecipe(res.result))
+            .then(res => {
+                setRecipe(res.result);
+                setIsAdded(res.result.isAdded);
+            })
             .catch(error => setErrorToast(error.message))
             .finally(() => setIsSpinnerLoading(false));
     }, [recipeId]);
+
+    const handleAddRecipeToFavourites = (result) => {
+        setIsAdded(result);
+        if (result) {
+            setSuccessToast('Successfully added to favourites!');
+
+        } else {
+            setSuccessToast('Successfully removed from favourites!');
+
+        }
+    }
 
     const handleRatingRecipe = (result) => setRecipe((state) =>
     ({
@@ -79,7 +94,12 @@ const RecipeDetails = () => {
                 <>
                     <section className={styles.container}>
                         <img src={recipe.image.url} alt={`Recipe Image: ${recipe.name}`} />
-                        <RecipeDescriptionCard {...recipe} isRecipeOwner={isRecipeOwner} />
+                        <RecipeDescriptionCard
+                            {...recipe}
+                            isRecipeOwner={isRecipeOwner}
+                            isAdded={isAdded}
+                            recipeId={recipeId}
+                            handleAddRecipeToFavourites={handleAddRecipeToFavourites} />
                     </section>
 
                     <section className={styles.recipePropertiesContainer}>
