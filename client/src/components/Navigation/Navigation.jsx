@@ -38,11 +38,6 @@ const Navigation = () => {
                             to={paths.categoriesListPath}>
                             Categories
                         </NavLink>
-                        {/* {isAuthenticated && (
-                            <CustomNavLink to='/recipes/user-recipes/all'>
-                                My Recipes
-                            </CustomNavLink>
-                        )} */}
                     </Nav>
                     {isAuthenticated && (
                         <Nav className="fs-4">

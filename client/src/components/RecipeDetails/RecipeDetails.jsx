@@ -59,7 +59,6 @@ const RecipeDetails = () => {
 
         } else {
             setSuccessToast('Successfully removed from favourites!');
-
         }
     }
 

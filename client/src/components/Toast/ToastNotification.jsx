@@ -23,11 +23,13 @@ function ToastNotification({ message, isSuccessfull, onExited }) {
                 bg={isSuccessfull ? 'success' : 'danger'}>
                 <Toast.Header className='border-bottom border-2 border-black'>
                     <FontAwesomeIcon icon={isSuccessfull ? faCheckCircle : faTriangleExclamation} className='me-2' />
-                    <strong className="me-auto">
+                    <strong className='me-auto' >
                         {isSuccessfull ? 'Successful operation!' : 'Ooops! Something went wrong!'}
                     </strong>
                 </Toast.Header>
-                <Toast.Body className='fs-5'>{message}</Toast.Body>
+                <Toast.Body className={`fs-5 ${isSuccessfull ? styles.successMsg : ''}`}>
+                    {message}
+                </Toast.Body>
             </Toast>
         </ToastContainer>
     );
