@@ -48,6 +48,7 @@
     color: red;
 }
 
-.heartIcon:hover {
+.heartIcon:hover,
+.heartIconRed:hover {
     cursor: pointer;
 }

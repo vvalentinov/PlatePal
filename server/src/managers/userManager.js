@@ -90,3 +90,16 @@ exports.addRecipeToFavourites = async (userId, recipeId) => {
 
     return { message, result };
 };
+
+exports.getUserFavouriteRecipes = async (userId) => {
+    const user = await User
+        .findById(userId)
+        .populate('favouriteRecipes', 'name image')
+        .exec();
+
+    if (!user) {
+        throw new Error('No user with given id found!');
+    }
+
+    return user.favouriteRecipes;
+};

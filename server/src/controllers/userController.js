@@ -49,4 +49,14 @@ router.put('/add-recipe-to-favourites/:recipeId', isAuthenticated, async (req, r
     }
 });
 
+router.get('/get-user-favourite-recipes', isAuthenticated, async (req, res) => {
+    const userId = req.user._id;
+    try {
+        const result = await userManager.getUserFavouriteRecipes(userId);
+        res.status(200).json({ message: 'User favourite recipes retrieved successfully!', result });
+    } catch (error) {
+        res.status(400).json({ message: getErrorMessage(error) });
+    }
+});
+
 module.exports = router;
