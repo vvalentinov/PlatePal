@@ -156,16 +156,4 @@ router.put(
         }
     });
 
-// router.put('/add-to-favourites/:recipeId', isAuthenticated, async (req, res) => {
-//     const recipeId = req.params.recipeId;
-//     const user = req.user;
-
-//     try {
-//         const result = await recipeManager.addToFavourites(recipeId, user._id);
-//         return res.status(200).json(result);
-//     } catch (error) {
-//         res.status(400).json({ message: getErrorMessage(error) });
-//     }
-// });
-
 module.exports = router;
