@@ -28,41 +28,16 @@ const RecipesList = ({
     const navigate = useNavigate();
 
     useEffect(() => {
-        switch (recipeType) {
-            case 'all':
-                recipeService.getAllUserRecipes(searchQuery, currentPage)
-                    .then(res => {
-                        setRecipes(res.result);
-                        setTotalPages(res.totalPages);
-                    })
-                    .catch(error => handleToast(error.message));
-                break;
-            case 'approved':
-                recipeService.getApprovedUserRecipes(searchQuery, currentPage)
-                    .then(res => {
-                        setRecipes(res.result);
-                        setTotalPages(res.totalPages);
-                    })
-                    .catch(error => handleToast(error.message));
-                break;
-            case 'unapproved':
-                recipeService.getUnapprovedUserRecipes(searchQuery)
-                    .then(res => {
-                        setRecipes(res.result);
-                        setTotalPages(res.totalPages);
-                    })
-                    .catch(error => handleToast(error.message));
-                break;
-            default:
-                recipeService.getAllUserRecipes(searchQuery, currentPage)
-                    .then(res => {
-                        setRecipes(res.result);
-                        setTotalPages(res.totalPages);
-                    })
-                    .catch(error => handleToast(error.message))
-                    .finally(() => navigate('/recipes/user-recipes/all'));
-                break;
+        if (recipeType !== 'all' && recipeType !== 'approved' && recipeType !== 'unapproved') {
+            navigate('/recipes/user-recipes/all');
         }
+
+        recipeService.getAllUserRecipes(searchQuery, currentPage, recipeType)
+            .then(res => {
+                setRecipes(res.result);
+                setTotalPages(res.totalPages);
+            })
+            .catch(error => handleToast(error.message));
     }, [recipeType, searchQuery, currentPage]);
 
     return (
@@ -89,12 +64,14 @@ const RecipesList = ({
                         link={`/recipe/details/${recipe._id}`} />)
                 }
             </div>
+
             {totalPages > 1 && (
                 <div className={styles.paginationContainer}>
                     <PaginationComponent
                         pagesCount={totalPages}
                         currentPage={currentPage}
-                        setCurrentPage={(number) => setCurrentPage(number)} />
+                        setCurrentPage={(number) => setCurrentPage(number)}
+                    />
                 </div>
             )}
         </>

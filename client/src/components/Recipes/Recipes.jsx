@@ -26,12 +26,9 @@ const Recipes = () => {
     const pageNumber = parseInt(searchParams.get('page'));
 
     useEffect(() => {
-
         if ((isNaN(pageNumber) || !pageNumber) && totalPages > 1) {
             setSearchParams({ page: 1 });
         }
-
-
 
         recipeService.getAllInCategory(category, pageNumber)
             .then(res => {

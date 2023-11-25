@@ -139,11 +139,13 @@ const UserRecipesList = () => {
             </div>
             <h2 className='text-center'>{title}</h2>
             <RecipesList
-                setCurrentPage={(number) => setSearchParams(
-                    {
-                        search: searchName ? searchName : '',
-                        page: number
-                    })}
+                setCurrentPage={(number) => {
+                    if (searchParams.get('search')) {
+                        setSearchParams({ search: searchName, page: number });
+                    } else {
+                        setSearchParams({ page: number });
+                    }
+                }}
                 currentPage={pageNumber}
                 handleToast={handleToast}
                 recipeType={recipeType}

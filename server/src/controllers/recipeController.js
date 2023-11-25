@@ -72,70 +72,33 @@ router.put(routes.approveRecipeRoute, isAdmin, async (req, res) => {
     }
 });
 
-router.get(
-    routes.getAllUserRecipesRoute,
-    isAuthenticated,
-    isRecipeNameCorrectFormat,
-    async (req, res) => {
-        const userId = req.user._id;
-        const searchName = req.query.searchName;
-        const page = parseInt(req.query.page || "1");
+router.get('/user-recipes/:recipeType', isAuthenticated, async (req, res) => {
+    const userId = req.user._id;
+    const recipeType = req.params.recipeType;
+    const searchName = req.query.searchName;
+    const page = parseInt(req.query.page || "1");
 
-        try {
-            const { recipes, totalPages } = await recipeManager.getUserRecipes
-                (userId, searchName, page);
+    try {
+        const result = await recipeManager.getUserRecipes
+            (
+                userId,
+                searchName,
+                page,
+                recipeType
+            );
 
-            res.status(200).json({
-                message: "User recipes retrieved successfully!",
-                result: recipes,
-                totalPages
-            });
-        } catch (error) {
-            res.status(400).json({ message: getErrorMessage(error) });
-        }
-    });
-
-router.get(
-    routes.getApprovedUserRecipesRoute,
-    isAuthenticated,
-    isRecipeNameCorrectFormat,
-    async (req, res) => {
-        const userId = req.user._id;
-        const searchName = req.query.searchName;
-        const page = parseInt(req.query.page || "1");
-
-        try {
-            const { recipes, totalPages } = await recipeManager.getUserApprovedRecipes(userId, searchName, page);
-            res.status(200).json({
-                message: "User approved recipes retrieved successfully!",
-                result: recipes,
-                totalPages
-            });
-        } catch (error) {
-            res.status(400).json({ message: getErrorMessage(error) });
-        }
-    });
-
-router.get(
-    routes.getUnapprovedUserRecipesRoute,
-    isAuthenticated,
-    isRecipeNameCorrectFormat,
-    async (req, res) => {
-        const userId = req.user._id;
-        const searchName = req.query.searchName;
-        const page = parseInt(req.query.page || "1");
-
-        try {
-            const { recipes, totalPages } = await recipeManager.getUserUnapprovedRecipes(userId, searchName, page);
-            res.status(200).json({
-                message: "User unapproved recipes retrieved successfully!",
-                result: recipes,
-                totalPages
-            });
-        } catch (error) {
-            res.status(400).json({ message: getErrorMessage(error) });
-        }
-    });
+        res.status(200).json
+            (
+                {
+                    message: "User recipes retrieved successfully!",
+                    result: result.recipes,
+                    totalPages: result.totalPages
+                }
+            );
+    } catch (error) {
+        res.status(400).json({ message: getErrorMessage(error) });
+    }
+})
 
 router.delete(routes.deleteRecipeRoute, isAuthenticated, async (req, res) => {
     const recipeId = req.params.recipeId;
