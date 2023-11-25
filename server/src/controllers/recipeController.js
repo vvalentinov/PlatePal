@@ -79,10 +79,17 @@ router.get(
     async (req, res) => {
         const userId = req.user._id;
         const searchName = req.query.searchName;
+        const page = parseInt(req.query.page || "1");
 
         try {
-            const recipes = await recipeManager.getUserRecipes(userId, searchName);
-            res.status(200).json({ message: "User recipes retrieved successfully!", result: recipes });
+            const { recipes, totalPages } = await recipeManager.getUserRecipes
+                (userId, searchName, page);
+
+            res.status(200).json({
+                message: "User recipes retrieved successfully!",
+                result: recipes,
+                totalPages
+            });
         } catch (error) {
             res.status(400).json({ message: getErrorMessage(error) });
         }
@@ -95,10 +102,15 @@ router.get(
     async (req, res) => {
         const userId = req.user._id;
         const searchName = req.query.searchName;
+        const page = parseInt(req.query.page || "1");
 
         try {
-            const recipes = await recipeManager.getUserApprovedRecipes(userId, searchName);
-            res.status(200).json({ message: "User approved recipes retrieved successfully!", result: recipes });
+            const { recipes, totalPages } = await recipeManager.getUserApprovedRecipes(userId, searchName, page);
+            res.status(200).json({
+                message: "User approved recipes retrieved successfully!",
+                result: recipes,
+                totalPages
+            });
         } catch (error) {
             res.status(400).json({ message: getErrorMessage(error) });
         }
@@ -111,10 +123,15 @@ router.get(
     async (req, res) => {
         const userId = req.user._id;
         const searchName = req.query.searchName;
+        const page = parseInt(req.query.page || "1");
 
         try {
-            const recipes = await recipeManager.getUserUnapprovedRecipes(userId, searchName);
-            res.status(200).json({ message: "User unapproved recipes retrieved successfully!", result: recipes });
+            const { recipes, totalPages } = await recipeManager.getUserUnapprovedRecipes(userId, searchName, page);
+            res.status(200).json({
+                message: "User unapproved recipes retrieved successfully!",
+                result: recipes,
+                totalPages
+            });
         } catch (error) {
             res.status(400).json({ message: getErrorMessage(error) });
         }

@@ -155,48 +155,87 @@ exports.approveRecipe = async (recipeId) => {
     return recipe;
 };
 
-exports.getUserRecipes = async (userId, searchName) => {
+exports.getUserRecipes = async (userId, searchName, pageNumber) => {
     const user = await userManager.getById(userId);
     if (!user) {
         throw new Error('No user with given id found!');
     }
 
-    const recipes = Recipe.find({
-        owner: userId,
-        name: new RegExp(searchName, 'i'),
-    }).select('_id image name');
+    const total = await Recipe.countDocuments
+        ({
+            owner: userId,
+            name: new RegExp(searchName, 'i'),
+        });
 
-    return recipes;
+    const totalPages = Math.ceil(total / 6);
+
+    const recipes = await Recipe.find
+        ({
+            owner: userId,
+            name: new RegExp(searchName, 'i'),
+        })
+        .limit(6)
+        .skip((6 * pageNumber) - 6)
+        .select('_id image name')
+        .lean();
+
+    return { recipes, totalPages };
 };
 
-exports.getUserApprovedRecipes = async (userId, searchName) => {
+exports.getUserApprovedRecipes = async (userId, searchName, pageNumber) => {
     const user = await userManager.getById(userId);
     if (!user) {
         throw new Error('No user with given id found!');
     }
 
-    const recipes = Recipe.find({
+    const total = await Recipe.countDocuments
+        ({
+            owner: userId,
+            isApproved: true,
+            name: new RegExp(searchName, 'i')
+        });
+
+    const totalPages = Math.ceil(total / 6);
+
+    const recipes = await Recipe.find({
         owner: userId,
         isApproved: true,
         name: new RegExp(searchName, 'i')
-    }).select('_id image name');
+    })
+        .limit(6)
+        .skip((6 * pageNumber) - 6)
+        .select('_id image name')
+        .lean();
 
-    return recipes;
+    return { recipes, totalPages };
 }
 
-exports.getUserUnapprovedRecipes = async (userId, searchName) => {
+exports.getUserUnapprovedRecipes = async (userId, searchName, pageNumber) => {
     const user = await userManager.getById(userId);
     if (!user) {
         throw new Error('No user with given id found!');
     }
 
-    const recipes = Recipe.find({
+    const total = await Recipe.countDocuments
+        ({
+            owner: userId,
+            isApproved: false,
+            name: new RegExp(searchName, 'i')
+        });
+
+    const totalPages = Math.ceil(total / 6);
+
+    const recipes = await Recipe.find({
         owner: userId,
         isApproved: false,
         name: new RegExp(searchName, 'i')
-    }).select('_id image name');
+    })
+        .limit(6)
+        .skip((6 * pageNumber) - 6)
+        .select('_id image name')
+        .lean();
 
-    return recipes;
+    return { recipes, totalPages };
 }
 
 exports.deleteRecipe = async (userId, recipeId) => {
