@@ -1,36 +1,35 @@
 import styles from './Recipes.module.css';
 
-import Pagination from 'react-bootstrap/Pagination';
+import PaginationComponent from '../Pagination/Pagination';
 
 import RecipeCardLink from '../RecipeCardLink/RecipeCardLink';
 import NoRecipesCard from './NoRecipesCard/NoRecipesCard';
+import BackToTopArrow from '../BackToTopArrow/BackToTopArrow';
 
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate, useSearchParams, Link } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 
 import { recipeServiceFactory } from '../../services/recipeService';
 import { useService } from '../../hooks/useService';
-
 import { categoriesListPath } from '../../constants/pathNames';
 
 const Recipes = () => {
+    const recipeService = useService(recipeServiceFactory);
+
     const [searchParams, setSearchParams] = useSearchParams();
     const { category } = useParams();
     const navigate = useNavigate();
 
-
-
     const [recipes, setRecipes] = useState([]);
     const [totalPages, setTotalPages] = useState(1);
 
-    const recipeService = useService(recipeServiceFactory);
-
     const pageNumber = parseInt(searchParams.get('page'));
-    if (isNaN(pageNumber)) {
-        setSearchParams({ page: 1 })
-    }
 
     useEffect(() => {
+        if (isNaN(pageNumber) && totalPages > 1) {
+            setSearchParams({ page: 1 });
+        }
+
         recipeService.getAllInCategory(category, pageNumber)
             .then(res => {
                 setRecipes(res.result);
@@ -41,18 +40,6 @@ const Recipes = () => {
                 navigate(categoriesListPath, { state });
             });
     }, [category, pageNumber]);
-
-    let items = [];
-    for (let number = 1; number <= totalPages; number++) {
-        items.push(
-            <Pagination.Item
-                onClick={() => setSearchParams({ page: number })}
-                key={number}
-                active={number === parseInt(searchParams.get('page'))}>
-                {number}
-            </Pagination.Item>,
-        );
-    }
 
     return (
         <>
@@ -73,25 +60,19 @@ const Recipes = () => {
 
             {totalPages > 1 && (
                 <div className={styles.paginationContainer}>
-                    <Pagination size='lg'>
-                        {/* <Pagination.First /> */}
-                        <Pagination.Prev disabled={pageNumber === 1} onClick={() => setSearchParams({ page: pageNumber - 1 })} />
-                        {items}
-                        {/* <Pagination.Ellipsis /> */}
-
-                        {/* <Pagination.Ellipsis /> */}
-                        <Pagination.Next
-                            onClick={() => setSearchParams({ page: pageNumber + 1 })}
-                            disabled={pageNumber === totalPages} />
-                        {/* <Pagination.Last /> */}
-                    </Pagination>
+                    <PaginationComponent
+                        pagesCount={20}
+                        currentPage={parseInt(searchParams.get('page'))}
+                        setCurrentPage={(number) => {
+                            setSearchParams({ page: number });
+                            console.log(number);
+                        }}
+                    />
                 </div>
             )}
-
+            <BackToTopArrow />
         </>
     );
 };
-
-
 
 export default Recipes;

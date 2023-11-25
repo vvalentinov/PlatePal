@@ -26,5 +26,6 @@
 .paginationContainer {
     display: flex;
     justify-content: center;
-    /* border: solid 2px black; */
+    /* margin: 0 2rem;
+    border: solid 2px black; */
 }
