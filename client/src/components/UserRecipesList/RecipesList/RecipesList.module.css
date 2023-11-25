@@ -27,3 +27,8 @@
 .noRecipesMessage {
     font-size: 2.5rem;
 }
+
+.paginationContainer {
+    display: flex;
+    justify-content: center;
+}

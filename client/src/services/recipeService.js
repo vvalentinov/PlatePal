@@ -10,12 +10,12 @@ export const recipeServiceFactory = (token) => {
             request.post(`${baseUrl}/create`, data),
         getRecipe: (recipeId) =>
             request.get(`${baseUrl}/details/${recipeId}`),
-        getAllUserRecipes: (searchQuery) =>
-            request.get(`${baseUrl}/user-recipes?searchName=${searchQuery}`),
-        getApprovedUserRecipes: (searchQuery) =>
-            request.get(`${baseUrl}/user-recipes/approved?searchName=${searchQuery}`),
-        getUnapprovedUserRecipes: (searchQuery) =>
-            request.get(`${baseUrl}/user-recipes/unapproved?searchName=${searchQuery}`),
+        getAllUserRecipes: (searchQuery, pageNumber) =>
+            request.get(`${baseUrl}/user-recipes?searchName=${searchQuery}&page=${pageNumber}`),
+        getApprovedUserRecipes: (searchQuery, pageNumber) =>
+            request.get(`${baseUrl}/user-recipes/approved?searchName=${searchQuery}&page=${pageNumber}`),
+        getUnapprovedUserRecipes: (searchQuery, pageNumber) =>
+            request.get(`${baseUrl}/user-recipes/unapproved?searchName=${searchQuery}&page=${pageNumber}`),
         approveRecipe: (recipeId) =>
             request.put(`${baseUrl}/approve/${recipeId}`),
         getEditDetails: (recipeId) =>
