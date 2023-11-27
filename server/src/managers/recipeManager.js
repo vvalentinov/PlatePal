@@ -87,7 +87,11 @@ exports.edit = async (recipeId, data, recipeImage, owner) => {
     return editedRecipe;
 };
 
-exports.getAll = async (categoryName, pageNumber) => {
+exports.getAll = async (categoryName, pageNumber, searchName) => {
+    if (pageNumber < 1) {
+        throw new Error('Page number must be bigger or equal to 1!');
+    }
+
     const category = await categoryManager.getByName(categoryName);
     if (!category) {
         throw new Error(categoryErrors.categoryInvalidError);
@@ -96,7 +100,8 @@ exports.getAll = async (categoryName, pageNumber) => {
     const total = await Recipe.countDocuments
         ({
             category: category._id,
-            isApproved: true
+            isApproved: true,
+            name: new RegExp(searchName, 'i')
         });
 
     const totalPages = Math.ceil(total / 6);
@@ -104,7 +109,8 @@ exports.getAll = async (categoryName, pageNumber) => {
     const recipes = await Recipe.find
         ({
             category: category._id,
-            isApproved: true
+            isApproved: true,
+            name: new RegExp(searchName, 'i')
         })
         .limit(6)
         .skip((6 * pageNumber) - 6)

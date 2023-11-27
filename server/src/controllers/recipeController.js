@@ -34,10 +34,11 @@ router.post(
 router.get(routes.getRecipesInCategoryRoute, async (req, res) => {
     const category = req.params.categoryName;
 
+    const searchName = req.query.searchName;
     const page = parseInt(req.query.page || "1");
 
     try {
-        const { recipes, totalPages } = await recipeManager.getAll(category, page);
+        const { recipes, totalPages } = await recipeManager.getAll(category, page, searchName);
         res.status(200).json({ message: successMsg.getRecipesInCategorySuccess, result: recipes, totalPages });
     } catch (error) {
         res.status(400).json({ message: getErrorMessage(error) });

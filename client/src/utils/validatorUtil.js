@@ -69,11 +69,11 @@ export const categoryFileValidator = (file) => {
 };
 
 export const recipeNameValidator = (name) => {
-    if (!name) {
-        return 'Recipe name is required!';
-    }
+    // if (!name) {
+    //     return 'Recipe name is required!';
+    // }
 
-    if (name.length < 2 || name.length > 100) {
+    if (name && name.length < 2 || name.length > 100) {
         return 'Recipe name must be between 2 and 100 characters long!';
     }
 
