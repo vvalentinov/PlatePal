@@ -21,10 +21,8 @@ import RecipeCardLink from '../RecipeCardLink/RecipeCardLink';
 
 const Home = () => {
     const [recentRecipes, setRecentRecipes] = useState([]);
-    const [toast, setToast] = useState({
-        message: '',
-        isSuccessfull: false
-    });
+    const [topRatedRecipes, setTopRatedRecipes] = useState([]);
+    const [toast, setToast] = useState({ message: '', isSuccessfull: false });
 
     const recipeService = useService(recipeServiceFactory);
 
@@ -33,8 +31,11 @@ const Home = () => {
     useEffect(() => {
         recipeService.getMostRecent()
             .then(res => setRecentRecipes(res.result))
-            .catch(error => setToast({ message: error.message, isSuccessfull: false }))
-            .finally(() => window.scrollTo(0, 0));
+            .catch(error => setToast({ message: error.message, isSuccessfull: false }));
+
+        recipeService.getTopRated()
+            .then(res => setTopRatedRecipes(res.result))
+            .catch(error => setToast({ message: error.message, isSuccessfull: false }));
     }, []);
 
     return (
@@ -66,13 +67,28 @@ const Home = () => {
                 </section>
             )}
             {recentRecipes && (
-                <div className={styles.recipesContainer}>
-                    {recentRecipes.map(recipe => <RecipeCardLink
-                        key={recipe._id}
-                        recipe={recipe}
-                        link={`/recipe/details/${recipe._id}`} />
-                    )}
-                </div>
+                <section className={styles.recipesSection}>
+                    <h2>Recent Recipes</h2>
+                    <div className={styles.recipesContainer}>
+                        {recentRecipes.map(recipe => <RecipeCardLink
+                            key={recipe._id}
+                            recipe={recipe}
+                            link={`/recipe/details/${recipe._id}`} />
+                        )}
+                    </div>
+                </section>
+            )}
+            {topRatedRecipes && (
+                <section className={styles.recipesSection}>
+                    <h2>Top Rated Recipes</h2>
+                    <div className={styles.recipesContainer}>
+                        {topRatedRecipes.map(recipe => <RecipeCardLink
+                            key={recipe._id}
+                            recipe={recipe}
+                            link={`/recipe/details/${recipe._id}`} />
+                        )}
+                    </div>
+                </section>
             )}
             <BackToTopArrow />
         </>

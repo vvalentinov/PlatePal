@@ -24,6 +24,8 @@ export const recipeServiceFactory = (token) => {
         delete: (recipeId) =>
             authorizedRequest.delete(`${baseUrl}/delete/${recipeId}`),
         getMostRecent: () =>
-            anonymousRequest.get(`${baseUrl}/get-most-recent`)
+            anonymousRequest.get(`${baseUrl}/get-most-recent`),
+        getTopRated: () =>
+            anonymousRequest.get(`${baseUrl}/get-top-rated`)
     }
 };
