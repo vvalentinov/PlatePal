@@ -33,7 +33,7 @@ const Categories = () => {
                 onExited={() => window.history.replaceState(null, "")}
                 message={state.toastMsg}
                 isSuccessfull={false} />}
-            <section>
+            <section className={styles.categoriesSection}>
                 <h2 className={styles.heading}>
                     {
                         isLoading ? 'Category List - Loading...' : `Category List (${categories.length})`

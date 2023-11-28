@@ -42,7 +42,7 @@ const Register = () => {
     const [passwordError, setPasswordError] = useState('');
     const [repeatPassError, setRepeatPassError] = useState('');
 
-    const authService = useService(authServiceFactory);
+    const authService = useService(authServiceFactory, false);
 
     const { userLogin } = useContext(AuthContext);
 

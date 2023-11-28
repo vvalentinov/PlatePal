@@ -135,8 +135,8 @@ exports.getRecipeDetails = async (recipeId, userId) => {
 
     const user = await userManager.getById(userId);
     if (user) {
-        const isAdded = user.favouriteRecipes.includes(recipeId);
-        populatedRecipe = { ...populatedRecipe, isAdded };
+        const isFavourite = user.favouriteRecipes.includes(recipeId);
+        populatedRecipe = { ...populatedRecipe, isFavourite };
     }
 
     populatedRecipe.averageRating = populatedRecipe.averageRating.toFixed(1);

@@ -14,12 +14,7 @@ import { useService } from '../../../../hooks/useService';
 
 import useForm from '../../../../hooks/useForm';
 
-const EditCommentBtn = ({
-    commentId,
-    text,
-    recipeId,
-    onCommentEdit
-}) => {
+const EditCommentBtn = ({ commentId, text, recipeId, onCommentEdit }) => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);

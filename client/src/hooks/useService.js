@@ -1,8 +1,12 @@
 import { useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 
-export const useService = (serviceFactory) => {
-    const { token } = useContext(AuthContext);
+export const useService = (serviceFactory, authorized = true) => {
+    let authToken;
+    if (authorized) {
+        const { token } = useContext(AuthContext);
+        authToken = token;
+    }
 
-    return serviceFactory(token);
+    return authorized ? serviceFactory(authToken) : serviceFactory();
 };

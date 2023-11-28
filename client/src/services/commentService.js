@@ -3,16 +3,15 @@ import { requestFactory } from './requester';
 const baseUrl = 'http://localhost:3000/comment';
 
 export const commentServiceFactory = (token) => {
-    const authorizedRequest = requestFactory(token);
-    const anonymousRequest = requestFactory();
+    const request = requestFactory(token);
 
     return {
-        create: (data) => authorizedRequest.post(`${baseUrl}/create`, data),
-        edit: (commentId, data) => authorizedRequest.put(`${baseUrl}/edit/${commentId}`, data),
-        delete: (commentId) => authorizedRequest.delete(`${baseUrl}/delete/${commentId}`),
-        like: (commentId) => authorizedRequest.put(`${baseUrl}/like/${commentId}`),
-        getAll: (recipeId) => anonymousRequest.get(`${baseUrl}/all/${recipeId}`),
-        getSortedCommentsByLikes: (recipeId) => anonymousRequest.get(`${baseUrl}/getSortedCommentsByLikes/${recipeId}`),
-        getUserComments: (recipeId) => authorizedRequest.get(`${baseUrl}/user-comments/${recipeId}`)
+        create: (data) => request.post(`${baseUrl}/create`, data),
+        edit: (commentId, data) => request.put(`${baseUrl}/edit/${commentId}`, data),
+        delete: (commentId) => request.delete(`${baseUrl}/delete/${commentId}`),
+        like: (commentId) => request.put(`${baseUrl}/like/${commentId}`),
+        getAll: (recipeId) => request.get(`${baseUrl}/all/${recipeId}`),
+        getSortedCommentsByLikes: (recipeId) => request.get(`${baseUrl}/getSortedCommentsByLikes/${recipeId}`),
+        getUserComments: (recipeId) => request.get(`${baseUrl}/user-comments/${recipeId}`)
     }
 };

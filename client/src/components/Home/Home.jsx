@@ -24,7 +24,7 @@ const Home = () => {
     const [topRatedRecipes, setTopRatedRecipes] = useState([]);
     const [toast, setToast] = useState({ message: '', isSuccessfull: false });
 
-    const recipeService = useService(recipeServiceFactory);
+    const recipeService = useService(recipeServiceFactory, false);
 
     const { isAuthenticated, isAdmin } = useContext(AuthContext);
 

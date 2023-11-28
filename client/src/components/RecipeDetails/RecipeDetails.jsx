@@ -34,7 +34,7 @@ const RecipeDetails = () => {
 
     const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
     const [recipe, setRecipe] = useState();
-    const [isAdded, setIsAdded] = useState(false);
+    const [isFavourite, setIsFavourite] = useState(false);
     const [toast, setToast] = useState({ message: '', isSuccessfull: false });
 
     const recipeService = useService(recipeServiceFactory);
@@ -45,14 +45,14 @@ const RecipeDetails = () => {
         recipeService.getRecipe(recipeId)
             .then(res => {
                 setRecipe(res.result);
-                setIsAdded(res.result.isAdded);
+                setIsFavourite(res.result.isFavourite);
             })
             .catch(error => setToast({ message: error.message, isSuccessfull: false }))
             .finally(() => setIsSpinnerLoading(false));
     }, [recipeId]);
 
-    const handleAddRecipeToFavourites = (result) => {
-        setIsAdded(result);
+    const handleAddingRecipeToFavourites = (result) => {
+        setIsFavourite(result);
         let message;
         if (result) {
             message = 'Successfully added to favourites!';
@@ -95,11 +95,11 @@ const RecipeDetails = () => {
                     <section className={styles.container}>
                         <img src={recipe.image.url} alt={`Recipe Image: ${recipe.name}`} />
                         <RecipeDescriptionCard
-                            {...recipe}
-                            isRecipeOwner={isRecipeOwner}
-                            isAdded={isAdded}
+                            recipe={recipe}
                             recipeId={recipeId}
-                            handleAddRecipeToFavourites={handleAddRecipeToFavourites} />
+                            isRecipeOwner={isRecipeOwner}
+                            isFavourite={isFavourite}
+                            handleAddingRecipeToFavourites={handleAddingRecipeToFavourites} />
                     </section>
 
                     <section className={styles.recipePropertiesContainer}>
@@ -143,7 +143,6 @@ const RecipeDetails = () => {
                                     onRatingSubmit={handleRatingRecipe}
                                     userRating={recipe.userRating} />
                             }
-
                             {
                                 isRecipeOwner &&
                                 <DeleteRecipe

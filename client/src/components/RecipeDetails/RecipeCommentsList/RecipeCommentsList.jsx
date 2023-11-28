@@ -22,7 +22,8 @@ import { getFormattedDate } from './getFormattedDateUtil';
 import NoCommentsCard from './../NoCommentsCard/NoCommentsCard';
 
 const RecipeCommentsList = ({ recipeId }) => {
-    const commentService = useService(commentServiceFactory);
+    const commentService = useService(commentServiceFactory, false);
+    const commentAuthService = useService(commentServiceFactory);
 
     const { userId, isAuthenticated } = useContext(AuthContext);
 
@@ -37,17 +38,17 @@ const RecipeCommentsList = ({ recipeId }) => {
     const isCommentLiked = (comment) => comment.userLikes.includes(userId);
 
     const onCommentLike = (commentId) => {
-        commentService.like(commentId)
+        commentAuthService.like(commentId)
             .then(res => setComments(comments =>
-                comments.map(comment => (comment._id === commentId) ? res.result : comment)))
+                comments.map(x => (x._id === commentId) ? res.result : x)))
             .catch(error => console.log(error.message));
     };
 
     const onCommentEdit = (newComment, commentId) => setComments(comments =>
-        comments.map(comment => (comment._id === commentId) ? newComment : comment));
+        comments.map(x => (x._id === commentId) ? newComment : x));
 
     const onCommentDelete = (commentId) => setComments(state =>
-        state.filter(comment => comment._id !== commentId));
+        state.filter(x => x._id !== commentId));
 
     const getSortedCommentsHandler = () => {
         commentService.getSortedCommentsByLikes(recipeId)
@@ -56,7 +57,7 @@ const RecipeCommentsList = ({ recipeId }) => {
     };
 
     const getUserCommentsHandler = () => {
-        commentService.getUserComments(recipeId)
+        commentAuthService.getUserComments(recipeId)
             .then(res => setComments(res.result))
             .catch(error => console.log(error));
     };

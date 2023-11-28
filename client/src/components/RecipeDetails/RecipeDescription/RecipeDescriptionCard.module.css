@@ -39,7 +39,8 @@
     color: #93DC80;
 }
 
-.heartIcon {
+.heartIcon,
+.headrtIconGuest {
     margin-right: 0.5rem;
 }
 
