@@ -84,3 +84,15 @@ export const recipeNameValidator = (name) => {
 
     return '';
 };
+
+export const commentValidator = (comment) => {
+    if (!comment) {
+        return 'Comment is required!';
+    }
+
+    if (comment.length < 4 || comment.length > 540) {
+        return 'Comment must be between 4 and 540 characters long!';
+    }
+
+    return '';
+};

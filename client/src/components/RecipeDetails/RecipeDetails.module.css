@@ -22,17 +22,6 @@
     background-color: #B9CCE2;
 }
 
-.commentsSection {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    font-size: 1.5rem;
-    gap: 3rem;
-    padding: 2rem 0;
-    background-color: #008F92;
-}
-
 .youtubeVideoSection {
     display: flex;
     justify-content: center;

@@ -2,12 +2,8 @@ import styles from './RecipeDescriptionCard.module.css';
 
 import Card from 'react-bootstrap/Card';
 
-import { AuthContext } from '../../../contexts/AuthContext';
-
 import { useContext } from 'react';
-
 import { Link } from 'react-router-dom';
-
 import { HashLink } from 'react-router-hash-link';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -19,28 +15,28 @@ import {
     faComment,
     faHeart as faHeartSolid
 } from '@fortawesome/free-solid-svg-icons';
-
 import { faHeart as faRegularHeart } from '@fortawesome/free-regular-svg-icons';
+
+import { userServiceFactory } from '../../../services/userService';
+import { useService } from '../../../hooks/useService';
+import { AuthContext } from '../../../contexts/AuthContext';
 
 const RecipeDescriptionCard = ({
     recipe,
     recipeId,
     isRecipeOwner,
     isFavourite,
-    handleAddingRecipeToFavourites
+    handleAddingRecipeToFavourites,
+    handleToast
 }) => {
-    const { isAuthenticated, token } = useContext(AuthContext);
+    const userService = useService(userServiceFactory);
+    const { isAuthenticated } = useContext(AuthContext);
 
     const onHeartClick = () => {
         if (isAuthenticated) {
-            fetch(`http://localhost:3000/user/add-recipe-to-favourites/${recipeId}`,
-                {
-                    method: 'PUT',
-                    headers: { 'X-Authorization': token }
-                })
-                .then(res => res.json())
+            userService.addRecipeToFavorites(recipeId)
                 .then(res => handleAddingRecipeToFavourites(res.result))
-                .catch(error => console.log(error.message));
+                .catch(error => handleToast({ message: error.message, isSuccessfull: false }));
         }
     };
 
@@ -72,7 +68,12 @@ const RecipeDescriptionCard = ({
                 </Card.Title>
                 <Card.Title>
                     <FontAwesomeIcon size='lg' icon={faRectangleList} className='me-2' />
-                    Category: <Link className={styles.categoryLink} to={`/recipe/all/${recipe.category.name}`}>{recipe.category.name}</Link>
+                    Category: <Link
+                        target='_blank'
+                        className={styles.categoryLink}
+                        to={`/recipe/all/${recipe.category.name}`}>
+                        {recipe.category.name}
+                    </Link>
                 </Card.Title>
                 <Card.Title>
                     <FontAwesomeIcon icon={faStar} className='me-2' size='lg' />

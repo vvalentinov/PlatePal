@@ -1,4 +1,4 @@
-import styles from './RecipeCommentsList.module.css';
+import styles from './RecipeCommentsSection.module.css';
 
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
@@ -19,21 +19,26 @@ import { useService } from '../../../hooks/useService';
 
 import { getFormattedDate } from './getFormattedDateUtil';
 
-import NoCommentsCard from './../NoCommentsCard/NoCommentsCard';
+import NoCommentsCard from '../NoCommentsCard/NoCommentsCard';
+
+const FilterBtnsKeys = {
+    ByLikesDesc: 'ByLikesDesc',
+    ByDateAsc: 'ByDateAsc',
+    ByDateDesc: 'ByDateDesc',
+    UserComments: 'UserComments',
+};
 
 const RecipeCommentsList = ({ recipeId }) => {
     const commentService = useService(commentServiceFactory, false);
     const commentAuthService = useService(commentServiceFactory);
 
+    const [comments, setComments] = useState([]);
+    const [currentBtn, setCurrentBtn] = useState(FilterBtnsKeys.ByDateDesc);
+    const [isSpinning, setIsSpinning] = useState(false);
+
     const { userId, isAuthenticated } = useContext(AuthContext);
 
-    const [comments, setComments] = useState([]);
-
-    useEffect(() => {
-        commentService.getAll(recipeId)
-            .then(res => setComments(res.result))
-            .catch(error => console.log(error.message));
-    }, [recipeId]);
+    useEffect(() => getSortedCommentsByDateDescHandler(), [recipeId]);
 
     const isCommentLiked = (comment) => comment.userLikes.includes(userId);
 
@@ -50,13 +55,29 @@ const RecipeCommentsList = ({ recipeId }) => {
     const onCommentDelete = (commentId) => setComments(state =>
         state.filter(x => x._id !== commentId));
 
-    const getSortedCommentsHandler = () => {
+    const getSortedCommentsByLikesHandler = () => {
+        setCurrentBtn(FilterBtnsKeys.ByLikesDesc);
         commentService.getSortedCommentsByLikes(recipeId)
             .then(res => setComments(res.result))
             .catch(error => console.log(error.message));
     };
 
+    const getSortedCommentsByDateAscHandler = () => {
+        setCurrentBtn(FilterBtnsKeys.ByDateAsc);
+        commentService.getSortedCommentsByDateAsc(recipeId)
+            .then(res => setComments(res.result))
+            .catch(error => console.log(error.message));
+    };
+
+    const getSortedCommentsByDateDescHandler = () => {
+        setCurrentBtn(FilterBtnsKeys.ByDateDesc);
+        commentService.getAll(recipeId)
+            .then(res => setComments(res.result))
+            .catch(error => console.log(error.message));
+    };
+
     const getUserCommentsHandler = () => {
+        setCurrentBtn(FilterBtnsKeys.UserComments);
         commentAuthService.getUserComments(recipeId)
             .then(res => setComments(res.result))
             .catch(error => console.log(error));
@@ -67,27 +88,53 @@ const RecipeCommentsList = ({ recipeId }) => {
     const isCommentAuthor = (commentUserId) => commentUserId === userId || !isAuthenticated;
 
     return (
-        <>
-            {isAuthenticated && (
-                <>
-                    <PostRecipeComment recipeId={recipeId} onCommentSubmit={onCommentSubmit} />
-
-                    <div className={styles.container}>
-                        <Button
-                            bsPrefix={styles.sortFilterCommentsBtn}
-                            onClick={getSortedCommentsHandler}>
-                            Sort All Comments By Likes Desc
-                        </Button>
-                        <Button
-                            bsPrefix={styles.sortFilterCommentsBtn}
-                            onClick={getUserCommentsHandler}>
-                            Show my comments
-                        </Button>
-                    </div>
-
-                </>
-            )}
-            {comments.length > 0 ? (
+        <section id='comments' className={styles.commentsSection}>
+            {isAuthenticated &&
+                <PostRecipeComment
+                    recipeId={recipeId}
+                    onCommentSubmit={onCommentSubmit} />
+            }
+            <div className={styles.container}>
+                <Button
+                    bsPrefix={
+                        currentBtn === FilterBtnsKeys.ByLikesDesc ?
+                            styles.sortFilterCommentsBtnActive :
+                            styles.sortFilterCommentsBtn
+                    }
+                    onClick={getSortedCommentsByLikesHandler}>
+                    Sort By Likes Desc
+                </Button>
+                <Button
+                    bsPrefix={
+                        currentBtn === FilterBtnsKeys.ByDateAsc ?
+                            styles.sortFilterCommentsBtnActive :
+                            styles.sortFilterCommentsBtn
+                    }
+                    onClick={getSortedCommentsByDateAscHandler}>
+                    Sort By Date Asc
+                </Button>
+                <Button
+                    bsPrefix={
+                        currentBtn === FilterBtnsKeys.ByDateDesc ?
+                            styles.sortFilterCommentsBtnActive :
+                            styles.sortFilterCommentsBtn
+                    }
+                    onClick={getSortedCommentsByDateDescHandler}>
+                    Sort By Date Desc
+                </Button>
+                {isAuthenticated && (
+                    <Button
+                        bsPrefix={
+                            currentBtn === FilterBtnsKeys.UserComments ?
+                                styles.sortFilterCommentsBtnActive :
+                                styles.sortFilterCommentsBtn
+                        }
+                        onClick={getUserCommentsHandler}>
+                        Show my comments
+                    </Button>
+                )}
+            </div>
+            {comments.length > 0 && (
                 <>
                     <h2 className='text-white text-uppercase'>Comments ({comments.length})</h2>
                     {comments.map(x => (
@@ -130,8 +177,9 @@ const RecipeCommentsList = ({ recipeId }) => {
                         </Card>
                     ))}
                 </>
-            ) : <NoCommentsCard />}
-        </>
+            )}
+            {comments.length === 0 && <NoCommentsCard />}
+        </section>
     );
 };
 

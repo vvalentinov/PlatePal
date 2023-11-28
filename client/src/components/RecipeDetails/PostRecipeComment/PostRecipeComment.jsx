@@ -18,26 +18,38 @@ import { faComment } from '@fortawesome/free-solid-svg-icons';
 
 import ToastNotification from './../../Toast/ToastNotification';
 
+import { commentValidator } from '../../../utils/validatorUtil';
+
 const PostRecipeComment = ({ recipeId, onCommentSubmit }) => {
     const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-
     const [toastMsg, setToastMsg] = useState('');
+    const [errMsg, setErrMsg] = useState('');
+
+    const handleClose = () => {
+        setShow(false);
+        setErrMsg('');
+    };
+    const handleShow = () => setShow(true);
 
     const commentService = useService(commentServiceFactory);
 
+    const onCommentBlur = () => setErrMsg(commentValidator(formValues.text));
+
     const onFormSubmit = (data) => {
-        setToastMsg('');
+        const error = commentValidator(formValues.text);
+        if (error) {
+            return setErrMsg(error);
+        }
+
         commentService.create({ ...data, recipeId, createdAt: new Date() })
             .then(res => onCommentSubmit(res.result))
             .catch(error => {
                 setToastMsg(error.message);
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
-            }).finally(() => onChangeHandler({ target: { name: 'text', value: '' } }));
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }).finally(() => {
+                onChangeHandler({ target: { name: 'text', value: '' } });
+                handleClose();
+            });
     };
 
     const {
@@ -48,7 +60,10 @@ const PostRecipeComment = ({ recipeId, onCommentSubmit }) => {
 
     return (
         <>
-            {toastMsg && <ToastNotification isSuccessfull={false} message={toastMsg} />}
+            {toastMsg && <ToastNotification
+                onExited={() => setToastMsg('')}
+                isSuccessfull={false}
+                message={toastMsg} />}
             <div className={styles.container}>
                 <Card className={styles.postCommentCard}>
                     <Card.Body>
@@ -75,17 +90,18 @@ const PostRecipeComment = ({ recipeId, onCommentSubmit }) => {
                                 name="text"
                                 value={formValues.text}
                                 onChange={onChangeHandler}
+                                onBlur={onCommentBlur}
                                 style={{ height: '300px' }}
                                 className={styles.commentArea}
                             />
                         </FloatingLabel>
+                        {errMsg && <p className='text-start text-danger'>{errMsg}</p>}
                     </Modal.Body>
                     <Modal.Footer bsPrefix={styles.modalFooter}>
                         <div className="d-grid">
                             <Button
                                 bsPrefix={styles.modalButton}
                                 type='submit'
-                                onClick={handleClose}
                                 size="lg" >
                                 Comment
                             </Button>

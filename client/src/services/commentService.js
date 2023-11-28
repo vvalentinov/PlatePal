@@ -12,6 +12,7 @@ export const commentServiceFactory = (token) => {
         like: (commentId) => request.put(`${baseUrl}/like/${commentId}`),
         getAll: (recipeId) => request.get(`${baseUrl}/all/${recipeId}`),
         getSortedCommentsByLikes: (recipeId) => request.get(`${baseUrl}/getSortedCommentsByLikes/${recipeId}`),
-        getUserComments: (recipeId) => request.get(`${baseUrl}/user-comments/${recipeId}`)
+        getUserComments: (recipeId) => request.get(`${baseUrl}/user-comments/${recipeId}`),
+        getSortedCommentsByDateAsc: (recipeId) => request.get(`${baseUrl}/get-comments-by-date-asc/${recipeId}`)
     }
 };

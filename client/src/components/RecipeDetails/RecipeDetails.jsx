@@ -7,7 +7,7 @@ import RecipeDescriptionCard from './RecipeDescription/RecipeDescriptionCard';
 import RecipeIngredientsContainer from './RecipeIngredients/RecipeIngredientsContainer';
 import RecipeStepsContainer from './RecipeSteps/RecipeStepsContainer';
 import RecipeStarRating from './RecipeStarRating/RecipeStarRating';
-import RecipeCommentsList from './RecipeCommentsList/RecipeCommentsList';
+import RecipeCommentsSection from './RecipeCommentsSection/RecipeCommentsSection';
 import BackToTopArrow from '../BackToTopArrow/BackToTopArrow';
 import ToastNotification from '../Toast/ToastNotification';
 import CustomSpinner from '../Spinner/Spinner';
@@ -81,6 +81,11 @@ const RecipeDetails = () => {
         navigate('/', { state: toast });
     };
 
+    const handleToast = (toast) => {
+        setToast(toast);
+        window.scrollTo(0, 0);
+    };
+
     return (
         <>
             {isSpinnerLoading && <CustomSpinner />}
@@ -95,13 +100,13 @@ const RecipeDetails = () => {
                     <section className={styles.container}>
                         <img src={recipe.image.url} alt={`Recipe Image: ${recipe.name}`} />
                         <RecipeDescriptionCard
+                            handleToast={handleToast}
                             recipe={recipe}
                             recipeId={recipeId}
                             isRecipeOwner={isRecipeOwner}
                             isFavourite={isFavourite}
                             handleAddingRecipeToFavourites={handleAddingRecipeToFavourites} />
                     </section>
-
                     <section className={styles.recipePropertiesContainer}>
                         <div className={styles.recipeProperty}>
                             <span>
@@ -122,7 +127,6 @@ const RecipeDetails = () => {
                             </span>
                         </div>
                     </section>
-
                     {isAuthenticated && (
                         <div className={styles.recipeCommentStarContainer}>
                             {
@@ -164,21 +168,17 @@ const RecipeDetails = () => {
                             }
                         </div>
                     )}
-
                     {recipe.youtubeLink !== 'undefined' && (
                         <div className={styles.youtubeVideoSection}>
                             <iframe src={recipe.youtubeLink} allowFullScreen></iframe>
                             <div><p>{cardTexts.youtubeVideoText}</p></div>
                         </div>
                     )}
-
                     <div className={styles.recipeInfoContainer}>
                         <RecipeIngredientsContainer ingredients={recipe.ingredients} />
                         <RecipeStepsContainer steps={recipe.steps} />
                     </div>
-                    <section id='comments' className={styles.commentsSection}>
-                        <RecipeCommentsList recipeId={recipeId} />
-                    </section>
+                    <RecipeCommentsSection recipeId={recipeId} />
                     <BackToTopArrow />
                 </>
             )}
