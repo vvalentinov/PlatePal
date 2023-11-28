@@ -7,27 +7,42 @@ import BackToTopArrow from '../BackToTopArrow/BackToTopArrow';
 import LinkUnapprovedRecipesCard from './LinkUnapprovedRecipesCard/LinkUnapprovedRecipesCard';
 import ToastNotification from '../Toast/ToastNotification';
 
-import { useContext, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useContext, useEffect, useState } from 'react';
 
 import { AuthContext } from '../../contexts/AuthContext';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 
+import { recipeServiceFactory } from '../../services/recipeService';
+import { useService } from '../../hooks/useService';
+
+import RecipeCardLink from '../RecipeCardLink/RecipeCardLink';
+
 const Home = () => {
+    const [recentRecipes, setRecentRecipes] = useState([]);
+    const [toast, setToast] = useState({
+        message: '',
+        isSuccessfull: false
+    });
+
+    const recipeService = useService(recipeServiceFactory);
+
     const { isAuthenticated, isAdmin } = useContext(AuthContext);
 
-    const { state } = useLocation();
-
-    useEffect(() => window.scrollTo(0, 0), []);
+    useEffect(() => {
+        recipeService.getMostRecent()
+            .then(res => setRecentRecipes(res.result))
+            .catch(error => setToast({ message: error.message, isSuccessfull: false }))
+            .finally(() => window.scrollTo(0, 0));
+    }, []);
 
     return (
         <>
-            {state && <ToastNotification
-                isSuccessfull={state.isSuccessfull}
-                message={state.toastMsg}
-                onExited={() => window.history.replaceState(null, "")}
+            {toast.message && <ToastNotification
+                isSuccessfull={toast.isSuccessfull}
+                message={toast.message}
+                onExited={() => setToast({ message: '', isSuccessfull: false })}
             />}
             <section className={`${styles.homeSection}`}>
                 <WelcomeCard />
@@ -49,6 +64,15 @@ const Home = () => {
                         <LinkUnapprovedRecipesCard />
                     </div>
                 </section>
+            )}
+            {recentRecipes && (
+                <div className={styles.recipesContainer}>
+                    {recentRecipes.map(recipe => <RecipeCardLink
+                        key={recipe._id}
+                        recipe={recipe}
+                        link={`/recipe/details/${recipe._id}`} />
+                    )}
+                </div>
             )}
             <BackToTopArrow />
         </>

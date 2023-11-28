@@ -3,24 +3,27 @@ import { requestFactory } from './requester';
 const baseUrl = 'http://localhost:3000/recipe';
 
 export const recipeServiceFactory = (token) => {
-    const request = requestFactory(token);
+    const authorizedRequest = requestFactory(token);
+    const anonymousRequest = requestFactory();
 
     return {
         create: (data) =>
-            request.post(`${baseUrl}/create`, data),
+            authorizedRequest.post(`${baseUrl}/create`, data),
         getAllInCategory: (categoryName, pageNumber, searchName) =>
-            request.get(`${baseUrl}/all/${categoryName}?searchName=${searchName ? searchName : ''}&page=${pageNumber}`),
+            anonymousRequest.get(`${baseUrl}/all/${categoryName}?searchName=${searchName ? searchName : ''}&page=${pageNumber}`),
         getRecipe: (recipeId) =>
-            request.get(`${baseUrl}/details/${recipeId}`),
+            anonymousRequest.get(`${baseUrl}/details/${recipeId}`),
         getAllUserRecipes: (searchQuery, pageNumber, recipeType) =>
-            request.get(`${baseUrl}/user-recipes/${recipeType}?searchName=${searchQuery ? searchQuery : ''}&page=${pageNumber}`),
+            authorizedRequest.get(`${baseUrl}/user-recipes/${recipeType}?searchName=${searchQuery ? searchQuery : ''}&page=${pageNumber}`),
         approveRecipe: (recipeId) =>
-            request.put(`${baseUrl}/approve/${recipeId}`),
+            authorizedRequest.put(`${baseUrl}/approve/${recipeId}`),
         getEditDetails: (recipeId) =>
-            request.get(`${baseUrl}/get-edit-details/${recipeId}`),
+            authorizedRequest.get(`${baseUrl}/get-edit-details/${recipeId}`),
         edit: (recipeId, data) =>
-            request.put(`${baseUrl}/edit/${recipeId}`, data),
+            authorizedRequest.put(`${baseUrl}/edit/${recipeId}`, data),
         delete: (recipeId) =>
-            request.delete(`${baseUrl}/delete/${recipeId}`)
+            authorizedRequest.delete(`${baseUrl}/delete/${recipeId}`),
+        getMostRecent: () =>
+            anonymousRequest.get(`${baseUrl}/get-most-recent`)
     }
 };

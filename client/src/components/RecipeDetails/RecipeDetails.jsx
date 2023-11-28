@@ -35,8 +35,7 @@ const RecipeDetails = () => {
     const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
     const [recipe, setRecipe] = useState();
     const [isAdded, setIsAdded] = useState(false);
-    const [errorToast, setErrorToast] = useState('');
-    const [successToast, setSuccessToast] = useState('');
+    const [toast, setToast] = useState({ message: '', isSuccessfull: false });
 
     const recipeService = useService(recipeServiceFactory);
 
@@ -48,18 +47,21 @@ const RecipeDetails = () => {
                 setRecipe(res.result);
                 setIsAdded(res.result.isAdded);
             })
-            .catch(error => setErrorToast(error.message))
+            .catch(error => setToast({ message: error.message, isSuccessfull: false }))
             .finally(() => setIsSpinnerLoading(false));
     }, [recipeId]);
 
     const handleAddRecipeToFavourites = (result) => {
         setIsAdded(result);
+        let message;
         if (result) {
-            setSuccessToast('Successfully added to favourites!');
-
+            message = 'Successfully added to favourites!';
         } else {
-            setSuccessToast('Successfully removed from favourites!');
+            message = 'Successfully removed from favourites!';
         }
+
+        setToast({ message, isSuccessfull: true });
+        window.scrollTo(0, 0);
     }
 
     const handleRatingRecipe = (result) => setRecipe((state) =>
@@ -82,13 +84,12 @@ const RecipeDetails = () => {
     return (
         <>
             {isSpinnerLoading && <CustomSpinner />}
-            {errorToast && <ToastNotification
-                onExited={() => setErrorToast('')}
-                message={errorToast} />}
-            {successToast && <ToastNotification
-                isSuccessfull={true}
-                onExited={() => setSuccessToast('')}
-                message={successToast} />}
+            {
+                toast.message && <ToastNotification
+                    isSuccessfull={toast.isSuccessfull}
+                    onExited={() => setToast({ message: '' })}
+                    message={toast.message} />
+            }
             {recipe && (
                 <>
                     <section className={styles.container}>
@@ -128,7 +129,10 @@ const RecipeDetails = () => {
                                 !recipe.isApproved && isAdmin &&
                                 <ApproveRecipe
                                     showToast={(message, isSucc) =>
-                                        isSucc ? setSuccessToast(message) : setErrorToast(message)}
+                                        isSucc ?
+                                            setToast({ message, isSuccessfull: true }) :
+                                            setToast({ message, isSuccessfull: false })
+                                    }
                                     recipeId={recipeId}
                                     handleApprovingRecipe={handleApprovingRecipe} />
                             }

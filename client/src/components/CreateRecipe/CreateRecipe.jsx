@@ -74,10 +74,10 @@ const CreateRecipe = () => {
         const formData = extractRecipeFormData(data);
 
         try {
-            const result = await recipeService.create(formData);
+            const response = await recipeService.create(formData);
             setIsRequestInProgress(false);
-            const toast = { toastMsg: result.message, isSuccessfull: true };
-            navigate(paths.homePath, { state: toast });
+            const toast = { toastMsg: response.message, isSuccessfull: true };
+            navigate(`/recipe/details/${response.result._id}`, { state: toast });
         } catch (error) {
             setIsRequestInProgress(false);
             setToastMsg(error.message);

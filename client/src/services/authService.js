@@ -3,11 +3,12 @@ import { requestFactory } from './requester';
 const baseUrl = 'http://localhost:3000/user';
 
 export const authServiceFactory = (token) => {
-    const request = requestFactory(token);
+    const authorizedRequest = requestFactory(token);
+    const anonymousRequest = requestFactory();
 
     return {
-        login: (data) => request.post(`${baseUrl}/login`, data),
-        register: (data) => request.post(`${baseUrl}/register`, data),
-        logout: () => request.get(`${baseUrl}/logout`),
+        login: (data) => anonymousRequest.post(`${baseUrl}/login`, data),
+        register: (data) => anonymousRequest.post(`${baseUrl}/register`, data),
+        logout: () => authorizedRequest.get(`${baseUrl}/logout`),
     }
 };

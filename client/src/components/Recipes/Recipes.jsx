@@ -35,7 +35,7 @@ const Recipes = () => {
     const [totalPages, setTotalPages] = useState(1);
 
     const searchName = searchParams.get('search') || '';
-    let pageNumber = parseInt(searchParams.get('page') || '1');
+    let pageNumber = parseInt(searchParams.get('page'));
 
     if (!pageNumber || isNaN(pageNumber) || pageNumber < 1) {
         pageNumber = 1;
@@ -63,9 +63,10 @@ const Recipes = () => {
     useEffect(() => {
         if (searchName) {
             updateSearchQuery(searchName);
+        } else {
+            searchParams.delete('search');
+            setSearchParams(searchParams);
         }
-
-        setSearchParams({ search: searchName, page: pageNumber });
 
         recipeService.getAllInCategory(category, pageNumber, searchName)
             .then(res => {
@@ -127,10 +128,13 @@ const Recipes = () => {
                     <PaginationComponent
                         pagesCount={totalPages}
                         currentPage={pageNumber}
-                        setCurrentPage={(number) => setSearchParams({
-                            search: searchName ? searchName : '',
-                            page: number
-                        })}
+                        setCurrentPage={(number) => {
+                            if (searchName) {
+                                setSearchParams({ search: searchName, page: number });
+                            } else {
+                                setSearchParams({ page: number });
+                            }
+                        }}
                     />
                 </div>
             )}
