@@ -1,6 +1,7 @@
 .recipeCard {
     width: 65%;
     border: solid black 3px;
+    text-align: justify;
 }
 
 .recipeCardHeader {

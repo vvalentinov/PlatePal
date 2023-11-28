@@ -89,6 +89,7 @@ const RecipeCommentsList = ({ recipeId }) => {
             )}
             {comments.length > 0 ? (
                 <>
+                    <h2 className='text-white text-uppercase'>Comments ({comments.length})</h2>
                     {comments.map(x => (
                         <Card className={styles.card} key={x._id}>
                             <Card.Header className={styles.cardHeader}>

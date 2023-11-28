@@ -2,6 +2,8 @@
 
 .navbar {
     font-family: "Playpen Sans";
+    background-color: #2C3E50;
+    border-bottom: solid 2px #93DC80;
 }
 
 .collapse div:first-child {

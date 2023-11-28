@@ -20,7 +20,7 @@ const Navigation = () => {
     const { username, isAuthenticated } = useContext(AuthContext);
 
     return (
-        <Navbar collapseOnSelect expand="lg" className={styles.navbar}>
+        <Navbar fixed='top' collapseOnSelect expand="lg" className={styles.navbar}>
             <Container>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" className={styles.navbarToggler}>
                     <FontAwesomeIcon icon={faBars} className={styles.toggle} />
