@@ -231,3 +231,13 @@ exports.getEditRecipeDetails = async (recipeId) => {
         { preselectedCategory }
     ];
 };
+
+exports.getMostRecentRecipes = async () => {
+    const recipes = await Recipe.find({ isApproved: true })
+        .sort({ 'createdAt': 'desc' })
+        .limit(6)
+        .select('_id image name')
+        .lean();
+
+    return recipes;
+};
