@@ -1,25 +1,23 @@
 const mongoose = require('mongoose');
 
-const {
-    CommentModelName,
-    RecipeModelName,
-    UserModelName
-} = require('../constants/dbModelsNames');
+const modelNames = require('../constants/dbModelsNames');
 
 const commentSchema = new mongoose.Schema({
     text: {
         type: String,
         required: true,
+        minLength: [4, 'Comment must be between 4 and 540 characters long!'],
+        maxLength: [540, 'Comment must be between 4 and 540 characters long!']
     },
     recipeId: {
         type: mongoose.Types.ObjectId,
         required: true,
-        ref: RecipeModelName,
+        ref: modelNames.RecipeModelName,
     },
     user: {
         type: mongoose.Types.ObjectId,
         required: true,
-        ref: UserModelName,
+        ref: modelNames.UserModelName,
     },
     createdAt: {
         type: Date,
@@ -28,7 +26,7 @@ const commentSchema = new mongoose.Schema({
     },
     userLikes: [{
         type: mongoose.Types.ObjectId,
-        ref: UserModelName,
+        ref: modelNames.UserModelName,
     }],
     likesCount: {
         type: Number,
@@ -36,6 +34,6 @@ const commentSchema = new mongoose.Schema({
     }
 });
 
-const Comment = mongoose.model(CommentModelName, commentSchema);
+const Comment = mongoose.model(modelNames.CommentModelName, commentSchema);
 
 module.exports = Comment;

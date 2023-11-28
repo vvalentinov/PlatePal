@@ -91,6 +91,17 @@ exports.getSortedComments = async (recipeId) => await Comment.find({ recipeId })
     })
     .exec();
 
+exports.getSortedCommentsByDateAsc = async (recipeId) => {
+    await checkIfRecipeExists(recipeId);
+
+    const comments = await Comment.find({ recipeId })
+        .populate('user', 'username')
+        .sort({ 'createdAt': 'asc' })
+        .exec();
+
+    return comments;
+};
+
 exports.getUserComments = (userId, recipeId) => Comment.find(
     {
         recipeId,

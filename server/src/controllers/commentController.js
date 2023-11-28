@@ -80,6 +80,17 @@ router.get('/getSortedCommentsByLikes/:recipeId', async (req, res) => {
     res.status(200).json({ message: 'Sorted comments', result });
 });
 
+router.get('/get-comments-by-date-asc/:recipeId', async (req, res) => {
+    const recipeId = req.params.recipeId;
+
+    try {
+        const result = await commentManager.getSortedComments(recipeId);
+        res.status(200).json({ message: 'Sorted comments by date asc!', result });
+    } catch (error) {
+        res.status(400).json({ message: getErrorMessage(error) });
+    }
+});
+
 router.get('/user-comments/:recipeId', isAuthenticated, async (req, res) => {
     const userId = req.user._id;
     const recipeId = req.params.recipeId;
