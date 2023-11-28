@@ -241,3 +241,13 @@ exports.getMostRecentRecipes = async () => {
 
     return recipes;
 };
+
+exports.getTopRatedRecipes = async () => {
+    const recipes = await Recipe.find({ isApproved: true })
+        .sort({ 'averageRating': 'desc', 'createdAt': 'desc' })
+        .limit(6)
+        .select('_id image name')
+        .lean();
+
+    return recipes;
+};

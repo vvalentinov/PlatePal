@@ -149,4 +149,13 @@ router.get('/get-most-recent', async (req, res) => {
     }
 });
 
+router.get('/get-top-rated', async (req, res) => {
+    try {
+        const result = await recipeManager.getTopRatedRecipes();
+        res.status(200).json({ message: 'Top rated recipes retrieved successfully', result });
+    } catch (error) {
+        res.status(400).json({ message: getErrorMessage(error) });
+    }
+});
+
 module.exports = router;
