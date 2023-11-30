@@ -1,6 +1,6 @@
 const Category = require('../models/Category');
 
-const { uploadImage } = require('../utils/cloudinaryUtil');
+const { uploadImage, deleteImage } = require('../utils/cloudinaryUtil');
 const { validateImageFile } = require('../utils/imageFileValidatiorUtil');
 
 exports.create = async (data, categoryImage) => {
@@ -22,12 +22,47 @@ exports.create = async (data, categoryImage) => {
     return category;
 };
 
+exports.edit = async (categoryId, image, data) => {
+    const category = await Category.findById(categoryId);
+    if (!category) {
+        throw new Error('No category with given id found!');
+    }
+
+    const editedCategory = await Category.findByIdAndUpdate(
+        categoryId,
+        {
+            name: data.categoryName,
+            description: data.categoryDescription
+        }
+    );
+
+    if (image) {
+        validateImageFile(image);
+        await deleteImage(category.image.publicId);
+
+        const { public_id, secure_url } = await uploadImage(image.buffer, 'Categories');
+        editedCategory.image.publicId = public_id;
+        editedCategory.image.url = secure_url;
+    }
+
+    await editedCategory.save();
+
+    return editedCategory;
+};
+
 exports.getAll = () => Category
     .find({})
     .sort({ 'name': 'asc' })
     .lean();
 
-exports.getById = (categoryId) => Category.findById(categoryId);
+exports.getById = async (categoryId) => {
+    const category = await Category.findById(categoryId);
+    if (!category) {
+        throw new Error('No category with given id found!');
+    }
+
+    return category;
+}
 
 exports.getByName = (categoryName) => Category.findOne({ name: categoryName });
 

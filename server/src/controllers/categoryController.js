@@ -26,6 +26,22 @@ router.post(
         }
     });
 
+router.put(
+    '/edit/:categoryId',
+    isAdmin, multer().single('categoryFile'),
+    async (req, res) => {
+        const categoryId = req.params.categoryId;
+        const image = req.file;
+        const data = { ...req.body };
+
+        try {
+            const result = await categoryManager.edit(categoryId, image, data);
+            res.status(200).json({ message: "Category edited successfully!", result });
+        } catch (error) {
+            res.status(400).json({ message: getErrorMessage(error) });
+        }
+    });
+
 router.get(routes.getAllRoute, async (req, res) => {
     try {
         const result = await categoryManager.getAll();
@@ -38,6 +54,17 @@ router.get(routes.getAllRoute, async (req, res) => {
 router.get(routes.getCategoryList, async (req, res) => {
     const result = await categoryManager.getCategoryList();
     res.status(200).json({ message: 'Category list retrieved successfully!', result });
+});
+
+router.get('/get-category/:categoryId', async (req, res) => {
+    const categoryId = req.params.categoryId;
+
+    try {
+        const category = await categoryManager.getById(categoryId);
+        res.status(200).json({ message: 'Category with given id retrieved successfully!', result: category });
+    } catch (error) {
+        res.status(400).json({ message: getErrorMessage(error) });
+    }
 });
 
 module.exports = router;

@@ -31,10 +31,12 @@ exports.recipeValidator = async (data) => {
         throw new Error(categoryErrors.categoryInvalidIdFormat);
     }
 
-    const category = await categoryManager.getById(data.recipeCategory);
-    if (!category) {
-        throw new Error(categoryErrors.categoryInvalidError);
-    }
+    await categoryManager.getById(data.recipeCategory);
+
+    // const category = await categoryManager.getById(data.recipeCategory);
+    // if (!category) {
+    //     throw new Error(categoryErrors.categoryInvalidError);
+    // }
 
     if (data.youtubeLink) {
         const regex = new RegExp(regexes.recipeYoutubeLinkRegex);
