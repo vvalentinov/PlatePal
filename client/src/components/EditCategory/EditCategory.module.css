@@ -4,10 +4,38 @@
     margin: 1rem 0;
 }
 
+.container h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2rem;
+}
+
+.imgContainer {
+    display: flex;
+    justify-content: center;
+}
+
+.imgContainer img {
+    border-radius: 15px;
+    width: 50%;
+}
+
 .container form {
     flex-basis: 70%;
     background-color: #2C3E50;
     border: solid 3px #93DC80;
+}
+
+.container form input,
+.container form textarea {
+    font-size: 1.5rem;
+}
+
+.container form input:focus,
+.container form textarea:focus {
+    font-size: 1.5rem;
+    box-shadow: 0 0 0 0.2rem #93DC80;
 }
 
 .container form h2 {

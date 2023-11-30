@@ -9,6 +9,7 @@ export const categoryServiceFactory = (token) => {
         create: (data) => request.post(`${baseUrl}/create`, data),
         getAll: () => request.get(`${baseUrl}/all`),
         getCategoryList: () => request.get(`${baseUrl}/list`),
-        edit: (categoryId, data) => request.put(`${baseUrl}/edit/${categoryId}`, data)
+        edit: (categoryId, data) => request.put(`${baseUrl}/edit/${categoryId}`, data),
+        getById: (categoryId) => request.get(`${baseUrl}/get-category/${categoryId}`)
     }
 };

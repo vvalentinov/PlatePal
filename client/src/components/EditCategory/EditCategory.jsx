@@ -4,8 +4,8 @@ import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Button from 'react-bootstrap/Button';
 
-import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 
 import { useService } from '../../hooks/useService';
 import { categoryServiceFactory } from '../../services/categoryService';
@@ -16,6 +16,10 @@ import {
 } from '../../utils/validatorUtil';
 
 import * as paths from '../../constants/pathNames';
+
+import BackToTopArrow from '../BackToTopArrow/BackToTopArrow';
+
+import ToastNotification from '../Toast/ToastNotification';
 
 const EditCategoryKeys = {
     Name: 'categoryName',
@@ -32,20 +36,20 @@ const EditCategory = () => {
         [EditCategoryKeys.Name]: '',
         [EditCategoryKeys.Description]: ''
     });
-
     const [errors, setErrors] = useState({
         CategoryNameError: '',
         CategoryDescriptionError: '',
         CategoryFileError: ''
     });
-
     const [imageUrl, setImageUrl] = useState('');
+    const [toastMsg, setToastMsg] = useState('');
+    const [image, setImage] = useState('');
+    const [isEditing, setIsEditing] = useState(false);
 
     const { categoryId } = useParams();
 
     useEffect(() => {
-        fetch(`http://localhost:3000/category/get-category/${categoryId}`)
-            .then(res => res.json())
+        categoryService.getById(categoryId)
             .then(res => {
                 setFormValues(state => ({
                     ...state,
@@ -53,8 +57,7 @@ const EditCategory = () => {
                     [EditCategoryKeys.Description]: res.result.description
                 }));
                 setImageUrl(res.result.image.url);
-            })
-            .catch(err => console.log(err));
+            }).catch(error => setToastMsg(error.message));
     }, [categoryId]);
 
     const onFormSubmit = async (e) => {
@@ -65,14 +68,14 @@ const EditCategory = () => {
         const categoryFileErr = categoryEditFileValidator(formValues[EditCategoryKeys.File]);
 
         if (categoryNameErr || categoryDescriptionErr || categoryFileErr) {
-            setErrors({
+            return setErrors({
                 CategoryNameError: categoryNameErr,
                 CategoryDescriptionError: categoryDescriptionErr,
                 CategoryFileError: categoryFileErr
             });
-
-            return;
         }
+
+        setIsEditing(true);
 
         const formData = new FormData();
         formData.append(EditCategoryKeys.File, formValues[EditCategoryKeys.File]);
@@ -81,21 +84,35 @@ const EditCategory = () => {
 
         try {
             await categoryService.edit(categoryId, formData);
-            navigate(paths.homePath);
+            setIsEditing(false);
+            const toast = { message: 'Successfully edited category!', isSuccessfull: true };
+            navigate(paths.homePath, { state: { toast } });
         } catch (error) {
-            console.log(error.message);
+            setIsEditing(false);
+            setToastMsg(error.message);
+            window.scrollTo(0, 0);
         }
     };
 
     const onCategoryNameChange = (e) => setFormValues(state =>
         ({ ...state, [EditCategoryKeys.Name]: e.target.value }));
-
     const onCategoryDescriptionChange = (e) => setFormValues(state =>
         ({ ...state, [EditCategoryKeys.Description]: e.target.value }));
-
     const onFileChangeHandler = (e) => {
         const { name, files } = e.target;
         setFormValues((state) => ({ ...state, [name]: files[0] }));
+    };
+
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => setImage(reader.result);
+            reader.readAsDataURL(file);
+        } else {
+            setImage('');
+        }
     };
 
     const onCategoryNameBlur = () => {
@@ -104,14 +121,12 @@ const EditCategory = () => {
             CategoryNameError: categoryNameValidator(formValues[EditCategoryKeys.Name])
         }));
     };
-
     const onCategoryDescriptionBlur = () => {
         setErrors(state => ({
             ...state,
             CategoryDescriptionError: categoryDescriptionValidator(formValues[EditCategoryKeys.Description])
         }));
     };
-
     const onCategoryFileBlur = () => {
         setErrors(state => ({
             ...state,
@@ -120,55 +135,92 @@ const EditCategory = () => {
     };
 
     return (
-        <div className={styles.container}>
-            <Form encType="multipart/form-data" className="rounded-4 p-4" onSubmit={onFormSubmit}>
-                <h2 className='text-center mb-3'>Edit Recipe Category</h2>
-                {imageUrl && <img src={imageUrl} />}
-                <FloatingLabel controlId="floatingInput" label="Category Name" className="my-4">
-                    <Form.Control
-                        name={EditCategoryKeys.Name}
-                        onChange={onCategoryNameChange}
-                        value={formValues[EditCategoryKeys.Name]}
-                        onBlur={onCategoryNameBlur}
-                        autoComplete="on"
-                        type="text"
-                        placeholder="Category"
-                        className={errors.CategoryNameError ? styles.formControlError : styles.formControl}
-                    />
-                    {errors.CategoryNameError && <p className='text-start text-danger'>{errors.CategoryNameError}</p>}
-                </FloatingLabel>
-                <FloatingLabel controlId="floatingTextarea2" label="Category Description" className="mb-4">
-                    <Form.Control
-                        name={EditCategoryKeys.Description}
-                        onChange={onCategoryDescriptionChange}
-                        onBlur={onCategoryDescriptionBlur}
-                        value={formValues[EditCategoryKeys.Description]}
-                        as="textarea"
-                        placeholder="Leave a comment here"
-                        style={{ height: '150px' }}
-                        className={errors.CategoryDescriptionError ? styles.formControlError : styles.formControl}
-                    />
-                    {errors.CategoryDescriptionError && <p className='text-start text-danger'>{errors.CategoryDescriptionError}</p>}
-                </FloatingLabel>
-                <Form.Group controlId="formFile" className="mb-4">
-                    <Form.Control
-                        name={EditCategoryKeys.File}
-                        onChange={onFileChangeHandler}
-                        onBlur={onCategoryFileBlur}
-                        accept=".jpg, .jpeg, .png"
-                        type="file"
-                        size='lg'
-                        className={errors.CategoryFileError ? styles.formControlError : styles.formControl}
-                    />
-                    {errors.CategoryFileError && <p className='text-start text-danger'>{errors.CategoryFileError}</p>}
-                </Form.Group>
-                <div className="d-grid">
-                    <Button bsPrefix={styles.formButton} className='rounded-3 py-2' size="lg" type="submit">
-                        Edit
-                    </Button>
-                </div>
-            </Form>
-        </div>
+        <>
+            {toastMsg && <ToastNotification
+                onExited={() => setToastMsg('')}
+                message={toastMsg}
+                isSuccessfull={false} />}
+            <div className={styles.container}>
+                <Form encType="multipart/form-data" className="rounded-4 p-4" onSubmit={onFormSubmit}>
+                    <h2>Edit Category</h2>
+                    <div className={styles.imgContainer}>
+                        {imageUrl && <img src={imageUrl} />}
+                    </div>
+                    <FloatingLabel controlId="floatingInput" label="Category Name" className="my-4">
+                        <Form.Control
+                            name={EditCategoryKeys.Name}
+                            onChange={onCategoryNameChange}
+                            value={formValues[EditCategoryKeys.Name]}
+                            onBlur={onCategoryNameBlur}
+                            autoComplete="on"
+                            type="text"
+                            placeholder="Category"
+                            className={
+                                errors.CategoryNameError ?
+                                    styles.formControlError :
+                                    styles.formControl}
+                        />
+                        {errors.CategoryNameError &&
+                            <p className='text-start text-danger'>{errors.CategoryNameError}</p>}
+                    </FloatingLabel>
+                    <FloatingLabel controlId="floatingTextarea2" label="Category Description" className="mb-4">
+                        <Form.Control
+                            name={EditCategoryKeys.Description}
+                            onChange={onCategoryDescriptionChange}
+                            onBlur={onCategoryDescriptionBlur}
+                            value={formValues[EditCategoryKeys.Description]}
+                            as="textarea"
+                            placeholder="Leave a comment here"
+                            style={{ height: '250px' }}
+                            className={
+                                errors.CategoryDescriptionError ?
+                                    styles.formControlError :
+                                    styles.formControl}
+                        />
+                        {errors.CategoryDescriptionError &&
+                            <p className='text-start text-danger'>{errors.CategoryDescriptionError}</p>}
+                    </FloatingLabel>
+                    <Form.Group controlId="formFile" className="mb-4">
+                        <Form.Control
+                            name={EditCategoryKeys.File}
+                            onChange={(event) => {
+                                handleFileChange(event);
+                                onFileChangeHandler(event);
+                            }}
+                            onBlur={onCategoryFileBlur}
+                            accept=".jpg, .jpeg, .png"
+                            type="file"
+                            size='lg'
+                            className={
+                                errors.CategoryFileError ?
+                                    styles.formControlError :
+                                    styles.formControl}
+                        />
+                        {errors.CategoryFileError &&
+                            <p className='text-start text-danger'>{errors.CategoryFileError}</p>}
+                        {image && !errors.recipeFile && (
+                            <div className={`${styles.imgContainer} mt-3`}>
+                                <img src={image} alt="Preview" style={{
+                                    width: '50%',
+                                    maxHeight: '400px',
+                                    borderRadius: '15px'
+                                }} />
+                            </div>
+                        )}
+                    </Form.Group>
+                    <div className="d-grid">
+                        <Button
+                            bsPrefix={styles.formButton}
+                            className='rounded-3 py-2'
+                            size="lg"
+                            type="submit">
+                            {isEditing ? 'Editing Category...' : 'Edit'}
+                        </Button>
+                    </div>
+                </Form>
+                <BackToTopArrow />
+            </div>
+        </>
     )
 };
 

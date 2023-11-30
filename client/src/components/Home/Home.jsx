@@ -8,6 +8,7 @@ import LinkUnapprovedRecipesCard from './LinkUnapprovedRecipesCard/LinkUnapprove
 import ToastNotification from '../Toast/ToastNotification';
 
 import { useContext, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 import { AuthContext } from '../../contexts/AuthContext';
 
@@ -20,9 +21,14 @@ import { useService } from '../../hooks/useService';
 import RecipeCardLink from '../RecipeCardLink/RecipeCardLink';
 
 const Home = () => {
+    const { state } = useLocation();
+
     const [recentRecipes, setRecentRecipes] = useState([]);
     const [topRatedRecipes, setTopRatedRecipes] = useState([]);
-    const [toast, setToast] = useState({ message: '', isSuccessfull: false });
+    const [toast, setToast] = useState({
+        message: state?.toast.message,
+        isSuccessfull: state?.toast.isSuccessfull
+    });
 
     const recipeService = useService(recipeServiceFactory, false);
 
@@ -36,6 +42,8 @@ const Home = () => {
         recipeService.getTopRated()
             .then(res => setTopRatedRecipes(res.result))
             .catch(error => setToast({ message: error.message, isSuccessfull: false }));
+
+        window.scrollTo(0, 0);
     }, []);
 
     return (
@@ -43,7 +51,10 @@ const Home = () => {
             {toast.message && <ToastNotification
                 isSuccessfull={toast.isSuccessfull}
                 message={toast.message}
-                onExited={() => setToast({ message: '', isSuccessfull: false })}
+                onExited={() => {
+                    setToast({ message: '', isSuccessfull: false });
+                    window.history.replaceState({}, document.title);
+                }}
             />}
             <section className={`${styles.homeSection}`}>
                 <WelcomeCard />

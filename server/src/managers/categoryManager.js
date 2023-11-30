@@ -28,12 +28,29 @@ exports.edit = async (categoryId, image, data) => {
         throw new Error('No category with given id found!');
     }
 
+    if (!data.categoryName) {
+        throw new Error('Category name is required!');
+    }
+
+    if (data.categoryName.length < 2 || data.categoryName.length > 40) {
+        throw new Error('Category name must be between 2 and 40 characters long!');
+    }
+
+    if (!data.categoryDescription) {
+        throw new Error('Category description is required!');
+    }
+
+    if (data.categoryDescription.length < 200 || data.categoryDescription.length > 750) {
+        throw new Error('Category description must be between 200 and 750 characters long!');
+    }
+
     const editedCategory = await Category.findByIdAndUpdate(
         categoryId,
         {
             name: data.categoryName,
             description: data.categoryDescription
-        }
+        },
+        { new: true }
     );
 
     if (image) {
