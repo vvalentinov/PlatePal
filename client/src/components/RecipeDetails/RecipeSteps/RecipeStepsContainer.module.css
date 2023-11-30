@@ -21,12 +21,12 @@
 }
 
 .recipeStepsList li {
-    background-color: lightgray;
-    color: black;
+    background-color: #16657A;
+    color: white;
     font-size: 1.1rem;
 }
 
 .recipeStepsList li:hover {
-    background-color: #18A392;
+    background-color: #93DC80;
     color: black;
 }

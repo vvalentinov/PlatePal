@@ -82,6 +82,7 @@ const Recipes = () => {
 
     return (
         <>
+            <h2 className={styles.heading}>{category}</h2>
             {(recipes.length > 0 || (recipes.length === 0 && searchName)) && (
                 <div className={styles.searchContainer}>
                     <Form

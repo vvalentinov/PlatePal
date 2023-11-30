@@ -98,6 +98,11 @@ const RecipeDescriptionCard = ({
                 <Card.Title>
                     <HashLink
                         className={styles.commentsLink}
+                        // scroll={(el) => {
+                        //     const yOffset = -80; // Adjust this value based on your layout
+                        //     const y = el.getBoundingClientRect().top + yOffset;
+                        //     window.scrollTo({ top: y, behavior: 'smooth' });
+                        // }}
                         smooth
                         to={`/recipe/details/${recipe._id}#comments`}>
                         Go to Comments<FontAwesomeIcon className='ms-2' icon={faComment} />
