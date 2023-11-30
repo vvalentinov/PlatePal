@@ -68,6 +68,14 @@ export const categoryFileValidator = (file) => {
     return '';
 };
 
+export const categoryEditFileValidator = (file) => {
+    if (file && file.type !== 'image/png' && file.type !== 'image/jpeg') {
+        return errors.categoryImageFileError;
+    }
+
+    return '';
+};
+
 export const recipeNameValidator = (name) => {
     // if (!name) {
     //     return 'Recipe name is required!';

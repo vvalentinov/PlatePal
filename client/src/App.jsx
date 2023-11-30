@@ -18,6 +18,7 @@ import EditRecipe from './components/EditRecipe/EditRecipe';
 import UserRecipesList from './components/UserRecipesList/UserRecipesList';
 import UserFavoruiteRecipes from './components/UserFavouriteRecipes/UserFavouriteRecipes';
 import UserProfile from './components/UserProfile/UserProfile';
+import EditCategory from './components/EditCategory/EditCategory';
 
 import { AuthProvider } from './contexts/AuthContext';
 
@@ -34,6 +35,7 @@ const App = () => {
             </header>
             <main>
                 <Routes>
+                    <Route path='/category/edit/:categoryId' element={<EditCategory />} />
                     <Route path={paths.homePath} element={<Home />} />
                     <Route path={paths.loginPath} element={<Login />} />
                     <Route path={paths.registerPath} element={<Register />} />

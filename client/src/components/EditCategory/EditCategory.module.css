@@ -1,0 +1,45 @@
+.container {
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0;
+}
+
+.container form {
+    flex-basis: 70%;
+    background-color: #2C3E50;
+    border: solid 3px #93DC80;
+}
+
+.container form h2 {
+    color: white;
+}
+
+.error {
+    color: red;
+}
+
+.formControl {
+    border: solid 2px black;
+}
+
+.formControlError {
+    border: solid 2px red;
+}
+
+.formButton,
+.formButton:hover,
+.formButton:active {
+    background-color: #93DC80;
+    text-transform: uppercase;
+    font-size: 1.5rem;
+}
+
+.formButton:hover {
+    color: white;
+}
+
+@media only screen and (max-width: 1000px) {
+    .container form {
+        flex-basis: 90%;
+    }
+}

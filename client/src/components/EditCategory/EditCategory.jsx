@@ -1,33 +1,37 @@
+import styles from './EditCategory.module.css';
+
 import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Button from 'react-bootstrap/Button';
 
-import styles from './CreateCategory.module.css';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 
 import { useService } from '../../hooks/useService';
-
 import { categoryServiceFactory } from '../../services/categoryService';
-
-import { useNavigate } from 'react-router-dom';
+import {
+    categoryNameValidator,
+    categoryDescriptionValidator,
+    categoryEditFileValidator
+} from '../../utils/validatorUtil';
 
 import * as paths from '../../constants/pathNames';
 
-import useForm from '../../hooks/useForm';
-
-import { useState } from 'react';
-
-import * as validator from '../../utils/validatorUtil';
-
-const CreateCategoryKeys = {
+const EditCategoryKeys = {
     Name: 'categoryName',
     Description: 'categoryDescription',
     File: 'categoryFile'
 };
 
-const CreateCategory = () => {
+const EditCategory = () => {
     const navigate = useNavigate();
 
     const categoryService = useService(categoryServiceFactory);
+
+    const [formValues, setFormValues] = useState({
+        [EditCategoryKeys.Name]: '',
+        [EditCategoryKeys.Description]: ''
+    });
 
     const [errors, setErrors] = useState({
         CategoryNameError: '',
@@ -35,10 +39,30 @@ const CreateCategory = () => {
         CategoryFileError: ''
     });
 
-    const onFormSubmit = async (data) => {
-        const categoryNameErr = validator.categoryNameValidator(formValues[CreateCategoryKeys.Name]);
-        const categoryDescriptionErr = validator.categoryDescriptionValidator(formValues[CreateCategoryKeys.Description]);
-        const categoryFileErr = validator.categoryFileValidator(formValues[CreateCategoryKeys.File]);
+    const [imageUrl, setImageUrl] = useState('');
+
+    const { categoryId } = useParams();
+
+    useEffect(() => {
+        fetch(`http://localhost:3000/category/get-category/${categoryId}`)
+            .then(res => res.json())
+            .then(res => {
+                setFormValues(state => ({
+                    ...state,
+                    [EditCategoryKeys.Name]: res.result.name,
+                    [EditCategoryKeys.Description]: res.result.description
+                }));
+                setImageUrl(res.result.image.url);
+            })
+            .catch(err => console.log(err));
+    }, [categoryId]);
+
+    const onFormSubmit = async (e) => {
+        e.preventDefault();
+
+        const categoryNameErr = categoryNameValidator(formValues[EditCategoryKeys.Name]);
+        const categoryDescriptionErr = categoryDescriptionValidator(formValues[EditCategoryKeys.Description]);
+        const categoryFileErr = categoryEditFileValidator(formValues[EditCategoryKeys.File]);
 
         if (categoryNameErr || categoryDescriptionErr || categoryFileErr) {
             setErrors({
@@ -51,60 +75,60 @@ const CreateCategory = () => {
         }
 
         const formData = new FormData();
-        formData.append(CreateCategoryKeys.File, data.categoryFile);
-        formData.append(CreateCategoryKeys.Name, data.categoryName);
-        formData.append(CreateCategoryKeys.Description, data.categoryDescription);
+        formData.append(EditCategoryKeys.File, formValues[EditCategoryKeys.File]);
+        formData.append(EditCategoryKeys.Name, formValues[EditCategoryKeys.Name]);
+        formData.append(EditCategoryKeys.Description, formValues[EditCategoryKeys.Description]);
 
         try {
-            await categoryService.create(formData);
+            await categoryService.edit(categoryId, formData);
             navigate(paths.homePath);
         } catch (error) {
             console.log(error.message);
         }
     };
 
+    const onCategoryNameChange = (e) => setFormValues(state =>
+        ({ ...state, [EditCategoryKeys.Name]: e.target.value }));
+
+    const onCategoryDescriptionChange = (e) => setFormValues(state =>
+        ({ ...state, [EditCategoryKeys.Description]: e.target.value }));
+
+    const onFileChangeHandler = (e) => {
+        const { name, files } = e.target;
+        setFormValues((state) => ({ ...state, [name]: files[0] }));
+    };
 
     const onCategoryNameBlur = () => {
         setErrors(state => ({
             ...state,
-            CategoryNameError: validator.categoryNameValidator(formValues[CreateCategoryKeys.Name])
+            CategoryNameError: categoryNameValidator(formValues[EditCategoryKeys.Name])
         }));
     };
 
     const onCategoryDescriptionBlur = () => {
         setErrors(state => ({
             ...state,
-            CategoryDescriptionError: validator.categoryDescriptionValidator(formValues[CreateCategoryKeys.Description])
+            CategoryDescriptionError: categoryDescriptionValidator(formValues[EditCategoryKeys.Description])
         }));
     };
 
     const onCategoryFileBlur = () => {
         setErrors(state => ({
             ...state,
-            CategoryFileError: validator.categoryFileValidator(formValues[CreateCategoryKeys.File])
+            CategoryFileError: categoryEditFileValidator(formValues[EditCategoryKeys.File])
         }));
     };
 
-    const {
-        formValues,
-        onChangeHandler,
-        onFileChangeHandler,
-        onSubmit
-    } = useForm({
-        [CreateCategoryKeys.Name]: '',
-        [CreateCategoryKeys.Description]: '',
-        [CreateCategoryKeys.File]: null
-    }, onFormSubmit);
-
     return (
         <div className={styles.container}>
-            <Form encType="multipart/form-data" className="rounded-4 p-4" onSubmit={onSubmit}>
-                <h2 className='text-center mb-3'>Create Recipe Category</h2>
+            <Form encType="multipart/form-data" className="rounded-4 p-4" onSubmit={onFormSubmit}>
+                <h2 className='text-center mb-3'>Edit Recipe Category</h2>
+                {imageUrl && <img src={imageUrl} />}
                 <FloatingLabel controlId="floatingInput" label="Category Name" className="my-4">
                     <Form.Control
-                        name={CreateCategoryKeys.Name}
-                        onChange={onChangeHandler}
-                        value={formValues[CreateCategoryKeys.Name]}
+                        name={EditCategoryKeys.Name}
+                        onChange={onCategoryNameChange}
+                        value={formValues[EditCategoryKeys.Name]}
                         onBlur={onCategoryNameBlur}
                         autoComplete="on"
                         type="text"
@@ -115,10 +139,10 @@ const CreateCategory = () => {
                 </FloatingLabel>
                 <FloatingLabel controlId="floatingTextarea2" label="Category Description" className="mb-4">
                     <Form.Control
-                        name={CreateCategoryKeys.Description}
-                        onChange={onChangeHandler}
+                        name={EditCategoryKeys.Description}
+                        onChange={onCategoryDescriptionChange}
                         onBlur={onCategoryDescriptionBlur}
-                        value={formValues[CreateCategoryKeys.Description]}
+                        value={formValues[EditCategoryKeys.Description]}
                         as="textarea"
                         placeholder="Leave a comment here"
                         style={{ height: '150px' }}
@@ -128,10 +152,9 @@ const CreateCategory = () => {
                 </FloatingLabel>
                 <Form.Group controlId="formFile" className="mb-4">
                     <Form.Control
-                        name={CreateCategoryKeys.File}
+                        name={EditCategoryKeys.File}
                         onChange={onFileChangeHandler}
                         onBlur={onCategoryFileBlur}
-                        // value={formValues[CreateCategoryKeys.Form]}
                         accept=".jpg, .jpeg, .png"
                         type="file"
                         size='lg'
@@ -141,12 +164,12 @@ const CreateCategory = () => {
                 </Form.Group>
                 <div className="d-grid">
                     <Button bsPrefix={styles.formButton} className='rounded-3 py-2' size="lg" type="submit">
-                        Create
+                        Edit
                     </Button>
                 </div>
             </Form>
         </div>
-    );
+    )
 };
 
-export default CreateCategory;
+export default EditCategory;

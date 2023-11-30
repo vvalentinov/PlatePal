@@ -3,12 +3,12 @@ import { requestFactory } from './requester';
 const baseUrl = 'http://localhost:3000/category';
 
 export const categoryServiceFactory = (token) => {
-    const authorizedRequest = requestFactory(token);
-    const anonymousRequest = requestFactory();
+    const request = requestFactory(token);
 
     return {
-        create: (data) => authorizedRequest.post(`${baseUrl}/create`, data),
-        getAll: () => anonymousRequest.get(`${baseUrl}/all`),
-        getCategoryList: () => anonymousRequest.get(`${baseUrl}/list`)
+        create: (data) => request.post(`${baseUrl}/create`, data),
+        getAll: () => request.get(`${baseUrl}/all`),
+        getCategoryList: () => request.get(`${baseUrl}/list`),
+        edit: (categoryId, data) => request.put(`${baseUrl}/edit/${categoryId}`, data)
     }
 };
