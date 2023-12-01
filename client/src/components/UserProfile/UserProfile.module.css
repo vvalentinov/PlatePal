@@ -1,27 +1,31 @@
 .container {
     display: flex;
-    flex-direction: column;
-    margin: 2rem 0;
+    justify-content: center;
     align-items: center;
-    gap: 2rem;
+    gap: 3rem;
+    padding: 2rem 10rem;
+    /* border: solid 2px black; */
+    height: 30rem;
 }
 
-.container h2 {
-    text-align: center;
-    text-transform: uppercase;
-    letter-spacing: 0.5rem;
+.container img {
+    flex-basis: 40%;
+    height: 100%;
+    width: 20%;
+    border: solid 2px black;
+    border-radius: 15px;
 }
 
-.userRecipesCard {
-    width: 60%;
+.card {
+    flex-basis: 60%;
+    font-size: 1.4rem;
     text-align: justify;
+    border: solid 2px black;
     background-color: #2C3E50;
     color: white;
-    font-size: 1.3rem;
-    padding: 0.5rem;
 }
 
-.userRecipesCardBtn {
+.cardBtn {
     width: 100%;
     background-color: #93DC80;
     text-transform: uppercase;
@@ -30,6 +34,6 @@
     font-size: 1.5rem;
 }
 
-.userRecipesCardBtn:hover {
+.cardBtn:hover {
     color: white;
 }
