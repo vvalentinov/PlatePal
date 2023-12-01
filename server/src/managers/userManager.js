@@ -52,6 +52,20 @@ exports.login = async (username, password) => {
     return result;
 };
 
+exports.changeUsername = async (userId, token, newUsername) => {
+    const user = await User.findById(userId);
+    if (!user) {
+        throw new Error('No user with given id found!');
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(userId, { username: newUsername }, { new: true });
+
+    this.logout(token);
+
+    const tokenToBeSent = await generateToken(updatedUser._id, updatedUser.username, updatedUser.isAdmin);
+    return createSession(updatedUser, tokenToBeSent);
+};
+
 
 exports.validateToken = async (token) => {
     if (revokedTokens.has(token)) {

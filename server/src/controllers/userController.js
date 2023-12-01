@@ -71,4 +71,16 @@ router.get('/get-all/:userRole', isAdmin, async (req, res) => {
     }
 });
 
+router.put('/change-username', isAuthenticated, async (req, res) => {
+    const { _id, token } = req.user;
+    const { newUsername } = req.body;
+
+    try {
+        const result = await userManager.changeUsername(_id, token, newUsername);
+        res.status(200).json({ message: 'Username changed!', result });
+    } catch (error) {
+        res.status(400).json({ message: getErrorMessage(error) });
+    }
+});
+
 module.exports = router;
