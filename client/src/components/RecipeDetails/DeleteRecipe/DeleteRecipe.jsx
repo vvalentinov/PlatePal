@@ -4,17 +4,13 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Card from 'react-bootstrap/Card';
 
-import { useState, useContext } from 'react';
-
-// import { AuthContext } from '../../../contexts/AuthContext';
+import { useState } from 'react';
 
 import { recipeServiceFactory } from '../../../services/recipeService';
 import { useService } from '../../../hooks/useService';
 
 const DeleteRecipe = ({ recipeId, handleRecipeDelete, text }) => {
     const recipeService = useService(recipeServiceFactory);
-
-    // const { token } = useContext(AuthContext);
 
     const [show, setShow] = useState(false);
 
@@ -25,14 +21,6 @@ const DeleteRecipe = ({ recipeId, handleRecipeDelete, text }) => {
         recipeService.delete(recipeId)
             .then(res => handleRecipeDelete(res))
             .catch(err => console.log(err.message));
-
-        // fetch(`http://localhost:3000/recipe/delete/${recipeId}`, {
-        //     method: 'DELETE',
-        //     headers: { 'Content-Type': 'application/json', 'X-Authorization': token }
-        // })
-        //     .then(res => res.json())
-        //     .then(res => handleRecipeDelete(res))
-        //     .catch(err => console.log(err.message));
     };
 
     return (

@@ -168,7 +168,7 @@ const RecipeDetails = () => {
                             }
                         </div>
                     )}
-                    {recipe.youtubeLink !== 'undefined' && (
+                    {recipe.youtubeLink && (
                         <div className={styles.youtubeVideoSection}>
                             <iframe src={recipe.youtubeLink} allowFullScreen></iframe>
                             <div><p>{cardTexts.youtubeVideoText}</p></div>
