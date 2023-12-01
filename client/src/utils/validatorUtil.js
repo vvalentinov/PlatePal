@@ -17,9 +17,37 @@ export const usernameValidator = (username) => {
     return '';
 };
 
+export const oldPassValidator = (password) => {
+    if (!password) {
+        return 'Old password is required!';
+    }
+
+    if (password.length < 4 || password.length > 20) {
+        return 'Old password must be between 4 and 20 characters long!'
+    }
+
+    return '';
+};
+
+export const newPassValidator = (password) => {
+    if (!password) {
+        return 'New password is required!';
+    }
+
+    if (password.length < 4 || password.length > 20) {
+        return 'New password must be between 4 and 20 characters long!'
+    }
+
+    return '';
+};
+
 export const passwordValidator = (password, repeatPassword) => {
     if (!password) {
         return errors.passwordRequiredError;
+    }
+
+    if (password.length < 4 || password.length > 20) {
+        return 'Password must be between 4 and 20 characters long!'
     }
 
     if (repeatPassword !== undefined && password !== repeatPassword) {

@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { AuthContext } from '../../contexts/AuthContext';
@@ -14,10 +14,11 @@ import {
     manageUsersCardText,
     favoriteRecipesCardText,
     userRecipesCardText,
-    editUsernameCardText
+    editUsernameCardText,
+    changePasswordCardText
 } from '../../constants/cardTextMessages';
 
-import { usernameValidator } from '../../utils/validatorUtil';
+import { usernameValidator, oldPassValidator, newPassValidator } from '../../utils/validatorUtil';
 
 import BackToTopArrow from '../BackToTopArrow/BackToTopArrow';
 
@@ -34,7 +35,9 @@ const UserProfile = () => {
     const { isAdmin, username, userLogin } = useContext(AuthContext);
 
     const [usernameErr, setUsernameErr] = useState('');
-    const [toast, setToast] = useState(null);
+    const [oldPassErr, setOldPassErr] = useState('');
+    const [newPassErr, setNewPassErr] = useState('');
+    const [toast, setToast] = useState({ message: '', isSuccessfull: true });
 
     const onFormSubmit = async (data) => {
         const username = data.username;
@@ -53,17 +56,60 @@ const UserProfile = () => {
         }
     };
 
+    const onChangePassFormSubmit = async (data) => {
+        const oldPassErrorMsg = oldPassValidator(data.oldPassword);
+        const newPassErrorMsg = newPassValidator(data.newPassword);
+        if (oldPassErrorMsg || newPassErrorMsg) {
+            setOldPassErr(oldPassErrorMsg);
+            setNewPassErr(newPassErrorMsg);
+            return;
+        }
+
+        setOldPassErr('');
+        setNewPassErr('');
+
+        try {
+            const response = await userService.changePassword({
+                oldPassword: data.oldPassword,
+                newPassword: data.newPassword
+            });
+            changePassFormValues.oldPassword = '';
+            changePassFormValues.newPassword = '';
+            setToast({ message: response.message, isSuccessfull: true });
+            window.scrollTo(0, 0);
+        } catch (error) {
+            setToast({ message: error.message, isSuccessfull: false });
+            window.scrollTo(0, 0);
+        }
+    };
+
     const {
         formValues,
         onChangeHandler,
         onSubmit
     } = useForm({ 'username': username }, onFormSubmit);
 
+    const {
+        formValues: changePassFormValues,
+        onChangeHandler: changePassChangeHandler,
+        onSubmit: changePassOnSubmit
+    } = useForm({
+        'oldPassword': '',
+        'newPassword': ''
+    }, onChangePassFormSubmit);
+
     const onUsernameBlur = () => setUsernameErr(usernameValidator(formValues.username));
+
+    const onOldPasswordBlur = () => setOldPassErr(oldPassValidator(changePassFormValues.oldPassword));
+
+    const onNewPasswordBlur = () => setNewPassErr(newPassValidator(changePassFormValues.newPassword));
 
     return (
         <>
-            {toast && <ToastNotification onExited={() => setToast({})} message={toast.message} isSuccessfull={toast.isSuccessfull} />}
+            {toast.message && <ToastNotification
+                onExited={() => setToast({ message: '' })}
+                message={toast.message}
+                isSuccessfull={toast.isSuccessfull} />}
             <h2 className='text-center mt-3'>My Profile</h2>
             <h3 className='text-center'>Username: {username}</h3>
 
@@ -72,7 +118,7 @@ const UserProfile = () => {
                     <img src='/src/assets/images/manageUsers.jpg' alt="" />
                     <Card className={styles.card}>
                         <Card.Body>
-                            <Card.Text>
+                            <Card.Text className={styles.cardText}>
                                 {manageUsersCardText}
                             </Card.Text>
                             <Link to='/manage-users'>
@@ -127,7 +173,7 @@ const UserProfile = () => {
                         </Card.Text>
                         <Form onSubmit={onSubmit}>
                             <FloatingLabel
-                                controlId="floatingInput"
+                                controlId="floatingUsernameInput"
                                 label="Username"
                                 className="mb-3">
                                 <Form.Control
@@ -141,6 +187,48 @@ const UserProfile = () => {
                             </FloatingLabel>
                             <Button type='submit' bsPrefix={styles.cardBtn}>
                                 Change Username
+                            </Button>
+                        </Form>
+                    </Card.Body>
+                </Card>
+            </div>
+
+            <div className={styles.container}>
+                <img src='/src/assets/images/login-register.jpg' alt="" />
+                <Card className={styles.card}>
+                    <Card.Body>
+                        <Card.Text className={styles.cardText}>
+                            {changePasswordCardText}
+                        </Card.Text>
+                        <Form onSubmit={changePassOnSubmit}>
+                            <FloatingLabel
+                                controlId="floatingOldPassInput"
+                                label="Old Password"
+                                className="mb-3">
+                                <Form.Control
+                                    name='oldPassword'
+                                    onChange={changePassChangeHandler}
+                                    onBlur={onOldPasswordBlur}
+                                    value={changePassFormValues.oldPassword}
+                                    type="password"
+                                    placeholder="Old Password..." />
+                                {oldPassErr && <p className='text-start text-danger'>{oldPassErr}</p>}
+                            </FloatingLabel>
+                            <FloatingLabel
+                                controlId="floatingNewPassInput"
+                                label="New Password"
+                                className="mb-3">
+                                <Form.Control
+                                    name='newPassword'
+                                    onChange={changePassChangeHandler}
+                                    onBlur={onNewPasswordBlur}
+                                    value={changePassFormValues.newPassword}
+                                    type="password"
+                                    placeholder="New Password..." />
+                                {newPassErr && <p className='text-start text-danger'>{newPassErr}</p>}
+                            </FloatingLabel>
+                            <Button type='submit' bsPrefix={styles.cardBtn}>
+                                Change Password
                             </Button>
                         </Form>
                     </Card.Body>

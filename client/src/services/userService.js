@@ -11,6 +11,8 @@ export const userServiceFactory = (token) => {
         getAllUsers: (userRole) =>
             request.get(`${baseUrl}/get-all/${userRole}`),
         changeUsername: (data) =>
-            request.put(`${baseUrl}/change-username`, data)
+            request.put(`${baseUrl}/change-username`, data),
+        changePassword: (data) =>
+            request.put(`${baseUrl}/change-password`, data)
     }
 };

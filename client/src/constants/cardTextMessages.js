@@ -23,3 +23,5 @@ export const manageUsersCardText = 'As an administrator, you have the ability to
 export const favoriteRecipesCardText = 'Explore the delightful world of flavors by diving into your curated collection of favorite recipes. This personalized list is a testament to your culinary journey, showcasing the dishes that have won a special place in your heart and kitchen. Click the link below to savor the memories and discover the magic behind each recipe. Happy cooking!';
 
 export const editUsernameCardText = 'Personalize your culinary space by updating your username! Your username is a key ingredient in your online identity. 🌶️ Spice things up and choose a username that reflects your kitchen style. Click below to embark on the journey of redefining your culinary persona. 🔄';
+
+export const changePasswordCardText = '🔐 Elevate your account security by updating your password. Input your current password, choose a robust new one, and enhance your protection. Craft a strong password with a mix of letters, numbers, and special characters. Click below to fortify your account. 🔒';
