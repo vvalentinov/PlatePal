@@ -67,4 +67,14 @@ router.get('/get-category/:categoryId', async (req, res) => {
     }
 });
 
+router.delete('/delete/:categoryId', isAdmin, async (req, res) => {
+    const categoryId = req.params.categoryId;
+    try {
+        const result = await categoryManager.deleteCategory(categoryId);
+        res.status(200).json({ message: 'Category deleted successfully!', result });
+    } catch (error) {
+        res.status(400).json({ message: getErrorMessage(error) });
+    }
+});
+
 module.exports = router;

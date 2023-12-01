@@ -1,5 +1,7 @@
 const Category = require('../models/Category');
 
+const recipeManager = require('./recipeManager');
+
 const { uploadImage, deleteImage } = require('../utils/cloudinaryUtil');
 const { validateImageFile } = require('../utils/imageFileValidatiorUtil');
 
@@ -88,3 +90,18 @@ exports.getCategoryList = () => Category
     .sort({ 'name': 'asc' })
     .select('_id name')
     .lean();
+
+exports.deleteCategory = async (categoryId) => {
+    const category = await Category.findById(categoryId);
+    if (!category) {
+        throw new Error('No category with given id found!');
+    }
+
+    await deleteImage(category.image.publicId);
+
+    const deletedCategory = await Category.findByIdAndDelete(categoryId);
+
+    await recipeManager.deleteAllRecipesInCategory(categoryId);
+
+    return deletedCategory;
+};

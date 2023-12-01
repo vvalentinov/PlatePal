@@ -1,8 +1,9 @@
 const Recipe = require('../models/Recipe');
 
-const categoryManager = require('./categoryManager');
-const ratingManager = require('./ratingManager');
 const userManager = require('./userManager');
+const ratingManager = require('./ratingManager');
+const commentManager = require('./commentManager');
+const categoryManager = require('./categoryManager');
 
 const { uploadImage } = require('../utils/cloudinaryUtil');
 const { validateImageFile } = require('../utils/imageFileValidatiorUtil');
@@ -210,6 +211,18 @@ exports.deleteRecipe = async (userId, recipeId) => {
     await deleteImage(recipe.image.publicId);
 
     return deletedRecipe;
+};
+
+exports.deleteAllRecipesInCategory = async (categoryId) => {
+    const recipes = await Recipe.find({ category: categoryId });
+
+    recipes.forEach(async recipe => {
+        await commentManager.deleteRecipeComments(recipe._id);
+        await ratingManager.deleteRecipeRatings(recipe._id);
+        await deleteImage(recipe.image.publicId);
+    });
+
+    await Recipe.deleteMany({ category: categoryId });
 };
 
 exports.getEditRecipeDetails = async (recipeId) => {

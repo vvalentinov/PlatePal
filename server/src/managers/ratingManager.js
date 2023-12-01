@@ -37,3 +37,7 @@ exports.getRating = async (userId, recipeId) => {
 
     return rating.value;
 };
+
+exports.deleteRecipeRatings = async (recipeId) => {
+    await StarRating.deleteMany({ recipeId });
+};

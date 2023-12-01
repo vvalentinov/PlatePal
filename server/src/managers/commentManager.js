@@ -54,6 +54,10 @@ exports.deleteComment = async (commentId) => {
     return comment;
 };
 
+exports.deleteRecipeComments = async (recipeId) => {
+    await Comment.deleteMany({ recipeId });
+};
+
 exports.likeComment = async (commentId, userId) => {
     const comment = await Comment.findById(commentId);
     if (!comment) {
@@ -109,4 +113,4 @@ exports.getUserComments = (userId, recipeId) => Comment.find(
     })
     .populate('user', 'username')
     .sort({ 'createdAt': 'descending' })
-    .exec();;
+    .exec();
