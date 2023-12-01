@@ -3,15 +3,34 @@ import styles from './UserProfile.module.css';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
 
 import { userRecipesCardText } from '../../constants/cardTextMessages';
 
+import { AuthContext } from '../../contexts/AuthContext';
+
 const UserProfile = () => {
+    const { isAdmin } = useContext(AuthContext);
 
     return (
         <div className={styles.container}>
             <h2>My Profile</h2>
+            {isAdmin && (
+                <Card className={styles.userRecipesCard}>
+                    <Card.Body>
+                        <Card.Text>
+                            Manage Users
+                        </Card.Text>
+                        <Link to='/manage-users'>
+                            <Button bsPrefix={styles.userRecipesCardBtn}>
+                                Go To Manage Users
+                            </Button>
+                        </Link>
+                    </Card.Body>
+                </Card>
+            )}
+
 
             <Card className={styles.userRecipesCard}>
                 <Card.Body>

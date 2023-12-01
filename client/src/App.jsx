@@ -19,6 +19,7 @@ import UserRecipesList from './components/UserRecipesList/UserRecipesList';
 import UserFavoruiteRecipes from './components/UserFavouriteRecipes/UserFavouriteRecipes';
 import UserProfile from './components/UserProfile/UserProfile';
 import EditCategory from './components/EditCategory/EditCategory';
+import ManageUsers from './components/ManageUsers/ManageUsers';
 
 import { AuthProvider } from './contexts/AuthContext';
 
@@ -47,6 +48,7 @@ const App = () => {
                     <Route path='/recipe/edit/:recipeId' element={<EditRecipe />} />
                     <Route path='/user/profile' element={<UserProfile />} />
                     <Route path='/recipes/user-favourites' element={<UserFavoruiteRecipes />} />
+                    <Route path='/manage-users' element={<ManageUsers />} />
                     <Route element={<GuestRouteGuard />}>
                         <Route path={paths.recipeCreatePath} element={<CreateRecipe />} />
                         <Route path={paths.logoutPath} element={<Logout />} />
