@@ -5,8 +5,13 @@ export const usernameValidator = (username) => {
         return errors.usernameRequiredError;
     }
 
-    if (username.length < 3 || username.length > 30) {
+    if (username.length < 2 || username.length > 25) {
         return errors.usernameLengthError;
+    }
+
+    const regex = /^(?=(?:.*[a-zA-Z]){2})[a-zA-Z0-9]*$/;
+    if (!regex.test(username)) {
+        return 'Username must have at least two letters and be made of only letters and numbers!';
     }
 
     return '';

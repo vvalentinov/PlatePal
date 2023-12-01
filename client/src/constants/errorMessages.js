@@ -1,5 +1,5 @@
 export const usernameRequiredError = 'Username is required!';
-export const usernameLengthError = 'Username must be between 3 and 30 characters long!';
+export const usernameLengthError = 'Username must be between 2 and 25 characters long!';
 
 export const passwordRequiredError = 'Password is required!';
 export const repeatPasswordRequiredError = 'Repeat Password is required!';
