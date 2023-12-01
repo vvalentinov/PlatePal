@@ -6,6 +6,8 @@ const userErrors = require('../constants/errorMessages/userErrors');
 
 const { UserModelName, RecipeModelName } = require('../constants/dbModelsNames');
 
+const { userPasswordRegex } = require('../constants/regexes/regexes');
+
 const userSchema = new mongoose.Schema({
     username: {
         type: String,
@@ -17,6 +19,8 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: [true, userErrors.passwordRequiredError],
+        minLength: [4, 'Password must be at least 4 characters long!'],
+        maxLength: [20, 'Password must not exceed 20 characters!']
     },
     isAdmin: {
         type: Boolean,

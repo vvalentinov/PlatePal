@@ -83,4 +83,16 @@ router.put('/change-username', isAuthenticated, async (req, res) => {
     }
 });
 
+router.put('/change-password', isAuthenticated, async (req, res) => {
+    const { _id } = req.user;
+    const { oldPassword, newPassword } = req.body;
+
+    try {
+        await userManager.changePassword(_id, oldPassword, newPassword);
+        res.status(200).json({ message: 'Password changed!' });
+    } catch (error) {
+        res.status(400).json({ message: getErrorMessage(error) });
+    }
+});
+
 module.exports = router;

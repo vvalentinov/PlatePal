@@ -1,5 +1,7 @@
 const User = require('../models/User');
 
+const bcrypt = require('bcrypt');
+
 const recipeManager = require('../managers/recipeManager');
 
 const { generateToken } = require('../utils/generateTokenUtil');
@@ -64,6 +66,21 @@ exports.changeUsername = async (userId, token, newUsername) => {
 
     const tokenToBeSent = await generateToken(updatedUser._id, updatedUser.username, updatedUser.isAdmin);
     return createSession(updatedUser, tokenToBeSent);
+};
+
+exports.changePassword = async (userId, oldPassword, newPassword) => {
+    const user = await User.findById(userId);
+    if (!user) {
+        throw new Error('No user with given id found!');
+    }
+
+    const isValid = await bcrypt.compare(oldPassword, user.password);
+    if (!isValid) {
+        throw new Error('Old password is not correct!');
+    }
+
+    const newPasswordHash = await bcrypt.hash(newPassword, 10);
+    await User.updateOne({ _id: userId }, { password: newPasswordHash });
 };
 
 
