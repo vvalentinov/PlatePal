@@ -1,6 +1,7 @@
 const router = require('express').Router();
 
 const { isAuthenticated } = require('../middlewares/authMiddleware');
+const { isAdmin } = require('../middlewares/isAdminMiddleware');
 
 const { getErrorMessage } = require('../utils/errorMessageUtil');
 
@@ -54,6 +55,17 @@ router.get('/get-user-favourite-recipes', isAuthenticated, async (req, res) => {
     try {
         const result = await userManager.getUserFavouriteRecipes(userId);
         res.status(200).json({ message: 'User favourite recipes retrieved successfully!', result });
+    } catch (error) {
+        res.status(400).json({ message: getErrorMessage(error) });
+    }
+});
+
+router.get('/get-all/:userRole', isAdmin, async (req, res) => {
+    const userRole = req.params.userRole;
+
+    try {
+        const result = await userManager.getAllUsers(userRole);
+        res.status(200).json({ message: 'Users retrieved successfully!', result });
     } catch (error) {
         res.status(400).json({ message: getErrorMessage(error) });
     }

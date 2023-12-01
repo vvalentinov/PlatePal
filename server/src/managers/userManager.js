@@ -103,3 +103,22 @@ exports.getUserFavouriteRecipes = async (userId) => {
 
     return user.favouriteRecipes;
 };
+
+exports.getAllUsers = async (userRole) => {
+    if (userRole === 'undefined') {
+        const users = await User.find({}).sort({ 'username': 'asc' }).exec();
+        return users;
+    }
+
+    if (userRole !== 'Admin' && userRole !== 'User') {
+        throw new Error('Invalid user role!');
+    }
+
+    if (userRole === 'Admin') {
+        const users = await User.find({ isAdmin: true }).sort({ 'username': 'asc' }).exec();
+        return users;
+    }
+
+    const users = await User.find({ isAdmin: false }).sort({ 'username': 'asc' }).exec();
+    return users;
+};
