@@ -7,6 +7,8 @@ export const userServiceFactory = (token) => {
 
     return {
         addRecipeToFavorites: (recipeId) =>
-            request.put(`${baseUrl}/add-recipe-to-favourites/${recipeId}`)
+            request.put(`${baseUrl}/add-recipe-to-favourites/${recipeId}`),
+        getAllUsers: (userRole) =>
+            request.get(`${baseUrl}/get-all/${userRole}`)
     }
 };

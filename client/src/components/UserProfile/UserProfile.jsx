@@ -11,11 +11,12 @@ import { userRecipesCardText } from '../../constants/cardTextMessages';
 import { AuthContext } from '../../contexts/AuthContext';
 
 const UserProfile = () => {
-    const { isAdmin } = useContext(AuthContext);
+    const { isAdmin, username } = useContext(AuthContext);
 
     return (
         <div className={styles.container}>
             <h2>My Profile</h2>
+            <h3>Username: {username}</h3>
             {isAdmin && (
                 <Card className={styles.userRecipesCard}>
                     <Card.Body>

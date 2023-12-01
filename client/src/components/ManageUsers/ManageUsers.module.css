@@ -1,0 +1,25 @@
+.tableContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.table {
+    width: 50%;
+    text-align: center;
+    font-size: 1.3rem;
+}
+
+.table tr td {
+    align-items: center;
+}
+
+.table thead tr th:first-child {
+    width: 5%;
+}
+
+.actionsCell {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+}
