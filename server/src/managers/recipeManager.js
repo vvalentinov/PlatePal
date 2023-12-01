@@ -168,7 +168,7 @@ exports.getUserRecipes = async (
 ) => {
     const user = await userManager.getById(userId);
     if (!user) {
-        throw new Error('No user with the given id found!');
+        throw new Error('No user with given id found!');
     }
 
     let query = { owner: userId, name: new RegExp(searchName, 'i') };

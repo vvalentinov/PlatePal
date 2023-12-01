@@ -13,10 +13,12 @@
     gap: 3rem;
     margin-top: 2rem;
     padding: 0 3rem;
+
 }
 
-.link {
+.button {
     flex-basis: 33.3%;
+
 }
 
 .button,
@@ -65,4 +67,9 @@
 
 .searchBtn:hover {
     color: white;
+}
+
+.paginationContainer {
+    display: flex;
+    justify-content: center;
 }

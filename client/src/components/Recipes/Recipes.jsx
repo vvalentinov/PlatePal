@@ -26,9 +26,9 @@ import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 const Recipes = () => {
     const recipeService = useService(recipeServiceFactory);
 
-    const [searchParams, setSearchParams] = useSearchParams();
-    const { category } = useParams();
     const navigate = useNavigate();
+    const { category } = useParams();
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const [recipes, setRecipes] = useState([]);
     const [recipeNameErr, setRecipeNameErr] = useState('');
