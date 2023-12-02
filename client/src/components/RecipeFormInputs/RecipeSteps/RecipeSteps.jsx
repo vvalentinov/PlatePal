@@ -7,7 +7,7 @@ import Button from 'react-bootstrap/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 
-import { recipeStepRules } from "../../../utils/errorRules";
+import { recipeStepRules } from "../../../constants/errorRules";
 
 const RecipeSteps = ({ steps, control, remove, errors }) => {
     return steps.map((field, index) => (

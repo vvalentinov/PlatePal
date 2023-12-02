@@ -23,11 +23,11 @@ const Logout = () => {
                 navigate(paths.homePath);
             })
             .catch(() => {
-                navigate('/')
+                navigate(paths.homePath)
             })
     }, []);
 
-    return <Navigate to="/" />;
+    return <Navigate to={paths.homePath} />;
 };
 
 export default Logout;

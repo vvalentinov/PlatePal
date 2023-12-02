@@ -29,6 +29,8 @@ import { useService } from '../../hooks/useService';
 
 import ToastNotification from '../Toast/ToastNotification';
 
+import { userFavoriteRecipesPath, userRecipesPath, manageUsersPath } from '../../constants/pathNames';
+
 const UserProfile = () => {
     const userService = useService(userServiceFactory);
 
@@ -121,7 +123,7 @@ const UserProfile = () => {
                             <Card.Text className={styles.cardText}>
                                 {manageUsersCardText}
                             </Card.Text>
-                            <Link to='/manage-users'>
+                            <Link to={manageUsersPath}>
                                 <Button bsPrefix={styles.cardBtn}>
                                     Go To Manage Users
                                 </Button>
@@ -138,7 +140,7 @@ const UserProfile = () => {
                         <Card.Text className={styles.cardText}>
                             {userRecipesCardText}
                         </Card.Text>
-                        <Link to='/recipes/user-recipes/all'>
+                        <Link to={userRecipesPath.replace(':recipeType', 'all')}>
                             <Button bsPrefix={styles.cardBtn}>
                                 Go To My Recipes
                             </Button>
@@ -154,7 +156,7 @@ const UserProfile = () => {
                         <Card.Text className={styles.cardText}>
                             {favoriteRecipesCardText}
                         </Card.Text>
-                        <Link to='/recipes/user-favourites'>
+                        <Link to={userFavoriteRecipesPath}>
                             <Button bsPrefix={styles.cardBtn}>
                                 Go To My Favourite Recipes
                             </Button>

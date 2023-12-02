@@ -19,6 +19,8 @@ import { AuthContext } from '../../contexts/AuthContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserPen, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 
+import { homePath, allRecipesPath, editCategoryPath } from '../../constants/pathNames';
+
 const Categories = () => {
     const navigate = useNavigate();
 
@@ -51,9 +53,8 @@ const Categories = () => {
         categoryService.delete(categoryId)
             .then(res => {
                 const toast = { message: res.message, isSuccessfull: true };
-                navigate('/', { state: { toast } });
-            })
-            .catch(error => console.log(`In error ${error}`));
+                navigate(homePath, { state: { toast } });
+            }).catch(error => console.log(`In error ${error}`));
     };
 
     return (
@@ -72,7 +73,7 @@ const Categories = () => {
                 <div key={x._id}>
                     <div className={styles.container}>
                         <div className={styles.imageContainer}>
-                            <Link className={styles.link} to={`/recipe/all/${x.name}`}>
+                            <Link className={styles.link} to={allRecipesPath.replace(':category', x.name)}>
                                 <img className={styles.categoryImg} src={x.image.url} alt="" />
                             </Link>
                         </div>
@@ -87,7 +88,7 @@ const Categories = () => {
                     </div>
                     {isAdmin && (
                         <div className={styles.btnsContainer}>
-                            <Link to={`/category/edit/${x._id}`}>
+                            <Link to={editCategoryPath.replace(':categoryId', x._id)}>
                                 <Button bsPrefix={styles.categoryBtn}>
                                     Edit {x.name} Category
                                     <FontAwesomeIcon className='ms-2' icon={faUserPen} />

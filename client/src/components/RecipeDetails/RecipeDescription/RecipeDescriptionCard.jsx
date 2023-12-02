@@ -23,7 +23,6 @@ import { AuthContext } from '../../../contexts/AuthContext';
 
 const RecipeDescriptionCard = ({
     recipe,
-    recipeId,
     isRecipeOwner,
     isFavourite,
     handleAddingRecipeToFavourites,
@@ -34,8 +33,8 @@ const RecipeDescriptionCard = ({
 
     const onHeartClick = () => {
         if (isAuthenticated && !isRecipeOwner) {
-            userService.addRecipeToFavorites(recipeId)
-                .then(res => handleAddingRecipeToFavourites(res.result))
+            userService.addRecipeToFavorites(recipe._id)
+                .then(res => handleAddingRecipeToFavourites(res))
                 .catch(error => handleToast({ message: error.message, isSuccessfull: false }));
         }
     };
@@ -61,9 +60,7 @@ const RecipeDescriptionCard = ({
                             onClick={onHeartClick}
                             size='lg'
                             icon={isFavourite ? faHeartSolid : faRegularHeart}
-                            className={
-                                isFavourite ? styles.heartIconRed : styles.heartIcon
-                            } />
+                            className={isFavourite ? styles.heartIconRed : styles.heartIcon} />
                         Add Recipe to Favourites
                     </Card.Title>
                 )}
@@ -99,11 +96,6 @@ const RecipeDescriptionCard = ({
                 <Card.Title>
                     <HashLink
                         className={styles.commentsLink}
-                        // scroll={(el) => {
-                        //     const yOffset = -80; // Adjust this value based on your layout
-                        //     const y = el.getBoundingClientRect().top + yOffset;
-                        //     window.scrollTo({ top: y, behavior: 'smooth' });
-                        // }}
                         smooth
                         to={`/recipe/details/${recipe._id}#comments`}>
                         Go to Comments<FontAwesomeIcon className='ms-2' icon={faComment} />

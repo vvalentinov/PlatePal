@@ -3,7 +3,7 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 
 import { Controller } from "react-hook-form";
 
-import { recipePrepTimeRules } from '../../../utils/errorRules';
+import { recipePrepTimeRules } from '../../../constants/errorRules';
 
 const RecipePrepTime = ({ control, errors }) => {
     return (

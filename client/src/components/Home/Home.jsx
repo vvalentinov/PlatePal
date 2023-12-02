@@ -7,6 +7,8 @@ import BackToTopArrow from '../BackToTopArrow/BackToTopArrow';
 import LinkUnapprovedRecipesCard from './LinkUnapprovedRecipesCard/LinkUnapprovedRecipesCard';
 import ToastNotification from '../Toast/ToastNotification';
 
+import RecipeCardLink from '../RecipeCardLink/RecipeCardLink';
+
 import { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
@@ -18,7 +20,7 @@ import { faUser } from '@fortawesome/free-solid-svg-icons';
 import { recipeServiceFactory } from '../../services/recipeService';
 import { useService } from '../../hooks/useService';
 
-import RecipeCardLink from '../RecipeCardLink/RecipeCardLink';
+import { recipeDetailsPath } from '../../constants/pathNames';
 
 const Home = () => {
     const { state } = useLocation();
@@ -26,8 +28,8 @@ const Home = () => {
     const [recentRecipes, setRecentRecipes] = useState([]);
     const [topRatedRecipes, setTopRatedRecipes] = useState([]);
     const [toast, setToast] = useState({
-        message: state?.toast.message,
-        isSuccessfull: state?.toast.isSuccessfull
+        message: state?.message,
+        isSuccessfull: state?.isSuccessfull
     });
 
     const recipeService = useService(recipeServiceFactory, false);
@@ -84,7 +86,7 @@ const Home = () => {
                         {recentRecipes.map(recipe => <RecipeCardLink
                             key={recipe._id}
                             recipe={recipe}
-                            link={`/recipe/details/${recipe._id}`} />
+                            link={recipeDetailsPath.replace(':recipeId', recipe._id)} />
                         )}
                     </div>
                 </section>
@@ -96,7 +98,7 @@ const Home = () => {
                         {topRatedRecipes.map(recipe => <RecipeCardLink
                             key={recipe._id}
                             recipe={recipe}
-                            link={`/recipe/details/${recipe._id}`} />
+                            link={recipeDetailsPath.replace(':recipeId', recipe._id)} />
                         )}
                     </div>
                 </section>

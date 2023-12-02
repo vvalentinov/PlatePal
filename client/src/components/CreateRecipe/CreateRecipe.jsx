@@ -26,7 +26,7 @@ import { categoryServiceFactory } from '../../services/categoryService';
 import { useService } from '../../hooks/useService';
 import useDynamicFieldArray from '../../hooks/useDynamicFieldArray';
 import { extractRecipeFormData } from '../../utils/extractRecipeInfoUtil';
-import * as paths from '../../constants/pathNames';
+import { recipeDetailsPath } from '../../constants/pathNames';
 
 const CreateRecipe = () => {
     const [categories, setCategories] = useState([]);
@@ -76,8 +76,8 @@ const CreateRecipe = () => {
         try {
             const response = await recipeService.create(formData);
             setIsRequestInProgress(false);
-            const toast = { toastMsg: response.message, isSuccessfull: true };
-            navigate(`/recipe/details/${response.result._id}`, { state: toast });
+            const toast = { message: response.message, isSuccessfull: true };
+            navigate(recipeDetailsPath.replace(':recipeId', response.result._id), { state: toast });
         } catch (error) {
             setIsRequestInProgress(false);
             setToastMsg(error.message);

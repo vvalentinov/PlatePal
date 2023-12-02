@@ -14,7 +14,7 @@ import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 
 import { recipeServiceFactory } from '../../services/recipeService';
 import { useService } from '../../hooks/useService';
-import { categoriesListPath } from '../../constants/pathNames';
+import { categoriesListPath, recipeDetailsPath } from '../../constants/pathNames';
 
 import useForm from '../../hooks/useForm';
 
@@ -63,9 +63,6 @@ const Recipes = () => {
     useEffect(() => {
         if (searchName) {
             updateSearchQuery(searchName);
-        } else {
-            searchParams.delete('search');
-            setSearchParams(searchParams);
         }
 
         recipeService.getAllInCategory(category, pageNumber, searchName)
@@ -112,7 +109,7 @@ const Recipes = () => {
                     {recipes.map(recipe => <RecipeCardLink
                         key={recipe._id}
                         recipe={recipe}
-                        link={`/recipe/details/${recipe._id}`} />
+                        link={recipeDetailsPath.replace(':recipeId', recipe._id)} />
                     )}
                 </div>
             )}

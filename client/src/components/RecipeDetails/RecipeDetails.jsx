@@ -13,7 +13,7 @@ import ToastNotification from '../Toast/ToastNotification';
 import CustomSpinner from '../Spinner/Spinner';
 
 import { useEffect, useState, useContext } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 
 import { AuthContext } from '../../contexts/AuthContext';
 
@@ -26,7 +26,11 @@ import * as cardTexts from '../../constants/cardTextMessages';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock, faUtensils } from '@fortawesome/free-solid-svg-icons';
 
+import { homePath } from '../../constants/pathNames';
+
 const RecipeDetails = () => {
+    const { state } = useLocation();
+
     const { isAuthenticated, isAdmin, userId } = useContext(AuthContext);
 
     const navigate = useNavigate();
@@ -35,7 +39,10 @@ const RecipeDetails = () => {
     const [isSpinnerLoading, setIsSpinnerLoading] = useState(true);
     const [recipe, setRecipe] = useState();
     const [isFavourite, setIsFavourite] = useState(false);
-    const [toast, setToast] = useState({ message: '', isSuccessfull: false });
+    const [toast, setToast] = useState({
+        message: state?.message,
+        isSuccessfull: state?.isSuccessfull
+    });
 
     const recipeService = useService(recipeServiceFactory);
 
@@ -51,16 +58,9 @@ const RecipeDetails = () => {
             .finally(() => setIsSpinnerLoading(false));
     }, [recipeId]);
 
-    const handleAddingRecipeToFavourites = (result) => {
-        setIsFavourite(result);
-        let message;
-        if (result) {
-            message = 'Successfully added to favourites!';
-        } else {
-            message = 'Successfully removed from favourites!';
-        }
-
-        setToast({ message, isSuccessfull: true });
+    const handleAddingRecipeToFavourites = (response) => {
+        setIsFavourite(response.result);
+        setToast({ message: response.message, isSuccessfull: true });
         window.scrollTo(0, 0);
     }
 
@@ -77,8 +77,8 @@ const RecipeDetails = () => {
     }
 
     const handleDeletingRecipe = (result) => {
-        const toast = { toastMsg: result.message, isSuccessfull: true };
-        navigate('/', { state: toast });
+        const toast = { message: result.message, isSuccessfull: true };
+        navigate(homePath, { state: toast });
     };
 
     const handleToast = (toast) => {
@@ -92,7 +92,10 @@ const RecipeDetails = () => {
             {
                 toast.message && <ToastNotification
                     isSuccessfull={toast.isSuccessfull}
-                    onExited={() => setToast({ message: '' })}
+                    onExited={() => {
+                        setToast({ message: '' });
+                        window.history.replaceState({}, document.title);
+                    }}
                     message={toast.message} />
             }
             {recipe && (
@@ -102,7 +105,6 @@ const RecipeDetails = () => {
                         <RecipeDescriptionCard
                             handleToast={handleToast}
                             recipe={recipe}
-                            recipeId={recipeId}
                             isRecipeOwner={isRecipeOwner}
                             isFavourite={isFavourite}
                             handleAddingRecipeToFavourites={handleAddingRecipeToFavourites} />

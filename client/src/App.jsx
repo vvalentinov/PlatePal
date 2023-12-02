@@ -6,7 +6,7 @@ import Home from './components/Home/Home';
 import Login from './components/Login/Login';
 import Register from './components/Register/Register';
 import Logout from './components/Logout/Logout';
-import Navigation from './components/Navigation/Navigation';
+import Header from './components/Header/Header';
 import CreateCategory from './components/CreateCategory/CreateCategory';
 import Categories from './components/Categories/Categories';
 import CreateRecipe from './components/CreateRecipe/CreateRecipe';
@@ -21,39 +21,47 @@ import UserProfile from './components/UserProfile/UserProfile';
 import EditCategory from './components/EditCategory/EditCategory';
 import ManageUsers from './components/ManageUsers/ManageUsers';
 
-import { AuthProvider } from './contexts/AuthContext';
-
 import { Route, Routes } from 'react-router-dom';
 
-import * as paths from './constants/pathNames';
+import { AuthProvider } from './contexts/AuthContext';
 import GuestRouteGuard from './components/common/GuestRouteGuard';
+import AuthRouteGuard from './components/common/AuthRouteGuard';
+import AdminRouteGuard from './components/common/AdminRouteGuard';
+
+import * as paths from './constants/pathNames';
 
 const App = () => {
     return (
         <AuthProvider>
-            <header>
-                <Navigation />
-            </header>
+            <Header />
             <main>
                 <Routes>
-                    <Route path='/category/edit/:categoryId' element={<EditCategory />} />
                     <Route path={paths.homePath} element={<Home />} />
-                    <Route path={paths.loginPath} element={<Login />} />
-                    <Route path={paths.registerPath} element={<Register />} />
-                    <Route path={paths.createCategoryPath} element={<CreateCategory />} />
                     <Route path={paths.categoriesListPath} element={<Categories />} />
                     <Route path={paths.allRecipesPath} element={<Recipes />} />
                     <Route path={paths.recipeDetailsPath} element={<RecipeDetails />} />
-                    <Route path='/recipes/user-recipes/:recipeType?/:search?' element={<UserRecipesList />} />
-                    <Route path='/recipe/edit/:recipeId' element={<EditRecipe />} />
-                    <Route path='/user/profile' element={<UserProfile />} />
-                    <Route path='/recipes/user-favourites' element={<UserFavoruiteRecipes />} />
-                    <Route path='/manage-users' element={<ManageUsers />} />
+
+                    <Route element={<AuthRouteGuard />}>
+                        <Route path={paths.loginPath} element={<Login />} />
+                        <Route path={paths.registerPath} element={<Register />} />
+                    </Route>
+
                     <Route element={<GuestRouteGuard />}>
                         <Route path={paths.recipeCreatePath} element={<CreateRecipe />} />
                         <Route path={paths.logoutPath} element={<Logout />} />
+                        <Route path={paths.userFavoriteRecipesPath} element={<UserFavoruiteRecipes />} />
+                        <Route path={paths.userProfilePath} element={<UserProfile />} />
+                        <Route path={paths.editRecipePath} element={<EditRecipe />} />
+                        <Route path={paths.userRecipesPath} element={<UserRecipesList />} />
                     </Route>
-                    <Route path='/recipe/all/unapproved' element={<UnapprovedRecipesList />} />
+
+                    <Route element={<AdminRouteGuard />}>
+                        <Route path={paths.editCategoryPath} element={<EditCategory />} />
+                        <Route path={paths.createCategoryPath} element={<CreateCategory />} />
+                        <Route path={paths.manageUsersPath} element={<ManageUsers />} />
+                        <Route path={paths.unapprovedRecipesPath} element={<UnapprovedRecipesList />} />
+                    </Route>
+
                 </Routes>
             </main>
             <Footer />

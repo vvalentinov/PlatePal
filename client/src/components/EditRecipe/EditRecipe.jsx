@@ -23,7 +23,7 @@ import { useService } from '../../hooks/useService';
 
 import { useNavigate, useParams } from 'react-router-dom';
 
-import * as paths from '../../constants/pathNames';
+import { recipeDetailsPath } from '../../constants/pathNames';
 
 import useDynamicFieldArray from '../../hooks/useDynamicFieldArray';
 
@@ -102,7 +102,7 @@ const EditRecipe = () => {
             setIsRequestInProgress(false);
             const toast = { toastMsg: result.message, isSuccessfull: true };
 
-            navigate(`/recipe/details/${recipeId}`, { state: toast });
+            navigate(recipeDetailsPath.replace(':recipeId', recipeId), { state: toast });
         } catch (error) {
             setIsRequestInProgress(false);
             setToastMsg(error.message);

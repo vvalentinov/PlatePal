@@ -17,9 +17,10 @@
 .recipeInfoContainer {
     display: flex;
     justify-content: center;
+    align-items: center;
     gap: 2rem;
     padding: 3rem 4rem;
-    background-color: #008F92;
+    background-color: #31837b;
 }
 
 .youtubeVideoSection {
@@ -28,7 +29,7 @@
     align-items: center;
     gap: 3rem;
     padding: 3rem;
-    background-color: #008F92;
+    background-color: #31837b;
 }
 
 .youtubeVideoSection iframe {
@@ -48,7 +49,7 @@
     border: solid 3px black;
     padding: 1rem;
     border-radius: 10px;
-    color: #BEE576;
+    color: white;
 }
 
 .recipeCommentStarContainer {

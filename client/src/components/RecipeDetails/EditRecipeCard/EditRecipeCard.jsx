@@ -7,10 +7,12 @@ import { editRecipeCardText } from '../../../constants/cardTextMessages';
 
 import { useNavigate } from 'react-router-dom';
 
+import { editRecipePath } from '../../../constants/pathNames';
+
 const EditRecipeCard = ({ recipeId }) => {
     const navigate = useNavigate();
 
-    const onEditRecipeBtnClick = () => navigate(`/recipe/edit/${recipeId}`);
+    const onEditRecipeBtnClick = () => navigate(editRecipePath.replace(':recipeId', recipeId));
 
     return (
         <Card className={styles.card}>

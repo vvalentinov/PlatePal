@@ -5,7 +5,7 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 
 import { Controller } from "react-hook-form";
 
-import { recipeYoutubeLinkRules } from '../../../utils/errorRules';
+import { recipeYoutubeLinkRules } from '../../../constants/errorRules';
 
 const RecipeYoutubeLink = ({ control, errors }) => {
     return (

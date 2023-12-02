@@ -3,7 +3,7 @@ import Form from 'react-bootstrap/Form';
 import { useState } from 'react';
 import { Controller } from "react-hook-form";
 
-import { fileRules, editRecipeFileRules } from '../../../utils/errorRules';
+import { fileRules, editRecipeFileRules } from '../../../constants/errorRules';
 
 const RecipeImageFile = ({ control, errors, isEdit }) => {
     const [image, setImage] = useState('');

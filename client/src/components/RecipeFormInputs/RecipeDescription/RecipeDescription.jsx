@@ -3,7 +3,7 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 
 import { Controller } from "react-hook-form";
 
-import { recipeDescriptionRules } from '../../../utils/errorRules';
+import { recipeDescriptionRules } from '../../../constants/errorRules';
 
 const RecipeDescription = ({ control, errors }) => {
     return (

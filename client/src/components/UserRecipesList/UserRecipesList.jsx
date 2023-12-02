@@ -13,7 +13,7 @@ import RecipeCardLink from '../RecipeCardLink/RecipeCardLink';
 import { useState, useEffect } from 'react';
 import { useParams, useSearchParams, Link, useNavigate } from 'react-router-dom';
 
-import { extractTitle } from '../../utils/extractInitialTitle';
+import { extractTitle } from '../../utils/extractInitialTitleUtil';
 import { recipeNameValidator } from '../../utils/validatorUtil';
 import useForm from '../../hooks/useForm';
 
@@ -44,7 +44,7 @@ const UserRecipesList = () => {
 
     const title = extractTitle(recipeType);
 
-    const searchName = searchParams.get('search');
+    const searchName = searchParams.get('search') || '';
     const pageNumber = parseInt(searchParams.get('page'));
 
     const searchInputText = `Search recipe by name in ${title.toLowerCase()}`;
@@ -71,10 +71,6 @@ const UserRecipesList = () => {
         if (searchName) {
             updateSearchQuery(searchName);
         }
-        // else {
-        //     searchParams.delete('search');
-        //     setSearchParams(searchParams);
-        // }
 
         if (isNaN(pageNumber) || !pageNumber || pageNumber <= 0) {
             return setSearchParams({ page: 1 });

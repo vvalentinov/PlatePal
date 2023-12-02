@@ -1,4 +1,4 @@
-import { requestFactory } from './requester';
+import { requestFactory } from '../lib/requester';
 
 const baseUrl = 'http://localhost:3000/user';
 

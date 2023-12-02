@@ -15,11 +15,9 @@ import { ratingServiceFactory } from '../../../services/ratingService';
 
 import useForm from '../../../hooks/useForm';
 
-const RecipeStarRating = ({
-    recipeId,
-    onRatingSubmit,
-    userRating
-}) => {
+import { recipeStarCardText } from '../../../constants/cardTextMessages';
+
+const RecipeStarRating = ({ recipeId, onRatingSubmit, userRating }) => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -38,17 +36,14 @@ const RecipeStarRating = ({
     const {
         formValues,
         onRecipeStarHandler,
-        onSubmit } = useForm({
-            "ratingBtn": userRating,
-            "hover": null
-        }, onFormSubmit);
+        onSubmit } = useForm({ "ratingBtn": userRating, "hover": null }, onFormSubmit);
 
     return (
         <>
             <Card className={styles.card}>
                 <Card.Body>
                     <Card.Text>
-                        Dear Food Enthusiasts, Your feedback is the secret ingredient to enhancing our recipe community! Have you savored a dish that tantalized your taste buds? Share the love with a star rating (one to five). Your ratings guide fellow foodies to delightful dishes and inspire chefs to craft more culinary masterpieces. Whether savory or sweet, let your voice inspire others on this flavorful culinary adventure. Happy cooking and happy rating!
+                        {recipeStarCardText}
                     </Card.Text>
                     <Button bsPrefix={styles.starButton} onClick={handleShow}>
                         Star Recipe<FontAwesomeIcon className='ms-2' icon={faStar} />
