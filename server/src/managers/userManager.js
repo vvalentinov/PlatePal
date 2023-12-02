@@ -83,6 +83,15 @@ exports.changePassword = async (userId, oldPassword, newPassword) => {
     await User.updateOne({ _id: userId }, { password: newPasswordHash });
 };
 
+exports.makeAdmin = async (userId) => {
+    const user = await User.findById(userId);
+    if (!user) {
+        throw new Error('No user with given id found!');
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(userId, { isAdmin: true }, { new: true });
+    return updatedUser;
+};
 
 exports.validateToken = async (token) => {
     if (revokedTokens.has(token)) {
