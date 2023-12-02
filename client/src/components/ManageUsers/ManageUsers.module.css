@@ -5,7 +5,7 @@
 }
 
 .table {
-    width: 50%;
+    width: 60%;
     text-align: center;
     font-size: 1.3rem;
 }
@@ -22,4 +22,40 @@
     display: flex;
     justify-content: center;
     gap: 2rem;
+}
+
+.actionsCell button {
+    flex-basis: 50%;
+}
+
+
+.modalHeader {
+    background-color: #93DC80;
+}
+
+.modalBody {
+    font-size: 1.3rem;
+    text-align: center;
+}
+
+.modalBody,
+.modalBtnContainer {
+    background-color: #2C3E50;
+    color: white;
+}
+
+.modalBtnContainer {
+    padding: 1rem;
+}
+
+.modalBtn {
+    background-color: #93DC80;
+    padding: 0.5rem 0;
+    border-radius: 15px;
+    text-transform: uppercase;
+    font-size: 1.2rem;
+}
+
+.modalBtn:hover {
+    color: red;
 }
