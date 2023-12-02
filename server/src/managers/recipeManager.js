@@ -257,22 +257,16 @@ exports.getEditRecipeDetails = async (recipeId) => {
     ];
 };
 
-exports.getMostRecentRecipes = async () => {
-    const recipes = await Recipe.find({ isApproved: true })
-        .sort({ 'createdAt': 'desc' })
+exports.getMostRecentRecipes = async () =>
+    await Recipe.find({ isApproved: true })
+        .sort({ 'createdAt': -1 })
         .limit(6)
         .select('_id image name')
         .lean();
 
-    return recipes;
-};
-
-exports.getTopRatedRecipes = async () => {
-    const recipes = await Recipe.find({ isApproved: true })
-        .sort({ 'averageRating': 'desc', 'createdAt': 'desc' })
+exports.getTopRatedRecipes = async () =>
+    await Recipe.find({ isApproved: true })
+        .sort({ 'averageRating': -1, 'createdAt': -1 })
         .limit(6)
         .select('_id image name')
         .lean();
-
-    return recipes;
-};
