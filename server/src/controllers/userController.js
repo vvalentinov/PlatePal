@@ -106,4 +106,15 @@ router.put('/make-admin/:userId', isAdmin, async (req, res) => {
     }
 });
 
+router.delete('/delete/:userId', isAdmin, async (req, res) => {
+    const userId = req.params.userId;
+
+    try {
+        const result = await userManager.deleteUser(userId);
+        res.status(200).json({ message: 'User deleted successfully!', result });
+    } catch (error) {
+        res.status(400).json({ message: getErrorMessage(error) });
+    }
+});
+
 module.exports = router;

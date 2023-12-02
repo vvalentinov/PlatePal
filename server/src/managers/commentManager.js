@@ -114,3 +114,5 @@ exports.getUserComments = (userId, recipeId) => Comment.find(
     .populate('user', 'username')
     .sort({ 'createdAt': 'descending' })
     .exec();
+
+exports.deleteAllUserComments = async (userId) => Comment.deleteMany({ user: userId });

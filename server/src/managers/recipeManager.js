@@ -225,6 +225,18 @@ exports.deleteAllRecipesInCategory = async (categoryId) => {
     await Recipe.deleteMany({ category: categoryId });
 };
 
+exports.deleteAllUserRecipes = async (userId) => {
+    const recipes = await Recipe.find({ owner: userId });
+
+    recipes.forEach(async recipe => {
+        await commentManager.deleteRecipeComments(recipe._id);
+        await ratingManager.deleteRecipeRatings(recipe._id);
+        await deleteImage(recipe.image.publicId);
+    });
+
+    await Recipe.deleteMany({ owner: userId });
+};
+
 exports.getEditRecipeDetails = async (recipeId) => {
     await checkIfRecipeExists(recipeId);
 

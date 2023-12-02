@@ -3,6 +3,8 @@ const User = require('../models/User');
 const bcrypt = require('bcrypt');
 
 const recipeManager = require('../managers/recipeManager');
+const commentManager = require('../managers/commentManager');
+const ratingManager = require('../managers/ratingManager');
 
 const { generateToken } = require('../utils/generateTokenUtil');
 const { validateUserPassword } = require('../utils/bcryptUtil');
@@ -161,4 +163,19 @@ exports.getAllUsers = async (userRole) => {
 
     const users = await User.find({ isAdmin: false }).sort({ 'username': 'asc' }).exec();
     return users;
+};
+
+exports.deleteUser = async (userId) => {
+    const user = await User.findById(userId);
+    if (!user) {
+        throw new Error('No user with given id found!');
+    }
+
+    await recipeManager.deleteAllUserRecipes(userId);
+    await commentManager.deleteAllUserComments(userId);
+    await ratingManager.deleteUserRatings(userId);
+
+    await User.findByIdAndDelete(userId);
+
+    return user._id;
 };
