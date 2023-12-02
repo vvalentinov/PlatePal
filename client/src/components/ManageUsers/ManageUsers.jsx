@@ -16,15 +16,25 @@ const ManageUsers = () => {
 
     const [userId, setUserId] = useState('');
     const [users, setUsers] = useState([]);
-    const [show, setShow] = useState(false);
     const [toast, setToast] = useState({ message: '', isSuccessfull: false });
 
-    const handleClose = () => {
-        setShow(false);
+    const [showAdminModal, setShowAdminModal] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+    const handleAdminModalClose = () => {
+        setShowAdminModal(false);
         setUserId('');
     };
-    const handleShow = (userId) => {
-        setShow(true);
+    const handleAdminModalShow = (userId) => {
+        setShowAdminModal(true);
+        setUserId(userId);
+    };
+    const handleDeleteModalClose = () => {
+        setShowDeleteModal(false);
+        setUserId('');
+    };
+    const handleDeleteModalShow = (userId) => {
+        setShowDeleteModal(true);
         setUserId(userId);
     };
 
@@ -45,11 +55,25 @@ const ManageUsers = () => {
                     return user;
                 });
             });
-            handleClose();
+            handleAdminModalClose();
             setToast({ message: response.message, isSuccessfull: true });
             window.scrollTo(0, 0);
         } catch (error) {
-            handleClose();
+            handleAdminModalClose();
+            setToast({ message: error.message, isSuccessfull: false });
+            window.scrollTo(0, 0);
+        }
+    };
+
+    const deleteUserHandler = async () => {
+        try {
+            const response = await userService.deleteUser(userId);
+            setUsers((prevUsers) => prevUsers.filter((x) => x._id !== response.result));
+            handleDeleteModalClose();
+            setToast({ message: response.message, isSuccessfull: true });
+            window.scrollTo(0, 0);
+        } catch (error) {
+            handleDeleteModalClose();
             setToast({ message: error.message, isSuccessfull: false });
             window.scrollTo(0, 0);
         }
@@ -81,11 +105,15 @@ const ManageUsers = () => {
                                         <td>{x.username}</td>
                                         <td>{x.isAdmin ? 'Admin' : 'User'}</td>
                                         <td className={styles.actionsCell}>
-                                            <Button size='lg'>Delete</Button>
+                                            <Button
+                                                onClick={() => handleDeleteModalShow(x._id)}
+                                                size='lg'>
+                                                Delete
+                                            </Button>
                                             {!x.isAdmin &&
                                                 <Button
                                                     size='lg'
-                                                    onClick={() => handleShow(x._id)}>
+                                                    onClick={() => handleAdminModalShow(x._id)}>
                                                     Make Admin
                                                 </Button>}
                                         </td>
@@ -95,7 +123,11 @@ const ManageUsers = () => {
                         )}
                     </tbody>
                 </Table>
-                <Modal className={styles.modal} centered show={show} onHide={handleClose}>
+                <Modal
+                    className={styles.modal}
+                    centered
+                    show={showAdminModal}
+                    onHide={handleAdminModalClose}>
                     <Modal.Header className={styles.modalHeader} closeButton>
                         <Modal.Title>Make User Admin</Modal.Title>
                     </Modal.Header>
@@ -103,8 +135,24 @@ const ManageUsers = () => {
                         <p>Are you sure you want to make this user an administrator?</p>
                     </Modal.Body>
                     <div className={`d-grid ${styles.modalBtnContainer}`}>
-                        <Button onClick={makeUserAdminHandler} bsPrefix={styles.modalBtn} size="lg">
+                        <Button
+                            onClick={makeUserAdminHandler}
+                            bsPrefix={styles.modalBtn}
+                            size="lg">
                             Make Admin
+                        </Button>
+                    </div>
+                </Modal>
+                <Modal className={styles.modal} centered show={showDeleteModal} onHide={handleDeleteModalClose}>
+                    <Modal.Header className={styles.modalHeader} closeButton>
+                        <Modal.Title>Delete User</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body className={styles.modalBody}>
+                        <p>Are you sure you want to delete this user?</p>
+                    </Modal.Body>
+                    <div className={`d-grid ${styles.modalBtnContainer}`}>
+                        <Button onClick={deleteUserHandler} bsPrefix={styles.modalBtn} size="lg">
+                            Delete User
                         </Button>
                     </div>
                 </Modal>

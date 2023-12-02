@@ -15,6 +15,8 @@ export const userServiceFactory = (token) => {
         changePassword: (data) =>
             request.put(`${baseUrl}/change-password`, data),
         makeAdmin: (userId) =>
-            request.put(`${baseUrl}/make-admin/${userId}`)
+            request.put(`${baseUrl}/make-admin/${userId}`),
+        deleteUser: (userId) =>
+            request.delete(`${baseUrl}/delete/${userId}`)
     }
 };
