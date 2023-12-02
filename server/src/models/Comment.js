@@ -19,11 +19,6 @@ const commentSchema = new mongoose.Schema({
         required: true,
         ref: modelNames.UserModelName,
     },
-    createdAt: {
-        type: Date,
-        required: true,
-        default: Date.now
-    },
     userLikes: [{
         type: mongoose.Types.ObjectId,
         ref: modelNames.UserModelName,
@@ -32,7 +27,7 @@ const commentSchema = new mongoose.Schema({
         type: Number,
         default: 0
     }
-});
+}, { timestamps: true });
 
 const Comment = mongoose.model(modelNames.CommentModelName, commentSchema);
 

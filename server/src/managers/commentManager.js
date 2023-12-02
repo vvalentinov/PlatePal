@@ -20,16 +20,11 @@ exports.create = async (commentData, userId) => {
     const comment = await Comment.create({
         text: commentData.text,
         recipeId: commentData.recipeId,
-        user: userId,
-        createdAt: commentData.createdAt
+        user: userId
     });
 
     return comment.populate('user', 'username');
 };
-
-exports.getRecipeComments = (recipeId) => Comment.find({ recipeId })
-    .sort({ 'createdAt': 'desc' })
-    .populate('user', 'username');
 
 exports.editComment = async (commentId, userId, recipeId, newText) => {
     const comment = await Comment.findOne({ _id: commentId, recipeId });
@@ -55,6 +50,7 @@ exports.deleteComment = async (commentId) => {
 };
 
 exports.deleteRecipeComments = async (recipeId) => {
+    await checkIfRecipeExists(recipeId);
     await Comment.deleteMany({ recipeId });
 };
 
@@ -87,32 +83,45 @@ exports.likeComment = async (commentId, userId) => {
     return { message, result };
 };
 
-exports.getSortedComments = async (recipeId) => await Comment.find({ recipeId })
-    .populate('user', 'username')
-    .sort({
-        'likesCount': -1,
-        'createdAt': 'descending'
-    })
-    .exec();
-
-exports.getSortedCommentsByDateAsc = async (recipeId) => {
+exports.getCommentsByDateDesc = async (recipeId) => {
     await checkIfRecipeExists(recipeId);
 
-    const comments = await Comment.find({ recipeId })
+    return await Comment.find({ recipeId })
         .populate('user', 'username')
-        .sort({ 'createdAt': 'asc' })
-        .exec();
-
-    return comments;
+        .sort({ 'createdAt': -1 })
+        .lean();
 };
 
-exports.getUserComments = (userId, recipeId) => Comment.find(
-    {
-        recipeId,
-        user: userId
-    })
-    .populate('user', 'username')
-    .sort({ 'createdAt': 'descending' })
-    .exec();
+exports.getCommentsByDateAsc = async (recipeId) => {
+    await checkIfRecipeExists(recipeId);
+
+    return await Comment.find({ recipeId })
+        .populate('user', 'username')
+        .sort({ 'createdAt': 1 })
+        .lean();
+};
+
+exports.getCommentsByLikesDesc = async (recipeId) => {
+    await checkIfRecipeExists(recipeId);
+
+    return await Comment.find({ recipeId })
+        .populate('user', 'username')
+        .sort({ 'likesCount': -1, 'createdAt': -1 })
+        .lean();
+};
+
+exports.getUserComments = async (userId, recipeId) => {
+    await checkIfRecipeExists(recipeId);
+
+    const user = await userManager.getById(userId);
+    if (!user) {
+        throw new Error('No user wit given id found!');
+    }
+
+    return await Comment.find({ recipeId, user: userId })
+        .populate('user', 'username')
+        .sort({ 'createdAt': -1 })
+        .lean();
+};
 
 exports.deleteAllUserComments = async (userId) => Comment.deleteMany({ user: userId });

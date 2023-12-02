@@ -7,7 +7,10 @@ const {
     editCommentRoute,
     deleteCommentRoute,
     likeCommentRoute,
-    getRecipeCommentsRoute
+    getCommentsByDateDescRoute,
+    getCommentsByDateAscRoute,
+    getCommentsByLikesDescRoute,
+    getUserCommentsRoute
 } = require('../constants/routeNames/commentRoutes');
 
 const { getErrorMessage } = require('../utils/errorMessageUtil');
@@ -27,16 +30,6 @@ router.post(
             res.status(400).json({ message: getErrorMessage(error) });
         }
     });
-
-router.get(getRecipeCommentsRoute, async (req, res) => {
-    const recipeId = req.params.recipeId;
-    try {
-        const result = await commentManager.getRecipeComments(recipeId);
-        res.status(200).json({ message: 'Recipe comments retrieved successfully!', result });
-    } catch (error) {
-        res.status(400).json({ message: getErrorMessage(error) });
-    }
-});
 
 router.put(editCommentRoute, isAuthenticated, async (req, res) => {
     const commentId = req.params.commentId;
@@ -74,28 +67,46 @@ router.put(likeCommentRoute, isAuthenticated, async (req, res) => {
     }
 });
 
-router.get('/getSortedCommentsByLikes/:recipeId', async (req, res) => {
+router.get(getCommentsByDateDescRoute, async (req, res) => {
     const recipeId = req.params.recipeId;
-    const result = await commentManager.getSortedComments(recipeId);
-    res.status(200).json({ message: 'Sorted comments', result });
+    try {
+        const result = await commentManager.getCommentsByDateDesc(recipeId);
+        res.status(200).json({ message: 'Recipe comments retrieved successfully!', result });
+    } catch (error) {
+        res.status(400).json({ message: getErrorMessage(error) });
+    }
 });
 
-router.get('/get-comments-by-date-asc/:recipeId', async (req, res) => {
+router.get(getCommentsByDateAscRoute, async (req, res) => {
     const recipeId = req.params.recipeId;
 
     try {
-        const result = await commentManager.getSortedComments(recipeId);
+        const result = await commentManager.getCommentsByDateAsc(recipeId);
         res.status(200).json({ message: 'Sorted comments by date asc!', result });
     } catch (error) {
         res.status(400).json({ message: getErrorMessage(error) });
     }
 });
 
-router.get('/user-comments/:recipeId', isAuthenticated, async (req, res) => {
+router.get(getCommentsByLikesDescRoute, async (req, res) => {
+    const recipeId = req.params.recipeId;
+    try {
+        const result = await commentManager.getCommentsByLikesDesc(recipeId);
+        res.status(200).json({ message: 'Sorted comments', result });
+    } catch (error) {
+        res.status(400).json({ message: getErrorMessage(error) });
+    }
+});
+
+router.get(getUserCommentsRoute, isAuthenticated, async (req, res) => {
     const userId = req.user._id;
     const recipeId = req.params.recipeId;
-    const result = await commentManager.getUserComments(userId, recipeId);
-    res.status(200).json({ message: 'User comments retrieved successfully!', result });
+    try {
+        const result = await commentManager.getUserComments(userId, recipeId);
+        res.status(200).json({ message: 'User comments retrieved successfully!', result });
+    } catch (error) {
+        res.status(400).json({ message: getErrorMessage(error) });
+    }
 });
 
 module.exports = router;
