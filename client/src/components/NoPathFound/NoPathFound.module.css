@@ -1,0 +1,13 @@
+.imageContainer {
+    height: calc(100vh - 160px);
+    display: flex;
+    justify-content: center;
+    padding: 2rem 0;
+    background-color: #31837B;
+}
+
+.image {
+    width: 50%;
+    border-radius: 15px;
+    border: solid 2px #93DC80;
+}

@@ -20,6 +20,7 @@ import UserFavoruiteRecipes from './components/UserFavouriteRecipes/UserFavourit
 import UserProfile from './components/UserProfile/UserProfile';
 import EditCategory from './components/EditCategory/EditCategory';
 import ManageUsers from './components/ManageUsers/ManageUsers';
+import NoPathFound from './components/NoPathFound/NoPathFound';
 
 import { Route, Routes } from 'react-router-dom';
 
@@ -40,6 +41,7 @@ const App = () => {
                     <Route path={paths.categoriesListPath} element={<Categories />} />
                     <Route path={paths.allRecipesPath} element={<Recipes />} />
                     <Route path={paths.recipeDetailsPath} element={<RecipeDetails />} />
+                    <Route path='*' element={<NoPathFound />} />
 
                     <Route element={<AuthRouteGuard />}>
                         <Route path={paths.loginPath} element={<Login />} />

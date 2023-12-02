@@ -4,8 +4,8 @@
     align-items: center;
     gap: 3rem;
     padding: 2rem 10rem;
-    /* border: solid 2px black; */
     height: 30rem;
+    /* border: solid 2px black; */
 }
 
 .container img {
@@ -39,4 +39,27 @@
 
 .cardBtn:hover {
     color: white;
+}
+
+.myProfileSection {
+    background-color: #31837b;
+    padding: 2rem 0;
+
+}
+
+@media only screen and (max-width: 1240px) {
+    .container {
+        flex-direction: column;
+        height: auto;
+        padding: 0;
+    }
+
+    .card {
+        width: 90%;
+        margin: 2rem 0;
+    }
+
+    .container img {
+        display: none;
+    }
 }
