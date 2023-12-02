@@ -20,6 +20,8 @@ import ToastNotification from './../../Toast/ToastNotification';
 
 import { commentValidator } from '../../../utils/validatorUtil';
 
+import { postCommentCardText } from '../../../constants/cardTextMessages';
+
 const PostRecipeComment = ({ recipeId, onCommentSubmit }) => {
     const [show, setShow] = useState(false);
     const [toastMsg, setToastMsg] = useState('');
@@ -41,7 +43,7 @@ const PostRecipeComment = ({ recipeId, onCommentSubmit }) => {
             return setErrMsg(error);
         }
 
-        commentService.create({ ...data, recipeId, createdAt: new Date() })
+        commentService.create({ ...data, recipeId })
             .then(res => onCommentSubmit(res.result))
             .catch(error => {
                 setToastMsg(error.message);
@@ -68,7 +70,7 @@ const PostRecipeComment = ({ recipeId, onCommentSubmit }) => {
                 <Card className={styles.postCommentCard}>
                     <Card.Body>
                         <Card.Text>
-                            We value your thoughts and insights! Your comments can add a personal touch to the recipe, sharing your unique experience and tips. Whether it's a modification you made, an ingredient you love, or just your overall impression, your comments contribute to our vibrant culinary community. Don't hesitate to share your thoughts below – your comment might be the inspiration someone else is looking for! Let's make this cooking journey even more delightful together.
+                            {postCommentCardText}
                         </Card.Text>
                         <Button bsPrefix={styles.commentButton} onClick={handleShow}>
                             Post Comment<FontAwesomeIcon className='ms-2' icon={faComment} />

@@ -33,7 +33,7 @@ const RecipeDescriptionCard = ({
     const { isAuthenticated } = useContext(AuthContext);
 
     const onHeartClick = () => {
-        if (isAuthenticated) {
+        if (isAuthenticated && !isRecipeOwner) {
             userService.addRecipeToFavorites(recipeId)
                 .then(res => handleAddingRecipeToFavourites(res.result))
                 .catch(error => handleToast({ message: error.message, isSuccessfull: false }));
@@ -55,17 +55,18 @@ const RecipeDescriptionCard = ({
                 <Card.Text>
                     {recipe.description}
                 </Card.Text>
-                <Card.Title>
-                    <FontAwesomeIcon
-                        onClick={onHeartClick}
-                        size='lg'
-                        icon={isFavourite ? faHeartSolid : faRegularHeart}
-                        className={
-                            isAuthenticated ?
-                                (isFavourite ? styles.heartIconRed : styles.heartIcon) :
-                                styles.headrtIconGuest} />
-                    Add Recipe to Favourites
-                </Card.Title>
+                {isAuthenticated && !isRecipeOwner && (
+                    <Card.Title>
+                        <FontAwesomeIcon
+                            onClick={onHeartClick}
+                            size='lg'
+                            icon={isFavourite ? faHeartSolid : faRegularHeart}
+                            className={
+                                isFavourite ? styles.heartIconRed : styles.heartIcon
+                            } />
+                        Add Recipe to Favourites
+                    </Card.Title>
+                )}
                 <Card.Title>
                     <FontAwesomeIcon size='lg' icon={faRectangleList} className='me-2' />
                     Category: <Link

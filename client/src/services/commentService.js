@@ -10,9 +10,9 @@ export const commentServiceFactory = (token) => {
         edit: (commentId, data) => request.put(`${baseUrl}/edit/${commentId}`, data),
         delete: (commentId) => request.delete(`${baseUrl}/delete/${commentId}`),
         like: (commentId) => request.put(`${baseUrl}/like/${commentId}`),
-        getAll: (recipeId) => request.get(`${baseUrl}/all/${recipeId}`),
-        getSortedCommentsByLikes: (recipeId) => request.get(`${baseUrl}/getSortedCommentsByLikes/${recipeId}`),
-        getUserComments: (recipeId) => request.get(`${baseUrl}/user-comments/${recipeId}`),
-        getSortedCommentsByDateAsc: (recipeId) => request.get(`${baseUrl}/get-comments-by-date-asc/${recipeId}`)
+        getSortedByDateDesc: (recipeId) => request.get(`${baseUrl}/get-comments-by-date-desc/${recipeId}`),
+        getSortedByDateAsc: (recipeId) => request.get(`${baseUrl}/get-comments-by-date-asc/${recipeId}`),
+        getSortedByLikesDesc: (recipeId) => request.get(`${baseUrl}/get-comments-by-likes-desc/${recipeId}`),
+        getUserComments: (recipeId) => request.get(`${baseUrl}/get-user-comments/${recipeId}`)
     }
 };

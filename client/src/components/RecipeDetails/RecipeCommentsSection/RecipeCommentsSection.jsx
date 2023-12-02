@@ -21,11 +21,13 @@ import { getFormattedDate } from './getFormattedDateUtil';
 
 import NoCommentsCard from '../NoCommentsCard/NoCommentsCard';
 
+import ToastNotification from '../../Toast/ToastNotification';
+
 const FilterBtnsKeys = {
     ByLikesDesc: 'ByLikesDesc',
     ByDateAsc: 'ByDateAsc',
     ByDateDesc: 'ByDateDesc',
-    UserComments: 'UserComments',
+    UserComments: 'UserComments'
 };
 
 const RecipeCommentsList = ({ recipeId }) => {
@@ -34,7 +36,8 @@ const RecipeCommentsList = ({ recipeId }) => {
 
     const [comments, setComments] = useState([]);
     const [currentBtn, setCurrentBtn] = useState(FilterBtnsKeys.ByDateDesc);
-    const [isSpinning, setIsSpinning] = useState(false);
+
+    const [toastMsg, setToastMsg] = useState('');
 
     const { userId, isAuthenticated } = useContext(AuthContext);
 
@@ -55,25 +58,28 @@ const RecipeCommentsList = ({ recipeId }) => {
     const onCommentDelete = (commentId) => setComments(state =>
         state.filter(x => x._id !== commentId));
 
-    const getSortedCommentsByLikesHandler = () => {
+    const getSortedCommentsByLikesDescHandler = () => {
         setCurrentBtn(FilterBtnsKeys.ByLikesDesc);
-        commentService.getSortedCommentsByLikes(recipeId)
+        commentService.getSortedByLikesDesc(recipeId)
             .then(res => setComments(res.result))
             .catch(error => console.log(error.message));
     };
 
     const getSortedCommentsByDateAscHandler = () => {
         setCurrentBtn(FilterBtnsKeys.ByDateAsc);
-        commentService.getSortedCommentsByDateAsc(recipeId)
+        commentService.getSortedByDateAsc(recipeId)
             .then(res => setComments(res.result))
             .catch(error => console.log(error.message));
     };
 
     const getSortedCommentsByDateDescHandler = () => {
         setCurrentBtn(FilterBtnsKeys.ByDateDesc);
-        commentService.getAll(recipeId)
+        commentService.getSortedByDateDesc(recipeId)
             .then(res => setComments(res.result))
-            .catch(error => console.log(error.message));
+            .catch(error => {
+                setToastMsg(error.message);
+                window.scrollTo(0, 0);
+            });
     };
 
     const getUserCommentsHandler = () => {
@@ -83,17 +89,20 @@ const RecipeCommentsList = ({ recipeId }) => {
             .catch(error => console.log(error));
     };
 
-    const onCommentSubmit = (newComment) => setComments((state) => [newComment, ...state]);
+    const onCommentSubmit = (newComment) => {
+        setComments((state) => [newComment, ...state]);
+        setCurrentBtn(FilterBtnsKeys.ByDateDesc);
+    }
 
     const isCommentAuthor = (commentUserId) => commentUserId === userId || !isAuthenticated;
 
     return (
         <section id='comments' className={styles.commentsSection}>
-            {isAuthenticated &&
-                <PostRecipeComment
-                    recipeId={recipeId}
-                    onCommentSubmit={onCommentSubmit} />
-            }
+            {toastMsg && <ToastNotification
+                message={toastMsg}
+                isSuccessfull={false}
+                onExited={() => setToastMsg('')} />}
+            {isAuthenticated && <PostRecipeComment recipeId={recipeId} onCommentSubmit={onCommentSubmit} />}
             <div className={styles.container}>
                 <Button
                     bsPrefix={
@@ -101,7 +110,7 @@ const RecipeCommentsList = ({ recipeId }) => {
                             styles.sortFilterCommentsBtnActive :
                             styles.sortFilterCommentsBtn
                     }
-                    onClick={getSortedCommentsByLikesHandler}>
+                    onClick={getSortedCommentsByLikesDescHandler}>
                     Sort By Likes Desc
                 </Button>
                 <Button
