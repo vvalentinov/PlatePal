@@ -9,7 +9,7 @@ const GuestRouteGuard = ({ children }) => {
     const { isAuthenticated } = useContext(AuthContext);
 
     if (!isAuthenticated) {
-        return <Navigate to={paths.loginPath} /> // TODO: maybe use replace, for History API?
+        return <Navigate to={paths.loginPath} />
     }
 
     return children ? children : <Outlet />;

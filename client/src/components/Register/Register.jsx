@@ -124,10 +124,13 @@ const Register = () => {
         <>
             {toast && <ToastNotification message={toast} />}
             <div className={styles.container}>
-                <img className={styles.registerImg} src='/src/assets/images/login-register.jpg' alt="Register Image..." />
+                <img
+                    className={styles.registerImg}
+                    src='/src/assets/images/login-register.jpg'
+                    alt="Register Image..." />
                 <Form onSubmit={onSubmit} className={styles.form}>
                     <h2 className="my-4">Register</h2>
-                    <FloatingLabel controlId="floatingUsernameInput" label="Username" className="mb-4">
+                    <FloatingLabel controlId="floatingUsernameInput" label="Username" className="mb-3">
                         <Form.Control
                             autoComplete="on"
                             type="text"
@@ -139,7 +142,7 @@ const Register = () => {
                         />
                         {usernameError && <p className='text-start text-danger'>{usernameError}</p>}
                     </FloatingLabel>
-                    <FloatingLabel controlId="floatingPassword" label="Password" className="mb-4">
+                    <FloatingLabel controlId="floatingPassword" label="Password" className="mb-3">
                         <Form.Control
                             type="password"
                             onChange={onChangeHandler}
@@ -161,7 +164,7 @@ const Register = () => {
                         />
                         {repeatPassError && <p className='text-start text-danger'>{repeatPassError}</p>}
                     </FloatingLabel>
-                    <div className="text-start mt-4">
+                    <div className="text-start mt-2">
                         <Link to="/login">You already have an account? Go to Login!</Link>
                     </div>
                     <Button type="submit" bsPrefix={styles.registerButton} className="my-4 px-4 py-1 border-3">

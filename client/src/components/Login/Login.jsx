@@ -55,7 +55,7 @@ const Login = () => {
         try {
             const result = await authService.login(data);
             userLogin(result);
-            navigate(paths.homePath);
+            navigate(-1);
         } catch (error) {
             setToast(error.message);
         }
@@ -75,7 +75,10 @@ const Login = () => {
         <>
             {toast && <ToastNotification message={toast} />}
             <div className={`${styles.container}`}>
-                <img className={styles.loginImg} src='/src/assets/images/login-register.jpg' alt="Logo Image..." />
+                <img
+                    className={styles.loginImg}
+                    src='/src/assets/images/login-register.jpg'
+                    alt="Logo Image..." />
                 <Form method="POST" onSubmit={onSubmit} className={styles.form}>
                     <h2 className="my-3">Login</h2>
                     <FloatingLabel controlId="floatingInput" label="Username" className="mb-4">

@@ -12,8 +12,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 2rem 1rem;
+    /* margin: 2rem 1rem; */
     gap: 2rem;
+    height: calc(100vh - 160px);
+    background-color: #31837B;
+    padding: 1rem 0;
 }
 
 .container form {
@@ -42,6 +45,10 @@
 .form a {
     color: white;
     font-size: 1.1rem;
+}
+
+.form a:hover {
+    color: #93DC80;
 }
 
 .formControl {

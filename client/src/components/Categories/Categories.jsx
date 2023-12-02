@@ -24,7 +24,7 @@ import { homePath, allRecipesPath, editCategoryPath } from '../../constants/path
 const Categories = () => {
     const navigate = useNavigate();
 
-    const { isAdmin } = useContext(AuthContext);
+    const { isAdmin, userLogout } = useContext(AuthContext);
 
     const [categories, setCategories] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -45,7 +45,12 @@ const Categories = () => {
     useEffect(() => {
         categoryService.getAll()
             .then(res => setCategories(res.result))
-            .catch(error => console.log(`In error ${error}`))
+            .catch(error => {
+                if (error.message === 'jwt expired') {
+                    userLogout();
+                    navigate('/');
+                }
+            })
             .finally(() => { setIsLoading(false); });
     }, []);
 
@@ -54,7 +59,7 @@ const Categories = () => {
             .then(res => {
                 const toast = { message: res.message, isSuccessfull: true };
                 navigate(homePath, { state: { toast } });
-            }).catch(error => console.log(`In error ${error}`));
+            }).catch(error => console.log(error.message));
     };
 
     return (
