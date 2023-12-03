@@ -10,12 +10,12 @@ import Header from './components/Header/Header';
 import CreateCategory from './components/CreateCategory/CreateCategory';
 import Categories from './components/Categories/Categories';
 import CreateRecipe from './components/CreateRecipe/CreateRecipe';
-import Recipes from './components/Recipes/Recipes';
+import RecipesInCategory from './components/RecipesInCategory/RecipesInCategory';
 import RecipeDetails from './components/RecipeDetails/RecipeDetails';
 import Footer from './components/Footer/Footer';
 import UnapprovedRecipesList from './components/UnapprovedRecipesList/UnapprovedRecipesList';
 import EditRecipe from './components/EditRecipe/EditRecipe';
-import UserRecipesList from './components/UserRecipesList/UserRecipesList';
+import UserRecipes from './components/UserRecipes/UserRecipes';
 import UserFavoruiteRecipes from './components/UserFavouriteRecipes/UserFavouriteRecipes';
 import UserProfile from './components/UserProfile/UserProfile';
 import EditCategory from './components/EditCategory/EditCategory';
@@ -39,7 +39,7 @@ const App = () => {
                 <Routes>
                     <Route path={paths.homePath} element={<Home />} />
                     <Route path={paths.categoriesListPath} element={<Categories />} />
-                    <Route path={paths.allRecipesPath} element={<Recipes />} />
+                    <Route path={paths.allRecipesPath} element={<RecipesInCategory />} />
                     <Route path={paths.recipeDetailsPath} element={<RecipeDetails />} />
                     <Route path='*' element={<NoPathFound />} />
 
@@ -54,7 +54,7 @@ const App = () => {
                         <Route path={paths.userFavoriteRecipesPath} element={<UserFavoruiteRecipes />} />
                         <Route path={paths.userProfilePath} element={<UserProfile />} />
                         <Route path={paths.editRecipePath} element={<EditRecipe />} />
-                        <Route path={paths.userRecipesPath} element={<UserRecipesList />} />
+                        <Route path={paths.userRecipesPath} element={<UserRecipes />} />
                     </Route>
 
                     <Route element={<AdminRouteGuard />}>

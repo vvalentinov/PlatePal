@@ -1,29 +1,21 @@
-import styles from './Recipes.module.css';
+import styles from './RecipesInCategory.module.css';
 
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
-import Button from 'react-bootstrap/Button';
-
-import RecipeCardLink from '../RecipeCardLink/RecipeCardLink';
 import NoRecipesCard from './NoRecipesCard/NoRecipesCard';
 import BackToTopArrow from '../BackToTopArrow/BackToTopArrow';
 import PaginationComponent from '../Pagination/Pagination';
+import RecipesSection from '../RecipesSection/RecipesSection';
+import SearchRecipeForm from '../SearchRecipeForm/SearchRecipeForm';
 
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 
 import { recipeServiceFactory } from '../../services/recipeService';
 import { useService } from '../../hooks/useService';
-import { categoriesListPath, recipeDetailsPath } from '../../constants/pathNames';
-
 import useForm from '../../hooks/useForm';
-
+import { categoriesListPath } from '../../constants/pathNames';
 import { recipeNameValidator } from '../../utils/validatorUtil';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-
-const Recipes = () => {
+const RecipesInCategory = () => {
     const recipeService = useService(recipeServiceFactory);
 
     const navigate = useNavigate();
@@ -78,49 +70,24 @@ const Recipes = () => {
     }, [category, pageNumber, searchName]);
 
     return (
-        <>
+        <section className={styles.recipesInCategorySection}>
             <h2 className={styles.heading}>{category}</h2>
             {(recipes.length > 0 || (recipes.length === 0 && searchName)) && (
-                <div className={styles.searchContainer}>
-                    <Form
-                        onSubmit={onSubmit}
-                        className={styles.searchForm}>
-                        <InputGroup size='lg'>
-                            <Form.Control
-                                placeholder={`${searchInputText}`}
-                                aria-label={`${searchInputText}`}
-                                aria-describedby="basic-addon2"
-                                className='border border-2 border-dark'
-                                onChange={onChangeHandler}
-                                value={formValues.search}
-                                name='search'
-                            />
-                            <Button type='submit' bsPrefix={styles.searchBtn} id="button-addon2">
-                                <FontAwesomeIcon size='lg' icon={faMagnifyingGlass} />
-                            </Button>
-                        </InputGroup>
-                        {recipeNameErr && <p className='text-start text-danger'>{recipeNameErr}</p>}
-                    </Form>
-                </div>
+                <SearchRecipeForm
+                    onChange={onChangeHandler}
+                    onSubmit={onSubmit}
+                    value={formValues.search}
+                    searchInputText={searchInputText}
+                    error={recipeNameErr}
+                />
             )}
-
-            {recipes.length > 0 && (
-                <div className={styles.recipesContainer}>
-                    {recipes.map(recipe => <RecipeCardLink
-                        key={recipe._id}
-                        recipe={recipe}
-                        link={recipeDetailsPath.replace(':recipeId', recipe._id)} />
-                    )}
-                </div>
-            )}
-
+            {recipes.length > 0 && (<RecipesSection recipes={recipes} />)}
             {recipes.length === 0 && !searchName && (
                 <div className={styles.noRecipesContainer}>
                     <h3>No Recipes in {category} category Yet</h3>
                     <NoRecipesCard />
                 </div>
             )}
-
             {totalPages > 1 && (
                 <div className={styles.paginationContainer}>
                     <PaginationComponent
@@ -136,10 +103,9 @@ const Recipes = () => {
                     />
                 </div>
             )}
-
             <BackToTopArrow />
-        </>
+        </section>
     );
 };
 
-export default Recipes;
+export default RecipesInCategory;

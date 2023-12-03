@@ -1,14 +1,13 @@
-.homeSection {
+.heroSection {
     height: calc(100vh - 80px);
     position: relative;
     isolation: isolate;
-
     display: flex;
     justify-content: start;
     align-items: center;
 }
 
-.homeSection::after {
+.heroSection::after {
     content: '';
     position: absolute;
     inset: 0;
@@ -19,16 +18,11 @@
     background-repeat: no-repeat;
 }
 
-.homeSection h1 {
-    color: white;
-}
-
 .createRecipeSection {
     display: flex;
     justify-content: center;
     gap: 3rem;
     padding: 2rem 2.5rem;
-    background-color: #31837B;
 }
 
 .createRecipeSection img {
@@ -41,7 +35,6 @@
 
 .adminSection {
     padding: 2rem;
-    background-color: #31837B;
 }
 
 .adminSection h2 {

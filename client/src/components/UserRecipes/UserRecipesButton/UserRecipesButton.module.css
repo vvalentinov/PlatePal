@@ -1,0 +1,25 @@
+.button {
+    flex-basis: 33.3%;
+}
+
+.button,
+.activeButton {
+    background-color: #93DC80;
+    padding: 1rem 2rem;
+    font-size: 1.3rem;
+    border-radius: 15px;
+    text-transform: uppercase;
+    width: 100%;
+}
+
+.button {
+    color: black;
+}
+
+.button:hover {
+    color: white;
+}
+
+.activeButton {
+    color: white;
+}

@@ -3,12 +3,10 @@
     gap: 4rem;
     justify-content: center;
     flex-wrap: wrap;
-    margin: 3rem 0;
 }
 
 .recipesSection {
     padding: 2rem 0;
-    background-color: #31837b;
 }
 
 .recipesSection h2 {

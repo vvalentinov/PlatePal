@@ -5,6 +5,11 @@ body {
     height: 100%;
 }
 
+main {
+    background-color: #31837b;
+    min-height: calc(100vh - 160px);
+}
+
 #root {
     margin: 0;
     display: flex;

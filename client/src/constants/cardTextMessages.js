@@ -14,8 +14,6 @@ export const editRecipeCardText = 'Enjoy the freedom to enhance and personalize 
 
 export const noRecipesInCategoryText = 'Oops! It looks like there are no recipes in this category yet. 🥺 Why not be the first to share your amazing culinary creations? Click the button below to upload a recipe and inspire others in the community with your delicious dishes. Let\'s make this category come alive with your unique recipes! 🍲🍰';
 
-export const noSearchedRecipeFound = 'It seems your culinary creativity has outpaced our recipe database. No worries, though! There are countless flavor combinations waiting to be discovered. Feel free to refine your search terms or browse through our diverse collection of recipes for fresh inspiration. If you\'ve got a unique recipe up your sleeve, why not share it with the community? Your next culinary masterpiece could be the talk of the kitchen!';
-
 export const userRecipesCardText = 'Step into the world of your culinary creations, where each recipe is a unique masterpiece. Your kitchen endeavors reflect creativity and passion, turning every dish into a celebration of flavors. Explore your curated recipe list, a testament to your culinary legacy. Click below to immerse yourself in the rich tapestry of your kitchen artistry. 🍽️📜';
 
 export const manageUsersCardText = 'As an administrator, you have the ability to manage users on our platform. This includes viewing a list of all users, updating their information, and ensuring a smooth user experience. Click the link below to access the Manage Users page and oversee user management tasks. Your role as an admin is crucial in maintaining a secure and efficient community.';
