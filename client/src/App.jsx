@@ -21,6 +21,7 @@ import UserProfile from './components/UserProfile/UserProfile';
 import EditCategory from './components/EditCategory/EditCategory';
 import ManageUsers from './components/ManageUsers/ManageUsers';
 import NoPathFound from './components/NoPathFound/NoPathFound';
+import Spoonacular from './components/Spoonacular/Spoonacular';
 
 import { Route, Routes } from 'react-router-dom';
 
@@ -55,6 +56,7 @@ const App = () => {
                         <Route path={paths.userProfilePath} element={<UserProfile />} />
                         <Route path={paths.editRecipePath} element={<EditRecipe />} />
                         <Route path={paths.userRecipesPath} element={<UserRecipes />} />
+                        <Route path='/spoonacular' element={<Spoonacular />} />
                     </Route>
 
                     <Route element={<AdminRouteGuard />}>

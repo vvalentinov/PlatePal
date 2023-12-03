@@ -46,6 +46,13 @@ const Header = () => {
                                 to={categoriesListPath}>
                                 Categories
                             </NavLink>
+                            {isAuthenticated && (
+                                <NavLink
+                                    className={({ isActive }) => isActive ? styles.activeLink : styles.link}
+                                    to='/spoonacular'>
+                                    Spoonacular API
+                                </NavLink>
+                            )}
                         </Nav>
                         {isAuthenticated && (
                             <Nav className="fs-4">
