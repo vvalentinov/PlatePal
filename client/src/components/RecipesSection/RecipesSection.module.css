@@ -1,0 +1,21 @@
+.recipesContainer {
+    display: flex;
+    gap: 4rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 3rem 0;
+}
+
+.recipesSection {
+    padding: 2rem 0;
+    background-color: #31837b;
+}
+
+.recipesSection h2 {
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.2rem;
+    text-decoration: underline;
+    font-style: italic;
+    color: white;
+}

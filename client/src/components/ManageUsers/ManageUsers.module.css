@@ -1,3 +1,10 @@
+.manageUsersSection {
+    background-color: #31837b;
+    height: 100%;
+    padding: 2rem 0;
+    min-height: calc(100vh - 160px);
+}
+
 .tableContainer {
     display: flex;
     justify-content: center;
@@ -5,9 +12,12 @@
 }
 
 .table {
-    width: 60%;
+    width: 70%;
     text-align: center;
     font-size: 1.3rem;
+    justify-content: center;
+    margin-top: 2rem;
+    background-color: red;
 }
 
 .table tr td {
@@ -24,10 +34,18 @@
     gap: 2rem;
 }
 
-.actionsCell button {
+.actionsCellBtn {
     flex-basis: 50%;
+    text-transform: uppercase;
+    background-color: #93DC80;
+    color: white;
+    border-radius: 15px;
+    padding: 0.5rem 0;
 }
 
+.actionsCellBtn:hover {
+    color: black;
+}
 
 .modalHeader {
     background-color: #93DC80;
@@ -58,4 +76,17 @@
 
 .modalBtn:hover {
     color: red;
+}
+
+@media only screen and (max-width: 900px) {
+    .actionsCell {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .actionsCell button {
+        width: 100%;
+    }
 }

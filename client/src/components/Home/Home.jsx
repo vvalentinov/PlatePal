@@ -4,10 +4,9 @@ import WelcomeCard from './WelcomeCard/WelcomeCard';
 import CreateRecipeCard from './CreateRecipeCard/CreateRecipeCard';
 import CreateRecipeCategoryCard from './CreateRecipeCategoryCard/CreateRecipeCategoryCard';
 import BackToTopArrow from '../BackToTopArrow/BackToTopArrow';
+import RecipesSection from '../RecipesSection/RecipesSection';
 import LinkUnapprovedRecipesCard from './LinkUnapprovedRecipesCard/LinkUnapprovedRecipesCard';
 import ToastNotification from '../Toast/ToastNotification';
-
-import RecipeCardLink from '../RecipeCardLink/RecipeCardLink';
 
 import { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
@@ -19,8 +18,6 @@ import { faUser } from '@fortawesome/free-solid-svg-icons';
 
 import { recipeServiceFactory } from '../../services/recipeService';
 import { useService } from '../../hooks/useService';
-
-import { recipeDetailsPath } from '../../constants/pathNames';
 
 const Home = () => {
     const { state } = useLocation();
@@ -80,28 +77,10 @@ const Home = () => {
                 </section>
             )}
             {recentRecipes && (
-                <section className={styles.recipesSection}>
-                    <h2>Recent Recipes</h2>
-                    <div className={styles.recipesContainer}>
-                        {recentRecipes.map(recipe => <RecipeCardLink
-                            key={recipe._id}
-                            recipe={recipe}
-                            link={recipeDetailsPath.replace(':recipeId', recipe._id)} />
-                        )}
-                    </div>
-                </section>
+                <RecipesSection recipes={recentRecipes} title='Recent Recipes' />
             )}
             {topRatedRecipes && (
-                <section className={styles.recipesSection}>
-                    <h2>Top Rated Recipes</h2>
-                    <div className={styles.recipesContainer}>
-                        {topRatedRecipes.map(recipe => <RecipeCardLink
-                            key={recipe._id}
-                            recipe={recipe}
-                            link={recipeDetailsPath.replace(':recipeId', recipe._id)} />
-                        )}
-                    </div>
-                </section>
+                <RecipesSection recipes={topRatedRecipes} title='Top Rated Recipes' />
             )}
             <BackToTopArrow />
         </>
