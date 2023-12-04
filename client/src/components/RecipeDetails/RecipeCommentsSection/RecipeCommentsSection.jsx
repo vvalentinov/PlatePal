@@ -41,7 +41,14 @@ const RecipeCommentsList = ({ recipeId }) => {
 
     const { userId, isAuthenticated } = useContext(AuthContext);
 
-    useEffect(() => getSortedCommentsByDateDescHandler(), [recipeId]);
+    useEffect(() => {
+        commentService.getComments(recipeId, FilterBtnsKeys.ByDateDesc)
+            .then(res => setComments(res.result))
+            .catch(error => {
+                setToastMsg(error.message);
+                window.scrollTo(0, 0);
+            });
+    }, [recipeId]);
 
     const isCommentLiked = (comment) => comment.userLikes.includes(userId);
 
@@ -58,23 +65,15 @@ const RecipeCommentsList = ({ recipeId }) => {
     const onCommentDelete = (commentId) => setComments(state =>
         state.filter(x => x._id !== commentId));
 
-    const getSortedCommentsByLikesDescHandler = () => {
-        setCurrentBtn(FilterBtnsKeys.ByLikesDesc);
-        commentService.getSortedByLikesDesc(recipeId)
-            .then(res => setComments(res.result))
-            .catch(error => console.log(error.message));
-    };
+    const onGetCommentsBtnClick = (type) => {
+        setCurrentBtn(FilterBtnsKeys[type]);
 
-    const getSortedCommentsByDateAscHandler = () => {
-        setCurrentBtn(FilterBtnsKeys.ByDateAsc);
-        commentService.getSortedByDateAsc(recipeId)
-            .then(res => setComments(res.result))
-            .catch(error => console.log(error.message));
-    };
+        let service = commentService;
+        if (type === FilterBtnsKeys.UserComments) {
+            service = commentAuthService;
+        }
 
-    const getSortedCommentsByDateDescHandler = () => {
-        setCurrentBtn(FilterBtnsKeys.ByDateDesc);
-        commentService.getSortedByDateDesc(recipeId)
+        service.getComments(recipeId, type)
             .then(res => setComments(res.result))
             .catch(error => {
                 setToastMsg(error.message);
@@ -82,27 +81,28 @@ const RecipeCommentsList = ({ recipeId }) => {
             });
     };
 
-    const getUserCommentsHandler = () => {
-        setCurrentBtn(FilterBtnsKeys.UserComments);
-        commentAuthService.getUserComments(recipeId)
-            .then(res => setComments(res.result))
-            .catch(error => console.log(error));
-    };
-
     const onCommentSubmit = (newComment) => {
         setComments((state) => [newComment, ...state]);
         setCurrentBtn(FilterBtnsKeys.ByDateDesc);
-    }
+    };
 
     const isCommentAuthor = (commentUserId) => commentUserId === userId || !isAuthenticated;
 
     return (
         <section id='comments' className={styles.commentsSection}>
-            {toastMsg && <ToastNotification
-                message={toastMsg}
-                isSuccessfull={false}
-                onExited={() => setToastMsg('')} />}
-            {isAuthenticated && <PostRecipeComment recipeId={recipeId} onCommentSubmit={onCommentSubmit} />}
+            {
+                toastMsg && <ToastNotification
+                    message={toastMsg}
+                    isSuccessfull={false}
+                    onExited={() => setToastMsg('')} />
+            }
+            {
+                isAuthenticated &&
+                <PostRecipeComment
+                    recipeId={recipeId}
+                    onCommentSubmit={onCommentSubmit}
+                />
+            }
             <div className={styles.container}>
                 <Button
                     bsPrefix={
@@ -110,7 +110,7 @@ const RecipeCommentsList = ({ recipeId }) => {
                             styles.sortFilterCommentsBtnActive :
                             styles.sortFilterCommentsBtn
                     }
-                    onClick={getSortedCommentsByLikesDescHandler}>
+                    onClick={() => onGetCommentsBtnClick(FilterBtnsKeys.ByLikesDesc)}>
                     Sort By Likes Desc
                 </Button>
                 <Button
@@ -119,7 +119,7 @@ const RecipeCommentsList = ({ recipeId }) => {
                             styles.sortFilterCommentsBtnActive :
                             styles.sortFilterCommentsBtn
                     }
-                    onClick={getSortedCommentsByDateAscHandler}>
+                    onClick={() => onGetCommentsBtnClick(FilterBtnsKeys.ByDateAsc)}>
                     Sort By Date Asc
                 </Button>
                 <Button
@@ -128,7 +128,7 @@ const RecipeCommentsList = ({ recipeId }) => {
                             styles.sortFilterCommentsBtnActive :
                             styles.sortFilterCommentsBtn
                     }
-                    onClick={getSortedCommentsByDateDescHandler}>
+                    onClick={() => onGetCommentsBtnClick(FilterBtnsKeys.ByDateDesc)}>
                     Sort By Date Desc
                 </Button>
                 {isAuthenticated && (
@@ -138,11 +138,12 @@ const RecipeCommentsList = ({ recipeId }) => {
                                 styles.sortFilterCommentsBtnActive :
                                 styles.sortFilterCommentsBtn
                         }
-                        onClick={getUserCommentsHandler}>
+                        onClick={() => onGetCommentsBtnClick(FilterBtnsKeys.UserComments)}>
                         Show my comments
                     </Button>
                 )}
             </div>
+
             {comments.length > 0 && (
                 <>
                     <h2 className='text-white text-uppercase'>Comments ({comments.length})</h2>
@@ -187,7 +188,12 @@ const RecipeCommentsList = ({ recipeId }) => {
                     ))}
                 </>
             )}
-            {comments.length === 0 && <NoCommentsCard />}
+            {comments.length === 0 && currentBtn !== FilterBtnsKeys.UserComments && <NoCommentsCard />}
+            {
+                comments.length === 0 &&
+                currentBtn === FilterBtnsKeys.UserComments &&
+                <p className='text-white'>You haven't uploaded any comments yet...</p>
+            }
         </section>
     );
 };
