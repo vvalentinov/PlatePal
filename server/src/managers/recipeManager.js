@@ -121,6 +121,32 @@ exports.getAll = async (categoryName, pageNumber, searchName) => {
     return { recipes, totalPages };
 };
 
+exports.getUnapproved = async (pageNumber, searchName) => {
+    if (pageNumber < 1) {
+        throw new Error('Page number must be bigger or equal to 1!');
+    }
+
+    const total = await Recipe.countDocuments
+        ({
+            isApproved: false,
+            name: new RegExp(searchName, 'i')
+        });
+
+    const totalPages = Math.ceil(total / 6);
+
+    const recipes = await Recipe.find
+        ({
+            isApproved: false,
+            name: new RegExp(searchName, 'i')
+        })
+        .limit(6)
+        .skip((6 * pageNumber) - 6)
+        .select('_id image name')
+        .lean();
+
+    return { recipes, totalPages };
+}
+
 exports.getById = async (recipeId) => {
     await checkIfRecipeExists(recipeId);
     return Recipe.findById(recipeId);
@@ -149,8 +175,6 @@ exports.getRecipeDetails = async (recipeId, userId) => {
 
     return populatedRecipe;
 };
-
-exports.getUnapproved = () => Recipe.find({ isApproved: false }).lean();
 
 exports.approveRecipe = async (recipeId) => {
     const recipe = await this.getById(recipeId);

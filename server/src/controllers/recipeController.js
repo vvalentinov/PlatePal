@@ -4,15 +4,13 @@ const multer = require('multer');
 
 const { isAuthenticated } = require('../middlewares/authMiddleware');
 const { isAdmin } = require('../middlewares/isAdminMiddleware');
-const { isRecipeNameCorrectFormat } = require('../middlewares/recipeNameMiddleware');
 
 const routes = require('../constants/routeNames/recipeRoutes');
+const successMsg = require('../constants/successMessages/recipe');
 
 const recipeManager = require('../managers/recipeManager');
 
 const { getErrorMessage } = require('../utils/errorMessageUtil');
-
-const successMsg = require('../constants/successMessages/recipe');
 
 router.post(
     routes.createRecipeRoute,
@@ -33,13 +31,30 @@ router.post(
 
 router.get(routes.getRecipesInCategoryRoute, async (req, res) => {
     const category = req.params.categoryName;
-
     const searchName = req.query.searchName;
     const page = parseInt(req.query.page || "1");
 
     try {
         const { recipes, totalPages } = await recipeManager.getAll(category, page, searchName);
-        res.status(200).json({ message: successMsg.getRecipesInCategorySuccess, result: recipes, totalPages });
+        res.status(200).json({
+            message: successMsg.getRecipesInCategorySuccess,
+            result: recipes, totalPages
+        });
+    } catch (error) {
+        res.status(400).json({ message: getErrorMessage(error) });
+    }
+});
+
+router.get(routes.getUnapprovedRecipesRoute, isAdmin, async (req, res) => {
+    const searchName = req.query.searchName;
+    const page = parseInt(req.query.page || "1");
+
+    try {
+        const { recipes, totalPages } = await recipeManager.getUnapproved(page, searchName);
+        res.status(200).json({
+            message: successMsg.getUnapprovedRecipesSuccess,
+            result: recipes, totalPages
+        });
     } catch (error) {
         res.status(400).json({ message: getErrorMessage(error) });
     }
@@ -55,11 +70,6 @@ router.get(routes.getRecipeDetailsRoute, async (req, res) => {
     } catch (error) {
         res.status(400).json({ message: getErrorMessage(error) });
     }
-});
-
-router.get(routes.getUnapprovedRecipesRoute, isAdmin, async (req, res) => {
-    const recipes = await recipeManager.getUnapproved();
-    res.status(200).json({ message: successMsg.getUnapprovedRecipesSuccess, result: recipes });
 });
 
 router.put(routes.approveRecipeRoute, isAdmin, async (req, res) => {
@@ -116,9 +126,12 @@ router.delete(routes.deleteRecipeRoute, isAuthenticated, async (req, res) => {
 router.get('/get-edit-details/:recipeId', async (req, res) => {
     const recipeId = req.params.recipeId;
 
-    const result = await recipeManager.getEditRecipeDetails(recipeId);
-
-    res.status(200).json({ message: 'Recipe edit details!', result });
+    try {
+        const result = await recipeManager.getEditRecipeDetails(recipeId);
+        res.status(200).json({ message: 'Recipe edit details!', result });
+    } catch (error) {
+        res.status(400).json({ message: getErrorMessage(error) });
+    }
 });
 
 router.put(
