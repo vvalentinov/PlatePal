@@ -2,23 +2,14 @@ const router = require('express').Router();
 
 const { isAuthenticated } = require('../middlewares/authMiddleware');
 
-const {
-    createCommentRoute,
-    editCommentRoute,
-    deleteCommentRoute,
-    likeCommentRoute,
-    getCommentsByDateDescRoute,
-    getCommentsByDateAscRoute,
-    getCommentsByLikesDescRoute,
-    getUserCommentsRoute
-} = require('../constants/routeNames/commentRoutes');
+const routes = require('../constants/routeNames/commentRoutes');
 
 const { getErrorMessage } = require('../utils/errorMessageUtil');
 
 const commentManager = require('../managers/commentManager');
 
 router.post(
-    createCommentRoute,
+    routes.createCommentRoute,
     isAuthenticated,
     async (req, res) => {
         const commentData = req.body;
@@ -31,7 +22,7 @@ router.post(
         }
     });
 
-router.put(editCommentRoute, isAuthenticated, async (req, res) => {
+router.put(routes.editCommentRoute, isAuthenticated, async (req, res) => {
     const commentId = req.params.commentId;
     const userId = req.user._id;
     const { recipeId, text } = req.body;
@@ -44,7 +35,7 @@ router.put(editCommentRoute, isAuthenticated, async (req, res) => {
     }
 });
 
-router.delete(deleteCommentRoute, isAuthenticated, async (req, res) => {
+router.delete(routes.deleteCommentRoute, isAuthenticated, async (req, res) => {
     const commentId = req.params.commentId;
 
     try {
@@ -55,7 +46,7 @@ router.delete(deleteCommentRoute, isAuthenticated, async (req, res) => {
     }
 });
 
-router.put(likeCommentRoute, isAuthenticated, async (req, res) => {
+router.put(routes.likeCommentRoute, isAuthenticated, async (req, res) => {
     const commentId = req.params.commentId;
     const userId = req.user._id;
 
@@ -67,43 +58,14 @@ router.put(likeCommentRoute, isAuthenticated, async (req, res) => {
     }
 });
 
-router.get(getCommentsByDateDescRoute, async (req, res) => {
+router.get(routes.getCommentsRoute, async (req, res) => {
+    const type = req.params.type;
     const recipeId = req.params.recipeId;
-    try {
-        const result = await commentManager.getCommentsByDateDesc(recipeId);
-        res.status(200).json({ message: 'Recipe comments retrieved successfully!', result });
-    } catch (error) {
-        res.status(400).json({ message: getErrorMessage(error) });
-    }
-});
-
-router.get(getCommentsByDateAscRoute, async (req, res) => {
-    const recipeId = req.params.recipeId;
+    const userId = req.user?._id;
 
     try {
-        const result = await commentManager.getCommentsByDateAsc(recipeId);
-        res.status(200).json({ message: 'Sorted comments by date asc!', result });
-    } catch (error) {
-        res.status(400).json({ message: getErrorMessage(error) });
-    }
-});
-
-router.get(getCommentsByLikesDescRoute, async (req, res) => {
-    const recipeId = req.params.recipeId;
-    try {
-        const result = await commentManager.getCommentsByLikesDesc(recipeId);
-        res.status(200).json({ message: 'Sorted comments', result });
-    } catch (error) {
-        res.status(400).json({ message: getErrorMessage(error) });
-    }
-});
-
-router.get(getUserCommentsRoute, isAuthenticated, async (req, res) => {
-    const userId = req.user._id;
-    const recipeId = req.params.recipeId;
-    try {
-        const result = await commentManager.getUserComments(userId, recipeId);
-        res.status(200).json({ message: 'User comments retrieved successfully!', result });
+        const result = await commentManager.getComments(userId, recipeId, type);
+        res.status(200).json({ message: 'Comment list retrieved successfully!', result });
     } catch (error) {
         res.status(400).json({ message: getErrorMessage(error) });
     }

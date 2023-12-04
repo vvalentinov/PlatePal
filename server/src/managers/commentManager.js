@@ -83,45 +83,37 @@ exports.likeComment = async (commentId, userId) => {
     return { message, result };
 };
 
-exports.getCommentsByDateDesc = async (recipeId) => {
+exports.getComments = async (userId, recipeId, type) => {
     await checkIfRecipeExists(recipeId);
 
-    return await Comment.find({ recipeId })
-        .populate('user', 'username')
-        .sort({ 'createdAt': -1 })
-        .lean();
-};
+    switch (type) {
+        case 'ByDateDesc':
+            return await Comment.find({ recipeId })
+                .populate('user', 'username')
+                .sort({ 'createdAt': -1 })
+                .lean();
+        case 'ByDateAsc':
+            return await Comment.find({ recipeId })
+                .populate('user', 'username')
+                .sort({ 'createdAt': 1 })
+                .lean();
+        case 'ByLikesDesc':
+            return await Comment.find({ recipeId })
+                .populate('user', 'username')
+                .sort({ 'likesCount': -1, 'createdAt': -1 })
+                .lean();
+        case 'UserComments':
+            const user = await userManager.getById(userId);
+            if (!user) {
+                throw new Error('No user with given id found!');
+            }
 
-exports.getCommentsByDateAsc = async (recipeId) => {
-    await checkIfRecipeExists(recipeId);
-
-    return await Comment.find({ recipeId })
-        .populate('user', 'username')
-        .sort({ 'createdAt': 1 })
-        .lean();
-};
-
-exports.getCommentsByLikesDesc = async (recipeId) => {
-    await checkIfRecipeExists(recipeId);
-
-    return await Comment.find({ recipeId })
-        .populate('user', 'username')
-        .sort({ 'likesCount': -1, 'createdAt': -1 })
-        .lean();
-};
-
-exports.getUserComments = async (userId, recipeId) => {
-    await checkIfRecipeExists(recipeId);
-
-    const user = await userManager.getById(userId);
-    if (!user) {
-        throw new Error('No user wit given id found!');
+            return await Comment.find({ recipeId, user: userId })
+                .populate('user', 'username')
+                .sort({ 'createdAt': -1 })
+                .lean();
+        default: throw new Error('Invalid comment type!');
     }
-
-    return await Comment.find({ recipeId, user: userId })
-        .populate('user', 'username')
-        .sort({ 'createdAt': -1 })
-        .lean();
 };
 
 exports.deleteAllUserComments = async (userId) => Comment.deleteMany({ user: userId });
