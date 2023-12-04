@@ -16,8 +16,12 @@ const Spoonacular = () => {
 
     const onFormSubmit = async (data) => {
         const query = data.search;
-        const result = await searchForRecipes(query);
-        setRecipes(result);
+        try {
+            const result = await searchForRecipes(query);
+            setRecipes(result);
+        } catch (error) {
+            console.log(error.message);
+        }
     };
 
     const {
@@ -25,7 +29,6 @@ const Spoonacular = () => {
         onChangeHandler,
         onSubmit
     } = useForm({ 'search': '' }, onFormSubmit);
-
 
     return (
         <section>
@@ -43,7 +46,10 @@ const Spoonacular = () => {
                     <div className={styles.recipesContainer}>
                         {
                             recipes.map(recipe =>
-                                <Link key={recipe.id} className={styles.recipeLink} to='/'>
+                                <Link
+                                    key={recipe.id}
+                                    className={styles.recipeLink}
+                                    to={`/spoonacular-recipe-details/${recipe.id}`}>
                                     <Card className={styles.recipeCard}>
                                         <Card.Img variant="top" src={recipe.image} />
                                         <Card.Body className={styles.recipeCardBody}>
