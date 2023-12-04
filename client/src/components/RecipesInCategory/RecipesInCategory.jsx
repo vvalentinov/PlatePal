@@ -11,7 +11,6 @@ import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 
 import { recipeServiceFactory } from '../../services/recipeService';
 import { useService } from '../../hooks/useService';
-import useForm from '../../hooks/useForm';
 import { categoriesListPath } from '../../constants/pathNames';
 import { recipeNameValidator } from '../../utils/validatorUtil';
 
@@ -23,7 +22,6 @@ const RecipesInCategory = () => {
     const [searchParams, setSearchParams] = useSearchParams();
 
     const [recipes, setRecipes] = useState([]);
-    const [recipeNameErr, setRecipeNameErr] = useState('');
     const [totalPages, setTotalPages] = useState(1);
 
     const searchName = searchParams.get('search') || '';
@@ -33,30 +31,9 @@ const RecipesInCategory = () => {
         pageNumber = 1;
     }
 
-    const onSearchFormSubmit = () => {
-        const recipeNameErrMsg = recipeNameValidator(formValues.search);
-        if (recipeNameErrMsg) {
-            return setRecipeNameErr(recipeNameErrMsg);
-        }
-
-        setRecipeNameErr('');
-        setSearchParams({ search: formValues.search, page: 1 });
-    };
-
-    const {
-        formValues,
-        updateSearchQuery,
-        onChangeHandler,
-        onSubmit
-    } = useForm({ 'search': '' }, onSearchFormSubmit);
-
     const searchInputText = `Search recipe by name in ${category} category`;
 
     useEffect(() => {
-        if (searchName) {
-            updateSearchQuery(searchName);
-        }
-
         recipeService.getAllInCategory(category, pageNumber, searchName)
             .then(res => {
                 setRecipes(res.result);
@@ -67,19 +44,17 @@ const RecipesInCategory = () => {
                 navigate(categoriesListPath, { state });
             });
 
+        window.scrollTo(0, 0);
+
     }, [category, pageNumber, searchName]);
+
+    const setCurrentPage = (number) => setSearchParams({ search: searchName, page: number });
 
     return (
         <section className={styles.recipesInCategorySection}>
             <h2 className={styles.heading}>{category}</h2>
             {(recipes.length > 0 || (recipes.length === 0 && searchName)) && (
-                <SearchRecipeForm
-                    onChange={onChangeHandler}
-                    onSubmit={onSubmit}
-                    value={formValues.search}
-                    searchInputText={searchInputText}
-                    error={recipeNameErr}
-                />
+                <SearchRecipeForm searchInputText={searchInputText} validator={recipeNameValidator} />
             )}
             {recipes.length > 0 && (<RecipesSection recipes={recipes} />)}
             {recipes.length === 0 && !searchName && (
@@ -93,13 +68,7 @@ const RecipesInCategory = () => {
                     <PaginationComponent
                         pagesCount={totalPages}
                         currentPage={pageNumber}
-                        setCurrentPage={(number) => {
-                            if (searchName) {
-                                setSearchParams({ search: searchName, page: number });
-                            } else {
-                                setSearchParams({ page: number });
-                            }
-                        }}
+                        setCurrentPage={(number) => setCurrentPage(number)}
                     />
                 </div>
             )}

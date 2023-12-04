@@ -1,7 +1,4 @@
-.container {
+.paginationContainer {
     display: flex;
-    gap: 4rem;
     justify-content: center;
-    flex-wrap: wrap;
-    margin: 3rem 0;
 }

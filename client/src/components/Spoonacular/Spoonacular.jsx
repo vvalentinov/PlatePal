@@ -1,8 +1,13 @@
 import styles from './Spoonacular.module.css';
 
 import Card from 'react-bootstrap/Card';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
+import Button from 'react-bootstrap/Button';
 
-import SearchRecipeForm from '../SearchRecipeForm/SearchRecipeForm';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+
 import BackToTopArrow from '../BackToTopArrow/BackToTopArrow';
 
 import { useState } from 'react';
@@ -32,15 +37,27 @@ const Spoonacular = () => {
 
     return (
         <section>
-            <h2 className="text-center text-white text-uppercase mt-3">
+            <h2 className="text-center text-white text-uppercase mt-5">
                 Welcome to spoonacular API!
             </h2>
-            <SearchRecipeForm
-                onSubmit={onSubmit}
-                onChange={onChangeHandler}
-                value={formValues.query}
-                searchInputText='Search for recipe...'
-            />
+            <div className={styles.searchContainer}>
+                <Form onSubmit={onSubmit} className={styles.searchForm}>
+                    <InputGroup size='lg'>
+                        <Form.Control
+                            placeholder={'Search for recipe...'}
+                            aria-label={'Search for recipe...'}
+                            aria-describedby="basic-addon2"
+                            className='border border-2 border-dark'
+                            onChange={onChangeHandler}
+                            value={formValues.search}
+                            name='search'
+                        />
+                        <Button type='submit' bsPrefix={styles.searchBtn} id="button-addon2">
+                            <FontAwesomeIcon size='lg' icon={faMagnifyingGlass} />
+                        </Button>
+                    </InputGroup>
+                </Form>
+            </div>
             {recipes?.length > 0 && (
                 <section className={styles.recipesSection}>
                     <div className={styles.recipesContainer}>

@@ -88,7 +88,12 @@ const ManageUsers = () => {
                 isSuccessfull={toast.isSuccessfull}
                 onExited={() => setToast({ message: '' })} />}
             <h2 className="text-center mt-3 text-uppercase text-white">Manage Users</h2>
-            <Table responsive variant='dark' bordered hover className={styles.table}>
+            <Table
+                responsive
+                variant='dark'
+                bordered
+                hover
+                className={styles.table}>
                 <thead>
                     <tr>
                         <th>#</th>
@@ -146,7 +151,11 @@ const ManageUsers = () => {
                     </Button>
                 </div>
             </Modal>
-            <Modal className={styles.modal} centered show={showDeleteModal} onHide={handleDeleteModalClose}>
+            <Modal
+                className={styles.modal}
+                centered
+                show={showDeleteModal}
+                onHide={handleDeleteModalClose}>
                 <Modal.Header className={styles.modalHeader} closeButton>
                     <Modal.Title>Delete User</Modal.Title>
                 </Modal.Header>
@@ -154,7 +163,10 @@ const ManageUsers = () => {
                     <p>Are you sure you want to delete this user?</p>
                 </Modal.Body>
                 <div className={`d-grid ${styles.modalBtnContainer}`}>
-                    <Button onClick={deleteUserHandler} bsPrefix={styles.modalBtn} size="lg">
+                    <Button
+                        onClick={deleteUserHandler}
+                        bsPrefix={styles.modalBtn}
+                        size="lg">
                         Delete User
                     </Button>
                 </div>

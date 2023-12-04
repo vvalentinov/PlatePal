@@ -54,3 +54,29 @@
     font-style: italic;
     color: white;
 }
+
+.searchContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 2rem 0;
+}
+
+.searchForm {
+    width: 60%;
+}
+
+.searchBtn,
+.searchBtn:hover,
+.searchBtn:active {
+    background-color: #93DC80;
+    border: solid 2px black;
+    padding: 0 1.5rem;
+    font-size: 1.5rem;
+    border-radius: 8px;
+}
+
+.searchBtn:hover {
+    color: white;
+}

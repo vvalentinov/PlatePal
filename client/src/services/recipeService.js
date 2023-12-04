@@ -25,6 +25,8 @@ export const recipeServiceFactory = (token) => {
         getMostRecent: () =>
             request.get(`${baseUrl}/get-most-recent`),
         getTopRated: () =>
-            request.get(`${baseUrl}/get-top-rated`)
+            request.get(`${baseUrl}/get-top-rated`),
+        getUnapprovedRecipes: (pageNumber, searchName) =>
+            request.get(`${baseUrl}/unapproved?searchName=${searchName}&page=${pageNumber}`),
     }
 };
