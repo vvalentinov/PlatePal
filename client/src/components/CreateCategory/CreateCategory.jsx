@@ -131,7 +131,6 @@ const CreateCategory = () => {
                         name={CreateCategoryKeys.File}
                         onChange={onFileChangeHandler}
                         onBlur={onCategoryFileBlur}
-                        // value={formValues[CreateCategoryKeys.Form]}
                         accept=".jpg, .jpeg, .png"
                         type="file"
                         size='lg'

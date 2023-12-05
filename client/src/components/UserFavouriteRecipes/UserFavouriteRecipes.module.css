@@ -5,3 +5,8 @@
     flex-wrap: wrap;
     margin: 3rem 0;
 }
+
+.paginationContainer {
+    display: flex;
+    justify-content: center;
+}

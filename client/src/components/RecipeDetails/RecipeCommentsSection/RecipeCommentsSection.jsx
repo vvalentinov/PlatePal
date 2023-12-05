@@ -103,46 +103,48 @@ const RecipeCommentsList = ({ recipeId }) => {
                     onCommentSubmit={onCommentSubmit}
                 />
             }
-            <div className={styles.container}>
-                <Button
-                    bsPrefix={
-                        currentBtn === FilterBtnsKeys.ByLikesDesc ?
-                            styles.sortFilterCommentsBtnActive :
-                            styles.sortFilterCommentsBtn
-                    }
-                    onClick={() => onGetCommentsBtnClick(FilterBtnsKeys.ByLikesDesc)}>
-                    Sort By Likes Desc
-                </Button>
-                <Button
-                    bsPrefix={
-                        currentBtn === FilterBtnsKeys.ByDateAsc ?
-                            styles.sortFilterCommentsBtnActive :
-                            styles.sortFilterCommentsBtn
-                    }
-                    onClick={() => onGetCommentsBtnClick(FilterBtnsKeys.ByDateAsc)}>
-                    Sort By Date Asc
-                </Button>
-                <Button
-                    bsPrefix={
-                        currentBtn === FilterBtnsKeys.ByDateDesc ?
-                            styles.sortFilterCommentsBtnActive :
-                            styles.sortFilterCommentsBtn
-                    }
-                    onClick={() => onGetCommentsBtnClick(FilterBtnsKeys.ByDateDesc)}>
-                    Sort By Date Desc
-                </Button>
-                {isAuthenticated && (
+            {(comments.length > 0 || (comments.length === 0 && currentBtn === FilterBtnsKeys.UserComments)) && (
+                <div className={styles.container}>
                     <Button
                         bsPrefix={
-                            currentBtn === FilterBtnsKeys.UserComments ?
+                            currentBtn === FilterBtnsKeys.ByLikesDesc ?
                                 styles.sortFilterCommentsBtnActive :
                                 styles.sortFilterCommentsBtn
                         }
-                        onClick={() => onGetCommentsBtnClick(FilterBtnsKeys.UserComments)}>
-                        Show my comments
+                        onClick={() => onGetCommentsBtnClick(FilterBtnsKeys.ByLikesDesc)}>
+                        Sort By Likes Desc
                     </Button>
-                )}
-            </div>
+                    <Button
+                        bsPrefix={
+                            currentBtn === FilterBtnsKeys.ByDateAsc ?
+                                styles.sortFilterCommentsBtnActive :
+                                styles.sortFilterCommentsBtn
+                        }
+                        onClick={() => onGetCommentsBtnClick(FilterBtnsKeys.ByDateAsc)}>
+                        Sort By Date Asc
+                    </Button>
+                    <Button
+                        bsPrefix={
+                            currentBtn === FilterBtnsKeys.ByDateDesc ?
+                                styles.sortFilterCommentsBtnActive :
+                                styles.sortFilterCommentsBtn
+                        }
+                        onClick={() => onGetCommentsBtnClick(FilterBtnsKeys.ByDateDesc)}>
+                        Sort By Date Desc
+                    </Button>
+                    {isAuthenticated && (
+                        <Button
+                            bsPrefix={
+                                currentBtn === FilterBtnsKeys.UserComments ?
+                                    styles.sortFilterCommentsBtnActive :
+                                    styles.sortFilterCommentsBtn
+                            }
+                            onClick={() => onGetCommentsBtnClick(FilterBtnsKeys.UserComments)}>
+                            Show my comments
+                        </Button>
+                    )}
+                </div>
+            )}
 
             {comments.length > 0 && (
                 <>
@@ -192,7 +194,7 @@ const RecipeCommentsList = ({ recipeId }) => {
             {
                 comments.length === 0 &&
                 currentBtn === FilterBtnsKeys.UserComments &&
-                <p className='text-white'>You haven't uploaded any comments yet...</p>
+                <p className='text-white'>You haven't posted any comments yet...</p>
             }
         </section>
     );

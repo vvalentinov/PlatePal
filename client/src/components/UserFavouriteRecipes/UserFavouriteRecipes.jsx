@@ -1,39 +1,35 @@
-import styles from './UserFavouriteRecipes.module.css';
+import { useState, useEffect } from 'react';
 
-import RecipeCardLink from '../RecipeCardLink/RecipeCardLink';
+import { useService } from '../../hooks/useService';
+import { userServiceFactory } from '../../services/userService';
 
-import { AuthContext } from '../../contexts/AuthContext';
+import ToastNotification from '../Toast/ToastNotification';
 
-import { useState, useEffect, useContext } from 'react';
+import RecipesSection from '../RecipesSection/RecipesSection';
 
 const UserFavoruiteRecipes = () => {
-    const { userId, token } = useContext(AuthContext);
+    const userService = useService(userServiceFactory);
 
     const [favouriteRecipes, setFavouriteRecipes] = useState();
+    const [toastMsg, setToastMsg] = useState('');
 
     useEffect(() => {
-        fetch(`http://localhost:3000/user/get-user-favourite-recipes`, {
-            headers: { 'X-Authorization': token }
-        })
-            .then(res => res.json())
+        userService.getFavouriteRecipes()
             .then(res => setFavouriteRecipes(res.result))
-            .catch(error => console.log(error.message));
+            .catch(error => setToastMsg(error.message))
+            .finally(() => window.scrollTo(0, 0));
     }, []);
 
     return (
         <>
-            <h2 className='text-center'>My Favourite Recipes</h2>
-            {favouriteRecipes && (
-                <div className={styles.recipesContainer}>
-                    {
-                        favouriteRecipes.map(recipe => <RecipeCardLink
-                            key={recipe._id}
-                            recipe={recipe}
-                            link={`/recipe/details/${recipe._id}`} />
-                        )
-                    }
-                </div>
-            )}
+            {
+                toastMsg &&
+                <ToastNotification
+                    message={toastMsg}
+                    onExited={() => setToastMsg('')} />
+            }
+            <h2 className='text-center text-white text-uppercase mt-5'>My Favorite Recipes</h2>
+            {favouriteRecipes && <RecipesSection recipes={favouriteRecipes} />}
         </>
     )
 };

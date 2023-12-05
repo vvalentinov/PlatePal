@@ -77,11 +77,12 @@ const Categories = () => {
             {categories.map(x => (
                 <div key={x._id}>
                     <div className={styles.container}>
-                        <div className={styles.imageContainer}>
-                            <Link className={styles.link} to={allRecipesPath.replace(':category', x.name)}>
-                                <img className={styles.categoryImg} src={x.image.url} alt="" />
-                            </Link>
-                        </div>
+                        <Link className={styles.link} to={allRecipesPath.replace(':category', x.name)}>
+                            <img className={styles.categoryImg} src={x.image.url} alt="" />
+                        </Link>
+                        {/* <div className={styles.imageContainer}>
+                            
+                        </div> */}
                         <Card className={styles.card}>
                             <Card.Header className={styles.cardHeader}>{x.name}</Card.Header>
                             <Card.Body className={styles.cardBody}>
