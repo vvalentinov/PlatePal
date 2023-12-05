@@ -124,6 +124,12 @@ exports.getAll = async (
         throw new Error(categoryErrors.categoryInvalidError);
     }
 
+    const totalRecipesInCategory = await Recipe.countDocuments(
+        {
+            category: category._id,
+            isApproved: true
+        });
+
     const total = await Recipe.countDocuments
         ({
             category: category._id,
@@ -145,7 +151,7 @@ exports.getAll = async (
         .select('_id image name')
         .lean();
 
-    return { recipes, totalPages };
+    return { recipes, totalPages, totalRecipesInCategory };
 };
 
 exports.getUnapproved = async (pageNumber, searchName) => {

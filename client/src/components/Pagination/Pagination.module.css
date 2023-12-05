@@ -1,0 +1,22 @@
+.paginationItem {
+    background-color: #2C3E50;
+    color: white;
+}
+
+.paginationItem:hover {
+    background-color: #93DC80;
+    color: white;
+}
+
+.paginationItemActive {
+    background-color: #93DC80 !important;
+}
+
+.prevPageItem {
+    background-color: #2C3E50 !important;
+    color: white !important;
+}
+
+.prevPageItem:hover {
+    background-color: #93DC80 !important;
+}

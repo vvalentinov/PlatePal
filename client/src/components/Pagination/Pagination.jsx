@@ -1,3 +1,5 @@
+import styles from './Pagination.module.css';
+
 import { useEffect } from "react";
 
 import Pagination from "react-bootstrap/Pagination";
@@ -6,7 +8,7 @@ const PaginationComponent = ({
     pagesCount,
     currentPage,
     setCurrentPage,
-    alwaysShown = true,
+    alwaysShown = true
 }) => {
     const isPaginationShown = alwaysShown ? true : pagesCount > 1;
     const isCurrentPageFirst = currentPage === 1;
@@ -52,6 +54,10 @@ const PaginationComponent = ({
             isPageNumberOutOfRange = false;
             return (
                 <Pagination.Item
+                    linkClassName={
+                        pageNumber === currentPage ?
+                            styles.paginationItemActive :
+                            styles.paginationItem}
                     key={pageNumber}
                     onClick={() => onPageNumberClick(pageNumber)}
                     active={pageNumber === currentPage}
@@ -74,13 +80,15 @@ const PaginationComponent = ({
     return (
         <>
             {isPaginationShown && (
-                <Pagination size="lg">
+                <Pagination className={styles.pagination} size="lg">
                     <Pagination.Prev
+                        linkClassName={styles.prevPageItem}
                         onClick={onPreviousPageClick}
                         disabled={isCurrentPageFirst}
                     />
                     {pageNumbers}
                     <Pagination.Next
+                        linkClassName={styles.prevPageItem}
                         onClick={onNextPageClick}
                         disabled={isCurrentPageLast}
                     />

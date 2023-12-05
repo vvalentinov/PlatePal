@@ -31,6 +31,7 @@ const RecipesInCategory = () => {
 
     const [recipes, setRecipes] = useState([]);
     const [totalPages, setTotalPages] = useState(1);
+    const [totalRecipes, setTotalRecipes] = useState();
     const [currentBtn, setCurrentBtn] = useState(FilterBtnsKeys.ByDateDesc);
 
     const searchName = searchParams.get('search') || '';
@@ -47,6 +48,7 @@ const RecipesInCategory = () => {
             .then(res => {
                 setRecipes(res.result);
                 setTotalPages(res.totalPages);
+                setTotalRecipes(res.totalRecipesInCategory);
             })
             .catch(error => {
                 const state = { toastMsg: error.message, isSuccessfull: false };
@@ -66,7 +68,7 @@ const RecipesInCategory = () => {
 
     return (
         <section className={styles.recipesInCategorySection}>
-            <h2 className={styles.heading}>{category}</h2>
+            <h2 className={styles.heading}>{category} ({totalRecipes})</h2>
             {(recipes.length > 0 || (recipes.length === 0 && searchName)) && (
                 <SearchRecipeForm searchInputText={searchInputText} validator={recipeNameValidator} />
             )}

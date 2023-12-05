@@ -1,9 +1,4 @@
-.recipesSection {
-    /* padding: 2rem 0; */
-    /* border: solid 2px blue; */
-}
-
-.recipesSection h2 {
+.recipesSectionHeader {
     text-align: center;
     text-transform: uppercase;
     letter-spacing: 0.2rem;
@@ -17,6 +12,5 @@
     gap: 4rem;
     justify-content: flex-start;
     flex-wrap: wrap;
-    /* border: solid 2px red; */
     padding: 2rem 8rem;
 }

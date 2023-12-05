@@ -36,10 +36,14 @@ router.get(routes.getRecipesInCategoryRoute, async (req, res) => {
     const sortCriteria = req.query.sort;
 
     try {
-        const { recipes, totalPages } = await recipeManager.getAll(category, page, searchName, sortCriteria);
+        const {
+            recipes,
+            totalPages,
+            totalRecipesInCategory
+        } = await recipeManager.getAll(category, page, searchName, sortCriteria);
         res.status(200).json({
             message: successMsg.getRecipesInCategorySuccess,
-            result: recipes, totalPages
+            result: recipes, totalPages, totalRecipesInCategory
         });
     } catch (error) {
         res.status(400).json({ message: getErrorMessage(error) });
