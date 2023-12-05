@@ -1,0 +1,1 @@
+exports.createCategorySuccess = 'Recipe category created successfully!';

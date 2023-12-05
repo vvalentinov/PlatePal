@@ -294,3 +294,4 @@ exports.getTopRatedRecipes = async () =>
         .limit(6)
         .select('_id image name')
         .lean();
+

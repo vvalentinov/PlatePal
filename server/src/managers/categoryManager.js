@@ -5,10 +5,12 @@ const recipeManager = require('./recipeManager');
 const { uploadImage, deleteImage } = require('../utils/cloudinaryUtil');
 const { validateImageFile } = require('../utils/imageFileValidatiorUtil');
 
+const errorMessages = require('../constants/errorMessages/categoryErrors');
+
 exports.create = async (data, categoryImage) => {
     const categoryWithName = await Category.findOne({ name: data.categoryName });
     if (categoryWithName) {
-        throw new Error('Category with given name already exists!');
+        throw new Error(errorMessages.categoryWithNameExistsError);
     }
 
     validateImageFile(categoryImage);

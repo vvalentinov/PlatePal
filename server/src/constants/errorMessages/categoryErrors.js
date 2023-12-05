@@ -10,3 +10,5 @@ exports.categoryURLRequiredError = 'Category image file must have a url!';
 exports.categoryInvalidIdFormat = 'Invalid category id format!';
 
 exports.categoryInvalidError = 'Category does not exist!';
+
+exports.categoryWithNameExistsError = 'Category with given name already exists!';

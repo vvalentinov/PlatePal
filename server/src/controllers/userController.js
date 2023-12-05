@@ -5,15 +5,11 @@ const { isAdmin } = require('../middlewares/isAdminMiddleware');
 
 const { getErrorMessage } = require('../utils/errorMessageUtil');
 
-const {
-    loginRoute,
-    registerRoute,
-    logoutRoute,
-} = require('../constants/routeNames/userRoutes');
+const routes = require('../constants/routeNames/userRoutes');
 
 const userManager = require('../managers/userManager');
 
-router.post(loginRoute, async (req, res) => {
+router.post(routes.loginRoute, async (req, res) => {
     const { username, password } = req.body;
     try {
         const session = await userManager.login(username, password);
@@ -23,7 +19,7 @@ router.post(loginRoute, async (req, res) => {
     }
 });
 
-router.post(registerRoute, async (req, res) => {
+router.post(routes.registerRoute, async (req, res) => {
     const userData = req.body;
     try {
         const session = await userManager.register(userData);
@@ -33,7 +29,7 @@ router.post(registerRoute, async (req, res) => {
     }
 });
 
-router.get(logoutRoute, isAuthenticated, async (req, res) => {
+router.get(routes.logoutRoute, isAuthenticated, async (req, res) => {
     userManager.logout(req.user.token);
     res.status(200).json({ message: "Logged out successfully!" });
 });
@@ -52,6 +48,7 @@ router.put('/add-recipe-to-favourites/:recipeId', isAuthenticated, async (req, r
 
 router.get('/get-user-favourite-recipes', isAuthenticated, async (req, res) => {
     const userId = req.user._id;
+
     try {
         const result = await userManager.getUserFavouriteRecipes(userId);
         res.status(200).json({ message: 'User favourite recipes retrieved successfully!', result });

@@ -8,6 +8,8 @@ const { getErrorMessage } = require('../utils/errorMessageUtil');
 
 const { isAdmin } = require('../middlewares/isAdminMiddleware');
 
+const successMessages = require('../constants/successMessages/category');
+
 const multer = require('multer');
 
 router.post(
@@ -20,7 +22,7 @@ router.post(
 
         try {
             const result = await categoryManager.create(data, image);
-            res.status(200).json({ message: "Recipe category created successfully!", result });
+            res.status(201).json({ message: successMessages.createCategorySuccess, result });
         } catch (error) {
             res.status(400).json({ message: getErrorMessage(error) });
         }

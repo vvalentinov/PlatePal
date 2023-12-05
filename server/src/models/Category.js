@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 
 const errors = require('../constants/errorMessages/categoryErrors');
 
+const { CategoryModelName } = require('../constants/dbModelsNames');
+
 const categorySchema = new mongoose.Schema({
     name: {
         type: String,
@@ -27,6 +29,6 @@ const categorySchema = new mongoose.Schema({
     },
 });
 
-const Category = mongoose.model('Category', categorySchema);
+const Category = mongoose.model(CategoryModelName, categorySchema);
 
 module.exports = Category;
