@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const errors = require('../constants/errorMessages/categoryErrors');
-
 const { CategoryModelName } = require('../constants/dbModelsNames');
 
 const categorySchema = new mongoose.Schema({

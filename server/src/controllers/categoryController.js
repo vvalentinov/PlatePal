@@ -1,19 +1,14 @@
 const router = require('express').Router();
-
-const routes = require('../constants/routeNames/categoryRoutes');
-
-const categoryManager = require('../managers/categoryManager');
-
-const { getErrorMessage } = require('../utils/errorMessageUtil');
-
-const { isAdmin } = require('../middlewares/isAdminMiddleware');
-
-const successMessages = require('../constants/successMessages/category');
-
 const multer = require('multer');
 
+const routes = require('../constants/routeNames/categoryRoutes');
+const categoryManager = require('../managers/categoryManager');
+const { getErrorMessage } = require('../utils/errorMessageUtil');
+const { isAdmin } = require('../middlewares/isAdminMiddleware');
+const successMessages = require('../constants/successMessages/category');
+
 router.post(
-    routes.createRoute,
+    routes.createCategoryRoute,
     isAdmin,
     multer().single('categoryFile'),
     async (req, res) => {
@@ -22,15 +17,19 @@ router.post(
 
         try {
             const result = await categoryManager.create(data, image);
-            res.status(201).json({ message: successMessages.createCategorySuccess, result });
+            res.status(201).json({
+                message: successMessages.createCategorySuccess,
+                result
+            });
         } catch (error) {
             res.status(400).json({ message: getErrorMessage(error) });
         }
     });
 
 router.put(
-    '/edit/:categoryId',
-    isAdmin, multer().single('categoryFile'),
+    routes.editCategoryRoute,
+    isAdmin,
+    multer().single('categoryFile'),
     async (req, res) => {
         const categoryId = req.params.categoryId;
         const image = req.file;
@@ -38,42 +37,62 @@ router.put(
 
         try {
             const result = await categoryManager.edit(categoryId, image, data);
-            res.status(200).json({ message: "Category edited successfully!", result });
+            res.status(200).json({
+                message: successMessages.editedCategorySuccess,
+                result
+            });
         } catch (error) {
             res.status(400).json({ message: getErrorMessage(error) });
         }
     });
 
-router.get(routes.getAllRoute, async (req, res) => {
+router.get(routes.getAllCategoriesRoute, async (req, res) => {
     try {
         const result = await categoryManager.getAll();
-        res.status(200).json({ message: "Recipe Categories retrieved successfully!", result });
+        res.status(200).json({
+            message: successMessages.getCategoriesSuccess,
+            result
+        });
     } catch (error) {
         res.status(400).json({ message: getErrorMessage(error) });
     }
 });
 
 router.get(routes.getCategoryList, async (req, res) => {
-    const result = await categoryManager.getCategoryList();
-    res.status(200).json({ message: 'Category list retrieved successfully!', result });
-});
-
-router.get('/get-category/:categoryId', async (req, res) => {
-    const categoryId = req.params.categoryId;
-
     try {
-        const category = await categoryManager.getById(categoryId);
-        res.status(200).json({ message: 'Category with given id retrieved successfully!', result: category });
+        const result = await categoryManager.getCategoryList();
+        res.status(200).json({
+            message: successMessages.getCategoriesListSuccess,
+            result
+        });
     } catch (error) {
         res.status(400).json({ message: getErrorMessage(error) });
     }
 });
 
-router.delete('/delete/:categoryId', isAdmin, async (req, res) => {
+router.get(routes.getCategoryRoute, async (req, res) => {
     const categoryId = req.params.categoryId;
+
+    try {
+        const category = await categoryManager.getById(categoryId);
+        res.status(200).json({
+            message: successMessages.getCategorySuccess,
+            result: category
+        });
+    } catch (error) {
+        res.status(400).json({ message: getErrorMessage(error) });
+    }
+});
+
+router.delete(routes.deleteCategoryRoute, isAdmin, async (req, res) => {
+    const categoryId = req.params.categoryId;
+
     try {
         const result = await categoryManager.deleteCategory(categoryId);
-        res.status(200).json({ message: 'Category deleted successfully!', result });
+        res.status(200).json({
+            message: successMessages.deleteCategorySuccess,
+            result
+        });
     } catch (error) {
         res.status(400).json({ message: getErrorMessage(error) });
     }

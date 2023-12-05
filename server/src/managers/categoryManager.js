@@ -29,23 +29,23 @@ exports.create = async (data, categoryImage) => {
 exports.edit = async (categoryId, image, data) => {
     const category = await Category.findById(categoryId);
     if (!category) {
-        throw new Error('No category with given id found!');
+        throw new Error(errorMessages.categoryInvalidError);
     }
 
     if (!data.categoryName) {
-        throw new Error('Category name is required!');
+        throw new Error(errorMessages.categoryNameRequiredError);
     }
 
     if (data.categoryName.length < 2 || data.categoryName.length > 40) {
-        throw new Error('Category name must be between 2 and 40 characters long!');
+        throw new Error(errorMessages.categoryNameLengthError(2, 40));
     }
 
     if (!data.categoryDescription) {
-        throw new Error('Category description is required!');
+        throw new Error(errorMessages.categoryDescriptionRequiredError);
     }
 
     if (data.categoryDescription.length < 200 || data.categoryDescription.length > 750) {
-        throw new Error('Category description must be between 200 and 750 characters long!');
+        throw new Error(errorMessages.categoryDescriptionLengthError(200, 750));
     }
 
     const editedCategory = await Category.findByIdAndUpdate(
@@ -67,7 +67,6 @@ exports.edit = async (categoryId, image, data) => {
     }
 
     await editedCategory.save();
-
     return editedCategory;
 };
 
@@ -79,7 +78,7 @@ exports.getAll = () => Category
 exports.getById = async (categoryId) => {
     const category = await Category.findById(categoryId);
     if (!category) {
-        throw new Error('No category with given id found!');
+        throw new Error(errorMessages.categoryInvalidError);
     }
 
     return category;
@@ -96,7 +95,7 @@ exports.getCategoryList = () => Category
 exports.deleteCategory = async (categoryId) => {
     const category = await Category.findById(categoryId);
     if (!category) {
-        throw new Error('No category with given id found!');
+        throw new Error(errorMessages.categoryInvalidError);
     }
 
     await deleteImage(category.image.publicId);
