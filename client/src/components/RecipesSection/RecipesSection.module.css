@@ -1,12 +1,6 @@
-.recipesContainer {
-    display: flex;
-    gap: 4rem;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
 .recipesSection {
-    padding: 2rem 0;
+    /* padding: 2rem 0; */
+    /* border: solid 2px blue; */
 }
 
 .recipesSection h2 {
@@ -16,4 +10,13 @@
     text-decoration: underline;
     font-style: italic;
     color: white;
+}
+
+.recipesContainer {
+    display: flex;
+    gap: 4rem;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    /* border: solid 2px red; */
+    padding: 2rem 8rem;
 }

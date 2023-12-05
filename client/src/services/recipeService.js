@@ -8,8 +8,8 @@ export const recipeServiceFactory = (token) => {
     return {
         create: (data) =>
             request.post(`${baseUrl}/create`, data),
-        getAllInCategory: (categoryName, pageNumber, searchName) =>
-            request.get(`${baseUrl}/all/${categoryName}?searchName=${searchName}&page=${pageNumber}`),
+        getAllInCategory: (categoryName, pageNumber, searchName, sort) =>
+            request.get(`${baseUrl}/all/${categoryName}?searchName=${searchName}&page=${pageNumber}&sort=${sort}`),
         getRecipe: (recipeId) =>
             request.get(`${baseUrl}/details/${recipeId}`),
         getAllUserRecipes: (searchQuery, pageNumber, recipeType) =>

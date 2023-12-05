@@ -7,7 +7,7 @@ import { recipeDetailsPath } from '../../constants/pathNames';
 const RecipesSection = ({ recipes, title }) => {
     return (
         <section className={styles.recipesSection}>
-            {title && <h2 className='mb-5'>{title}</h2>}
+            {title && <h2 className='mb-3'>{title}</h2>}
             <div className={styles.recipesContainer}>
                 {recipes.map(recipe => <RecipeCardLink
                     key={recipe._id}

@@ -1,22 +1,19 @@
+import styles from './CreateCategory.module.css';
+
 import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Button from 'react-bootstrap/Button';
 
-import styles from './CreateCategory.module.css';
-
-import { useService } from '../../hooks/useService';
-
-import { categoryServiceFactory } from '../../services/categoryService';
-
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import * as paths from '../../constants/pathNames';
-
 import useForm from '../../hooks/useForm';
-
-import { useState } from 'react';
-
+import { useService } from '../../hooks/useService';
+import { categoryServiceFactory } from '../../services/categoryService';
+import * as paths from '../../constants/pathNames';
 import * as validator from '../../utils/validatorUtil';
+
+import ToastNotification from '../Toast/ToastNotification';
 
 const CreateCategoryKeys = {
     Name: 'categoryName',
@@ -29,6 +26,7 @@ const CreateCategory = () => {
 
     const categoryService = useService(categoryServiceFactory);
 
+    const [toastMsg, setToastMsg] = useState('');
     const [errors, setErrors] = useState({
         CategoryNameError: '',
         CategoryDescriptionError: '',
@@ -56,10 +54,11 @@ const CreateCategory = () => {
         formData.append(CreateCategoryKeys.Description, data.categoryDescription);
 
         try {
-            await categoryService.create(formData);
-            navigate(paths.homePath);
+            const response = await categoryService.create(formData);
+            const toast = { message: response.message, isSuccessfull: true };
+            navigate(paths.homePath, { state: toast });
         } catch (error) {
-            console.log(error.message);
+            setToastMsg(error.message);
         }
     };
 
@@ -97,54 +96,57 @@ const CreateCategory = () => {
     }, onFormSubmit);
 
     return (
-        <div className={styles.container}>
-            <Form encType="multipart/form-data" className="rounded-4 p-4" onSubmit={onSubmit}>
-                <h2 className='text-center mb-3'>Create Recipe Category</h2>
-                <FloatingLabel controlId="floatingInput" label="Category Name" className="my-4">
-                    <Form.Control
-                        name={CreateCategoryKeys.Name}
-                        onChange={onChangeHandler}
-                        value={formValues[CreateCategoryKeys.Name]}
-                        onBlur={onCategoryNameBlur}
-                        autoComplete="on"
-                        type="text"
-                        placeholder="Category"
-                        className={errors.CategoryNameError ? styles.formControlError : styles.formControl}
-                    />
-                    {errors.CategoryNameError && <p className='text-start text-danger'>{errors.CategoryNameError}</p>}
-                </FloatingLabel>
-                <FloatingLabel controlId="floatingTextarea2" label="Category Description" className="mb-4">
-                    <Form.Control
-                        name={CreateCategoryKeys.Description}
-                        onChange={onChangeHandler}
-                        onBlur={onCategoryDescriptionBlur}
-                        value={formValues[CreateCategoryKeys.Description]}
-                        as="textarea"
-                        placeholder="Leave a comment here"
-                        style={{ height: '150px' }}
-                        className={errors.CategoryDescriptionError ? styles.formControlError : styles.formControl}
-                    />
-                    {errors.CategoryDescriptionError && <p className='text-start text-danger'>{errors.CategoryDescriptionError}</p>}
-                </FloatingLabel>
-                <Form.Group controlId="formFile" className="mb-4">
-                    <Form.Control
-                        name={CreateCategoryKeys.File}
-                        onChange={onFileChangeHandler}
-                        onBlur={onCategoryFileBlur}
-                        accept=".jpg, .jpeg, .png"
-                        type="file"
-                        size='lg'
-                        className={errors.CategoryFileError ? styles.formControlError : styles.formControl}
-                    />
-                    {errors.CategoryFileError && <p className='text-start text-danger'>{errors.CategoryFileError}</p>}
-                </Form.Group>
-                <div className="d-grid">
-                    <Button bsPrefix={styles.formButton} className='rounded-3 py-2' size="lg" type="submit">
-                        Create
-                    </Button>
-                </div>
-            </Form>
-        </div>
+        <>
+            {toastMsg && <ToastNotification message={toastMsg} onExited={() => setToastMsg('')} />}
+            <div className={styles.container}>
+                <Form encType="multipart/form-data" className="rounded-4 p-4" onSubmit={onSubmit}>
+                    <h2 className='text-center mb-3'>Create Recipe Category</h2>
+                    <FloatingLabel controlId="floatingInput" label="Category Name" className="my-4">
+                        <Form.Control
+                            name={CreateCategoryKeys.Name}
+                            onChange={onChangeHandler}
+                            value={formValues[CreateCategoryKeys.Name]}
+                            onBlur={onCategoryNameBlur}
+                            autoComplete="on"
+                            type="text"
+                            placeholder="Category"
+                            className={errors.CategoryNameError ? styles.formControlError : styles.formControl}
+                        />
+                        {errors.CategoryNameError && <p className='text-start text-danger'>{errors.CategoryNameError}</p>}
+                    </FloatingLabel>
+                    <FloatingLabel controlId="floatingTextarea2" label="Category Description" className="mb-4">
+                        <Form.Control
+                            name={CreateCategoryKeys.Description}
+                            onChange={onChangeHandler}
+                            onBlur={onCategoryDescriptionBlur}
+                            value={formValues[CreateCategoryKeys.Description]}
+                            as="textarea"
+                            placeholder="Leave a comment here"
+                            style={{ height: '150px' }}
+                            className={errors.CategoryDescriptionError ? styles.formControlError : styles.formControl}
+                        />
+                        {errors.CategoryDescriptionError && <p className='text-start text-danger'>{errors.CategoryDescriptionError}</p>}
+                    </FloatingLabel>
+                    <Form.Group controlId="formFile" className="mb-4">
+                        <Form.Control
+                            name={CreateCategoryKeys.File}
+                            onChange={onFileChangeHandler}
+                            onBlur={onCategoryFileBlur}
+                            accept=".jpg, .jpeg, .png"
+                            type="file"
+                            size='lg'
+                            className={errors.CategoryFileError ? styles.formControlError : styles.formControl}
+                        />
+                        {errors.CategoryFileError && <p className='text-start text-danger'>{errors.CategoryFileError}</p>}
+                    </Form.Group>
+                    <div className="d-grid">
+                        <Button bsPrefix={styles.formButton} className='rounded-3 py-2' size="lg" type="submit">
+                            Create
+                        </Button>
+                    </div>
+                </Form>
+            </div>
+        </>
     );
 };
 

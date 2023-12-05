@@ -31,3 +31,35 @@
     display: flex;
     justify-content: center;
 }
+
+.container {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    width: 100%;
+    padding: 0 10rem;
+}
+
+.sortFilterCommentsBtn {
+    background-color: #93DC80;
+    color: black;
+    border: solid 2px black;
+    border-radius: 15px;
+    padding: 0.5rem 1rem;
+    flex-basis: 50%;
+    font-size: 1.3rem;
+}
+
+.sortFilterCommentsBtnActive {
+    background-color: #93DC80;
+    color: white;
+    border: solid 2px black;
+    border-radius: 15px;
+    padding: 0.5rem 1rem;
+    flex-basis: 50%;
+    font-size: 1.3rem;
+}
+
+.sortFilterCommentsBtn:hover {
+    color: white;
+}

@@ -57,7 +57,9 @@ const EditCategory = () => {
                     [EditCategoryKeys.Description]: res.result.description
                 }));
                 setImageUrl(res.result.image.url);
-            }).catch(error => setToastMsg(error.message));
+            })
+            .catch(error => setToastMsg(error.message))
+            .finally(() => window.scrollTo(0, 0));
     }, [categoryId]);
 
     const onFormSubmit = async (e) => {
