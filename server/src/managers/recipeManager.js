@@ -88,9 +88,35 @@ exports.edit = async (recipeId, data, recipeImage, owner) => {
     return editedRecipe;
 };
 
-exports.getAll = async (categoryName, pageNumber, searchName) => {
+exports.getAll = async (
+    categoryName,
+    pageNumber,
+    searchName,
+    sortCriteria
+) => {
     if (pageNumber < 1) {
         throw new Error('Page number must be bigger or equal to 1!');
+    }
+
+    if (sortCriteria !== 'ByAvgScoreDesc' &&
+        sortCriteria !== 'ByDateAsc' &&
+        sortCriteria !== 'ByDateDesc') {
+
+    }
+
+    let sortArg;
+    switch (sortCriteria) {
+        case 'ByAvgScoreDesc':
+            sortArg = { 'averageRating': -1, 'createdAt': -1 };
+            break;
+        case 'ByDateDesc':
+            sortArg = { 'createdAt': -1 };
+            break;
+        case 'ByDateAsc':
+            sortArg = { 'createdAt': 1 };
+            break;
+        default:
+            throw new Error('Invalid sort criteria!');
     }
 
     const category = await categoryManager.getByName(categoryName);
@@ -115,6 +141,7 @@ exports.getAll = async (categoryName, pageNumber, searchName) => {
         })
         .limit(6)
         .skip((6 * pageNumber) - 6)
+        .sort(sortArg)
         .select('_id image name')
         .lean();
 
