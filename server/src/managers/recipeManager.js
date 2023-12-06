@@ -21,30 +21,15 @@ exports.create = async (data, recipeImage, owner) => {
     }
 
     await recipeValidator(data);
-
     validateImageFile(recipeImage);
 
-    const recipe = await Recipe.create
-        ({
-            name: data.recipeName,
-            description: data.recipeDescription,
-            cookingTime: data.recipeCookingTime,
-            prepTime: data.recipePrepTime,
-            servings: data.recipeServings,
-            ingredients: data.ingredients,
-            steps: data.steps,
-            youtubeLink: data.youtubeLink,
-            category: data.recipeCategory,
-            createdAt: data.createdAt,
-            owner,
-        });
+    const recipe = await Recipe.create({ ...data, owner });
 
     const { public_id, secure_url } = await uploadImage(recipeImage.buffer, 'Recipes');
     recipe.image.publicId = public_id;
     recipe.image.url = secure_url;
 
     await recipe.save();
-
     return recipe;
 };
 
@@ -55,22 +40,12 @@ exports.edit = async (recipeId, data, recipeImage, owner) => {
     const recipe = await Recipe.findById(recipeId);
 
     if (recipe.owner.toString() !== owner) {
-        throw new Error('You have to be the recipe owner to edit it!');
+        throw new Error(recipeErrors.recipeOwnerEditError);
     }
 
-    const editedRecipe = await Recipe.findByIdAndUpdate(recipeId,
-        {
-            name: data.recipeName,
-            description: data.recipeDescription,
-            cookingTime: data.recipeCookingTime,
-            prepTime: data.recipePrepTime,
-            servings: data.recipeServings,
-            ingredients: data.ingredients,
-            steps: data.steps,
-            youtubeLink: data.youtubeLink,
-            category: data.recipeCategory,
-            owner
-        },
+    const editedRecipe = await Recipe.findByIdAndUpdate(
+        recipeId,
+        { ...data, owner },
         { new: true }
     );
 
@@ -84,7 +59,6 @@ exports.edit = async (recipeId, data, recipeImage, owner) => {
     }
 
     await editedRecipe.save();
-
     return editedRecipe;
 };
 

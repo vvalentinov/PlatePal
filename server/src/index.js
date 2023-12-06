@@ -13,6 +13,8 @@ const routes = require('./routes');
 
 const app = express();
 
+console.log('fdsfds');
+
 dbConfig();
 expressConfig(app);
 cloudinaryConfig();

@@ -6,37 +6,35 @@ const categoryErrors = require('../constants/errorMessages/categoryErrors');
 const regexes = require('../constants/regexes/regexes');
 
 exports.recipeValidator = async (data) => {
-    if (!data.recipeName) {
-        throw new Error('Recipe name is required!');
+    if (!data.name) {
+        throw new Error(recipeErrors.recipeNameRequiredError);
     }
 
-    if (!data.recipeDescription) {
-        throw new Error('Recipe description is required!');
+    if (!data.description) {
+        throw new Error(recipeErrors.recipeDescriptionRequiredError);
     }
 
-    if (!data.recipeCookingTime) {
-        throw new Error('Recipe cooking time is required!');
+    if (!data.cookingTime) {
+        throw new Error(recipeErrors.recipeCookingTimeRequiredError);
     }
 
-    if (!data.recipePrepTime) {
-        throw new Error('Recipe prep time is required!');
+    if (!data.prepTime) {
+        throw new Error(recipeErrors.recipePrepTimeRequiredError);
     }
 
-    if (!data.recipeServings) {
-        throw new Error('Recipe servings is required!');
+    if (!data.servings) {
+        throw new Error(recipeErrors.recipeServingsRequiredError);
     }
 
     const regex = new RegExp(regexes.mongooseObjectIdFormatRegex);
-    if (!regex.test(data.recipeCategory)) {
+    if (!regex.test(data.category)) {
         throw new Error(categoryErrors.categoryInvalidIdFormat);
     }
 
-    await categoryManager.getById(data.recipeCategory);
-
-    // const category = await categoryManager.getById(data.recipeCategory);
-    // if (!category) {
-    //     throw new Error(categoryErrors.categoryInvalidError);
-    // }
+    const category = await categoryManager.getById(data.category);
+    if (!category) {
+        throw new Error(categoryErrors.categoryInvalidError);
+    }
 
     if (data.youtubeLink) {
         const regex = new RegExp(regexes.recipeYoutubeLinkRegex);

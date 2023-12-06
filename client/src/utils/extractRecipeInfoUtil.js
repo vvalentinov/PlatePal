@@ -6,7 +6,7 @@ export const extractRecipeFormData = (data) => {
     }
 
     if (data.recipeName) {
-        formData.append("recipeName", data.recipeName);
+        formData.append("name", data.recipeName);
     }
 
     if (data.recipeFile) {
@@ -14,23 +14,23 @@ export const extractRecipeFormData = (data) => {
     }
 
     if (data.recipeDescription) {
-        formData.append("recipeDescription", data.recipeDescription);
+        formData.append("description", data.recipeDescription);
     }
 
     if (data.recipeCookTime) {
-        formData.append("recipeCookingTime", Number(data.recipeCookTime));
+        formData.append("cookingTime", Number(data.recipeCookTime));
     }
 
     if (data.recipePrepTime) {
-        formData.append("recipePrepTime", Number(data.recipePrepTime));
+        formData.append("prepTime", Number(data.recipePrepTime));
     }
 
     if (data.recipeServings) {
-        formData.append("recipeServings", Number(data.recipeServings));
+        formData.append("servings", Number(data.recipeServings));
     }
 
     if (data.recipeCategory) {
-        formData.append("recipeCategory", data.recipeCategory);
+        formData.append("category", data.recipeCategory);
     }
 
     if (data.ingredients) {
