@@ -3,6 +3,7 @@ import styles from './Categories.module.css';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import Image from 'react-bootstrap/Image';
 
 import CustomSpinner from '../Spinner/Spinner';
 import BackToTopArrow from '../BackToTopArrow/BackToTopArrow';
@@ -75,14 +76,11 @@ const Categories = () => {
             </h2>
             {isLoading && <CustomSpinner />}
             {categories.map(x => (
-                <div key={x._id}>
+                <div key={x._id} className={styles.customContainer}>
                     <div className={styles.container}>
                         <Link className={styles.link} to={allRecipesPath.replace(':category', x.name)}>
-                            <img className={styles.categoryImg} src={x.image.url} alt="" />
+                            <Image className={styles.categoryImg} src={x.image.url} fluid={true} />
                         </Link>
-                        {/* <div className={styles.imageContainer}>
-                            
-                        </div> */}
                         <Card className={styles.card}>
                             <Card.Header className={styles.cardHeader}>{x.name}</Card.Header>
                             <Card.Body className={styles.cardBody}>
@@ -108,7 +106,6 @@ const Categories = () => {
                             </Button>
                         </div>
                     )}
-
                 </div>
             ))}
             <BackToTopArrow />

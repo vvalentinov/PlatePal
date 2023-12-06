@@ -81,3 +81,10 @@
     padding: 2rem 0;
     background-color: #31837b;
 }
+
+@media only screen and (max-width: 1500px) {
+    .container {
+        flex-direction: column;
+        /* padding: 0; */
+    }
+}

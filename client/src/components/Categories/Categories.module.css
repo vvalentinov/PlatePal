@@ -1,3 +1,7 @@
+.customContainer:not(:last-child) {
+    margin-bottom: 5rem;
+}
+
 .categoriesSection {
     padding: 2rem 0;
     background-color: #31837b;
@@ -8,6 +12,7 @@
     text-transform: uppercase;
     letter-spacing: 0.3rem;
     color: white;
+    margin-bottom: 3rem;
 }
 
 .container {
@@ -16,14 +21,13 @@
     align-items: center;
     gap: 4rem;
     margin: 0 2.5rem;
-    min-height: calc(100vh - 160px);
 }
 
 .btnsContainer {
     display: flex;
     justify-content: center;
     gap: 3rem;
-    margin: 1rem 0;
+    margin-top: 3rem;
 }
 
 .categoryBtn {
@@ -118,5 +122,10 @@
 @media only screen and (max-width: 992px) {
     .container {
         flex-direction: column;
+    }
+
+    .btnsContainer {
+        flex-direction: column;
+        align-items: center;
     }
 }

@@ -1,5 +1,7 @@
 import styles from './RecipeDetails.module.css';
 
+import Image from 'react-bootstrap/Image';
+
 import ApproveRecipe from './ApproveRecipe/ApproveRecipe';
 import DeleteRecipe from './DeleteRecipe/DeleteRecipe';
 import EditRecipeCard from './EditRecipeCard/EditRecipeCard';
@@ -101,7 +103,7 @@ const RecipeDetails = () => {
             {recipe && (
                 <>
                     <section className={styles.container}>
-                        <img src={recipe.image.url} alt={`Recipe Image: ${recipe.name}`} />
+                        <Image src={recipe.image.url} alt={`Recipe Image: ${recipe.name}`} fluid />
                         <RecipeDescriptionCard
                             handleToast={handleToast}
                             recipe={recipe}

@@ -4,3 +4,9 @@ main {
     font-family: 'PT Serif';
     margin-top: 80px;
 }
+
+@media only screen and (max-width: 1000px) {
+    main {
+        margin-top: 40px;
+    }
+}
