@@ -13,7 +13,18 @@ import ToastNotification from '../Toast/ToastNotification';
 
 import BackToTopArrow from '../BackToTopArrow/BackToTopArrow';
 
+import { AuthContext } from '../../contexts/AuthContext';
+import { useContext } from 'react';
+
+const FilterBtnsKeys = {
+    AllUsers: 'All',
+    Users: 'Users',
+    Admins: 'Admins'
+};
+
 const ManageUsers = () => {
+    const { userLogin } = useContext(AuthContext);
+
     const userService = useService(userServiceFactory);
 
     const [userId, setUserId] = useState('');
@@ -22,6 +33,8 @@ const ManageUsers = () => {
 
     const [showAdminModal, setShowAdminModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+    const [currentBtn, setCurrentBtn] = useState(FilterBtnsKeys.AllUsers);
 
     const handleAdminModalClose = () => {
         setShowAdminModal(false);
@@ -41,14 +54,14 @@ const ManageUsers = () => {
     };
 
     useEffect(() => {
-        userService.getAllUsers()
+        userService.getAllUsers(currentBtn)
             .then(res => setUsers(res.result))
             .catch(err => console.log(err.message));
-    }, []);
+    }, [currentBtn]);
 
-    const makeUserAdminHandler = async () => {
+    const changeUserRoleHandler = async () => {
         try {
-            const response = await userService.makeAdmin(userId);
+            const response = await userService.changeRole(userId);
             setUsers((prevUsers) => {
                 return prevUsers.map((user) => {
                     if (user._id === userId) {
@@ -57,6 +70,7 @@ const ManageUsers = () => {
                     return user;
                 });
             });
+            userLogin(response.session);
             handleAdminModalClose();
             setToast({ message: response.message, isSuccessfull: true });
             window.scrollTo(0, 0);
@@ -81,6 +95,8 @@ const ManageUsers = () => {
         }
     };
 
+    const onFilterBtnClick = (type) => setCurrentBtn(type);
+
     return (
         <section className={styles.manageUsersSection}>
             {toast.message && <ToastNotification
@@ -88,6 +104,36 @@ const ManageUsers = () => {
                 isSuccessfull={toast.isSuccessfull}
                 onExited={() => setToast({ message: '' })} />}
             <h2 className="text-center mt-3 text-uppercase text-white">Manage Users</h2>
+            <div className={styles.container}>
+                <Button
+                    bsPrefix={
+                        currentBtn === FilterBtnsKeys.Admins ?
+                            styles.filterUsersBtnActive :
+                            styles.filterUsersBtn
+                    }
+                    onClick={() => onFilterBtnClick(FilterBtnsKeys.Admins)}>
+                    Show only admins
+                </Button>
+                <Button
+                    bsPrefix={
+                        currentBtn === FilterBtnsKeys.Users ?
+                            styles.filterUsersBtnActive :
+                            styles.filterUsersBtn
+                    }
+                    onClick={() => onFilterBtnClick(FilterBtnsKeys.Users)}
+                >
+                    Show only users
+                </Button>
+                <Button
+                    bsPrefix={
+                        currentBtn === FilterBtnsKeys.AllUsers ?
+                            styles.filterUsersBtnActive :
+                            styles.filterUsersBtn
+                    }
+                    onClick={() => onFilterBtnClick(FilterBtnsKeys.AllUsers)}>
+                    Show all
+                </Button>
+            </div>
             <Table
                 responsive
                 variant='dark'
@@ -117,13 +163,13 @@ const ManageUsers = () => {
                                             size='lg'>
                                             Delete
                                         </Button>
-                                        {!x.isAdmin &&
-                                            <Button
-                                                bsPrefix={styles.actionsCellBtn}
-                                                size='lg'
-                                                onClick={() => handleAdminModalShow(x._id)}>
-                                                Make Admin
-                                            </Button>}
+
+                                        <Button
+                                            bsPrefix={styles.actionsCellBtn}
+                                            size='lg'
+                                            onClick={() => handleAdminModalShow(x._id)}>
+                                            Change Role
+                                        </Button>
                                     </td>
                                 </tr>
                             ))}
@@ -144,10 +190,10 @@ const ManageUsers = () => {
                 </Modal.Body>
                 <div className={`d-grid ${styles.modalBtnContainer}`}>
                     <Button
-                        onClick={makeUserAdminHandler}
+                        onClick={changeUserRoleHandler}
                         bsPrefix={styles.modalBtn}
                         size="lg">
-                        Make Admin
+                        Change User Role
                     </Button>
                 </div>
             </Modal>

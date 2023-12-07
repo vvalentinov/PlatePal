@@ -43,8 +43,44 @@
 .myProfileSection {
     background-color: #31837b;
     padding: 2rem 0;
-
 }
+
+.modalHeader {
+    background-color: #93DC80;
+}
+
+.modalBody {
+    background-color: #2C3E50;
+    color: white;
+    text-align: center;
+    font-size: 1.3rem;
+}
+
+.modalFooter {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+    background-color: #2C3E50;
+}
+
+.modalFooter div {
+    width: 100%;
+}
+
+.modalButton,
+.modalButton:active {
+    font-size: 1.5rem;
+    background-color: #93DC80;
+    border-radius: 15px;
+    text-transform: uppercase;
+    border: solid 3px black;
+    width: 100%;
+}
+
+.modalButton:hover {
+    color: red;
+}
+
 
 @media only screen and (max-width: 1240px) {
     .container {

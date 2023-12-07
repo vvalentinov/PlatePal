@@ -268,14 +268,18 @@ const UserProfile = () => {
                 <BackToTopArrow />
 
                 <Modal centered show={show} onHide={handleClose}>
-                    <Modal.Header closeButton>
+                    <Modal.Header className={styles.modalHeader} closeButton>
                         <Modal.Title>Delete Profile</Modal.Title>
                     </Modal.Header>
-                    <Modal.Body>Are you sure you want to delete your profile?</Modal.Body>
-                    <Modal.Footer>
-                        <Button variant="primary" onClick={onDeleteBtnClick}>
-                            Delete
-                        </Button>
+                    <Modal.Body className={styles.modalBody}>Are you sure you want to delete your profile?</Modal.Body>
+                    <Modal.Footer className={styles.modalFooter}>
+                        <div className="d-grid gap-2">
+                            <Button bsPrefix={styles.modalButton} variant="primary" onClick={onDeleteBtnClick}>
+                                Delete
+                            </Button>
+
+                        </div>
+
                     </Modal.Footer>
                 </Modal>
             </section>
