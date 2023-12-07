@@ -39,7 +39,7 @@ const RecipeCommentsList = ({ recipeId }) => {
 
     const [toastMsg, setToastMsg] = useState('');
 
-    const { userId, isAuthenticated } = useContext(AuthContext);
+    const { userId, isAuthenticated, isAdmin } = useContext(AuthContext);
 
     useEffect(() => {
         commentService.getComments(recipeId, FilterBtnsKeys.ByDateDesc)
@@ -167,7 +167,7 @@ const RecipeCommentsList = ({ recipeId }) => {
                                         ({x.userLikes.length})
                                     </span>
                                 </div>
-                                {userId && userId === x.user._id && (
+                                {((userId && userId === x.user._id) || isAdmin) && (
                                     <div className={styles.commentBtnsContainer}>
                                         <EditCommentBtn
                                             onCommentEdit={onCommentEdit}
