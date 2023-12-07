@@ -4,6 +4,7 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
+import Modal from 'react-bootstrap/Modal';
 
 import { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -34,12 +35,16 @@ import { userFavoriteRecipesPath, userRecipesPath, manageUsersPath } from '../..
 const UserProfile = () => {
     const userService = useService(userServiceFactory);
 
-    const { isAdmin, username, userLogin } = useContext(AuthContext);
+    const { isAdmin, username, userLogin, userLogout, userId } = useContext(AuthContext);
 
     const [usernameErr, setUsernameErr] = useState('');
     const [oldPassErr, setOldPassErr] = useState('');
     const [newPassErr, setNewPassErr] = useState('');
     const [toast, setToast] = useState({ message: '', isSuccessfull: true });
+
+    const [show, setShow] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
 
     const onFormSubmit = async (data) => {
         const username = data.username;
@@ -106,6 +111,16 @@ const UserProfile = () => {
 
     const onNewPasswordBlur = () => setNewPassErr(newPassValidator(changePassFormValues.newPassword));
 
+    const onDeleteBtnClick = () => {
+        handleClose();
+        userService.deleteMyProfile(userId)
+            .then(() => userLogout())
+            .catch(err => setToast({
+                message: err.message,
+                isSuccessfull: false
+            }));
+    };
+
     return (
         <>
             {toast.message && <ToastNotification
@@ -161,7 +176,20 @@ const UserProfile = () => {
                                     Go To My Favourite Recipes
                                 </Button>
                             </Link>
+                        </Card.Body>
+                    </Card>
+                </div>
 
+                <div className={styles.container}>
+                    <img src='/src/assets/images/deleteProfile.jpg' alt="" />
+                    <Card className={styles.card}>
+                        <Card.Body>
+                            <Card.Text className={styles.cardText}>
+                                In PlatePal, users have the autonomy to manage their profiles seamlessly. 🔄 By navigating to the account settings, users can effortlessly locate the 'Delete Account' option. 🗑️ Upon selecting this option, a confirmation prompt ensures the user's intent, providing a secure process for self-profile removal. This feature grants users the freedom to control their presence on PlatePal with simplicity and confidence. 🚀
+                            </Card.Text>
+                            <Button onClick={handleShow} bsPrefix={styles.cardBtn}>
+                                Delete Profile
+                            </Button>
                         </Card.Body>
                     </Card>
                 </div>
@@ -238,6 +266,18 @@ const UserProfile = () => {
                 </div>
 
                 <BackToTopArrow />
+
+                <Modal centered show={show} onHide={handleClose}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Delete Profile</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>Are you sure you want to delete your profile?</Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="primary" onClick={onDeleteBtnClick}>
+                            Delete
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
             </section>
         </>
     )

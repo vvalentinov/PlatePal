@@ -18,6 +18,8 @@ export const userServiceFactory = (token) => {
             request.put(`${baseUrl}/make-admin/${userId}`),
         deleteUser: (userId) =>
             request.delete(`${baseUrl}/delete/${userId}`),
+        deleteMyProfile: (userId) =>
+            request.delete(`${baseUrl}/delete-my-profile/${userId}`),
         getFavouriteRecipes: () =>
             request.get(`${baseUrl}/get-user-favourite-recipes`)
     }

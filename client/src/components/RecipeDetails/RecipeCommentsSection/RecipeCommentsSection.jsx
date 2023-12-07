@@ -81,10 +81,7 @@ const RecipeCommentsList = ({ recipeId }) => {
             });
     };
 
-    const onCommentSubmit = (newComment) => {
-        setComments((state) => [newComment, ...state]);
-        setCurrentBtn(FilterBtnsKeys.ByDateDesc);
-    };
+    const onCommentSubmit = () => onGetCommentsBtnClick(FilterBtnsKeys.ByDateDesc);
 
     const isCommentAuthor = (commentUserId) => commentUserId === userId || !isAuthenticated;
 
