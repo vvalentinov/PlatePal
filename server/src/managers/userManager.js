@@ -177,3 +177,22 @@ exports.deleteUser = async (userId) => {
 
     return user._id;
 };
+
+exports.deleteMyProfile = async (userId, currentUserId) => {
+    const user = await User.findById(userId);
+    if (!user) {
+        throw new Error('No user with given id found!');
+    }
+
+    if (userId !== currentUserId) {
+        throw new Error('Unauthorized: You do not have permission to perform this action on the specified user.');
+    }
+
+    await recipeManager.deleteAllUserRecipes(userId);
+    await commentManager.deleteAllUserComments(userId);
+    await ratingManager.deleteUserRatings(userId);
+
+    await User.findByIdAndDelete(userId);
+
+    return user._id;
+};
