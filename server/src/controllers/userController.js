@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const { isAuthenticated } = require('../middlewares/authMiddleware');
+const { isAuthenticated, isGuest } = require('../middlewares/authMiddleware');
 const { isAdmin } = require('../middlewares/isAdminMiddleware');
 
 const { getErrorMessage } = require('../utils/errorMessageUtil');
@@ -9,8 +9,9 @@ const routes = require('../constants/routeNames/userRoutes');
 
 const userManager = require('../managers/userManager');
 
-router.post(routes.loginRoute, async (req, res) => {
+router.post(routes.loginRoute, isGuest, async (req, res) => {
     const { username, password } = req.body;
+    console.log('fdsgfdfgd');
     try {
         const session = await userManager.login(username, password);
         res.status(200).json(session);
@@ -19,7 +20,7 @@ router.post(routes.loginRoute, async (req, res) => {
     }
 });
 
-router.post(routes.registerRoute, async (req, res) => {
+router.post(routes.registerRoute, isGuest, async (req, res) => {
     const userData = req.body;
     try {
         const session = await userManager.register(userData);

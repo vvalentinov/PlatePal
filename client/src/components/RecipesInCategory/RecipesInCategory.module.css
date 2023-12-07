@@ -1,11 +1,11 @@
 .recipesInCategorySection {
     min-height: calc(100vh - 160px);
+    padding-top: 2rem;
 }
 
 .heading {
     text-align: center;
     text-transform: uppercase;
-    margin-top: 1.5rem;
     letter-spacing: 0.2rem;
     color: white;
 }
@@ -16,7 +16,6 @@
     justify-content: center;
     align-items: center;
     gap: 1rem;
-    margin: 2rem 0;
 }
 
 .noRecipesContainer h3 {

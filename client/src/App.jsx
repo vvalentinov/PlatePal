@@ -67,7 +67,6 @@ const App = () => {
                         <Route path={paths.manageUsersPath} element={<ManageUsers />} />
                         <Route path={paths.unapprovedRecipesPath} element={<UnapprovedRecipesList />} />
                     </Route>
-
                 </Routes>
             </main>
             <Footer />

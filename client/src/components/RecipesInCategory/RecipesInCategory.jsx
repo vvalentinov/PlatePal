@@ -108,7 +108,7 @@ const RecipesInCategory = () => {
             {recipes.length > 0 && (<RecipesSection recipes={recipes} />)}
             {recipes.length === 0 && !searchName && (
                 <div className={styles.noRecipesContainer}>
-                    <h3>No Recipes in {category} category Yet</h3>
+                    <h3 className='text-white'>No Recipes in {category} category Yet</h3>
                     <NoRecipesCard />
                 </div>
             )}

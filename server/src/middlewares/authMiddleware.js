@@ -22,3 +22,11 @@ exports.isAuthenticated = (req, res, next) => {
 
     next();
 };
+
+exports.isGuest = (req, res, next) => {
+    if (req.user) {
+        return res.status(401).json({ message: 'Log out!' });
+    }
+
+    next();
+};
