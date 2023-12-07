@@ -85,14 +85,32 @@ exports.changePassword = async (userId, oldPassword, newPassword) => {
     await User.updateOne({ _id: userId }, { password: newPasswordHash });
 };
 
-exports.makeAdmin = async (userId) => {
+exports.changeUserRole = async (userId) => {
     const user = await User.findById(userId);
     if (!user) {
         throw new Error('No user with given id found!');
     }
 
-    const updatedUser = await User.findByIdAndUpdate(userId, { isAdmin: true }, { new: true });
-    return updatedUser;
+    let updatedUser;
+    if (user.isAdmin) {
+        updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { isAdmin: false },
+            { new: true })
+            .select('_id username isAdmin');
+    } else {
+        updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { isAdmin: true },
+            { new: true })
+            .select('_id username isAdmin');
+    }
+
+    const token = await generateToken(updatedUser._id, updatedUser.username, updatedUser.isAdmin);
+
+    const session = createSession(updatedUser, token);
+
+    return { updatedUser, session };
 };
 
 exports.validateToken = async (token) => {
@@ -145,22 +163,27 @@ exports.getUserFavouriteRecipes = async (userId) => {
 };
 
 exports.getAllUsers = async (userRole) => {
-    if (userRole === 'undefined') {
-        const users = await User.find({}).sort({ 'username': 'asc' }).exec();
-        return users;
-    }
+    switch (userRole) {
+        case 'Users':
+            return await User
+                .find({ isAdmin: false })
+                .sort({ 'username': 'asc' })
+                .select('_id username isAdmin')
+                .exec();
 
-    if (userRole !== 'Admin' && userRole !== 'User') {
-        throw new Error('Invalid user role!');
+        case 'Admins':
+            return await User
+                .find({ isAdmin: true })
+                .sort({ 'username': 'asc' })
+                .select('_id username isAdmin')
+                .exec();
+        default:
+            return await User
+                .find({})
+                .sort({ 'username': 'asc' })
+                .select('_id username isAdmin')
+                .exec();
     }
-
-    if (userRole === 'Admin') {
-        const users = await User.find({ isAdmin: true }).sort({ 'username': 'asc' }).exec();
-        return users;
-    }
-
-    const users = await User.find({ isAdmin: false }).sort({ 'username': 'asc' }).exec();
-    return users;
 };
 
 exports.deleteUser = async (userId) => {

@@ -93,12 +93,12 @@ router.put('/change-password', isAuthenticated, async (req, res) => {
     }
 });
 
-router.put('/make-admin/:userId', isAdmin, async (req, res) => {
+router.put('/change-user-role/:userId', isAdmin, async (req, res) => {
     const userId = req.params.userId;
 
     try {
-        const result = await userManager.makeAdmin(userId);
-        res.status(200).json({ message: 'User is now an admin!', result });
+        const { updatedUser, session } = await userManager.changeUserRole(userId);
+        res.status(200).json({ message: 'User role is now changed!', result: updatedUser, session });
     } catch (error) {
         res.status(400).json({ message: getErrorMessage(error) });
     }
