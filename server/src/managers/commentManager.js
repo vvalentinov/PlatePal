@@ -32,16 +32,34 @@ exports.editComment = async (commentId, userId, recipeId, newText) => {
         throw new Error('No comment of recipe found with given id!');
     }
 
+    const user = await userManager.getById(userId);
+    if (!user) {
+        throw new Error('No user with given id found!');
+    }
+
+    if (comment.user._id.toString() !== userId && !user.isAdmin) {
+        throw new Error('You have to be either an admin or the comment owner to edit it!');
+    }
+
     comment.text = newText;
     await comment.save();
 
     return comment.populate('user', 'username');
 };
 
-exports.deleteComment = async (commentId) => {
+exports.deleteComment = async (commentId, userId) => {
     const comment = await Comment.findById(commentId);
     if (!comment) {
         throw new Error('Comment with given id not found!');
+    }
+
+    const user = await userManager.getById(userId);
+    if (!user) {
+        throw new Error('No user with given id found!');
+    }
+
+    if (comment.user._id.toString() !== userId && !user.isAdmin) {
+        throw new Error('You have to be either an admin or the comment owner to delete it!');
     }
 
     await Comment.deleteOne({ _id: commentId });

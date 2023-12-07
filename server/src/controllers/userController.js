@@ -11,7 +11,7 @@ const userManager = require('../managers/userManager');
 
 router.post(routes.loginRoute, isGuest, async (req, res) => {
     const { username, password } = req.body;
-    console.log('fdsgfdfgd');
+
     try {
         const session = await userManager.login(username, password);
         res.status(200).json(session);

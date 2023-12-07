@@ -37,9 +37,10 @@ router.put(routes.editCommentRoute, isAuthenticated, async (req, res) => {
 
 router.delete(routes.deleteCommentRoute, isAuthenticated, async (req, res) => {
     const commentId = req.params.commentId;
+    const userId = req.user._id;
 
     try {
-        const result = await commentManager.deleteComment(commentId);
+        const result = await commentManager.deleteComment(commentId, userId);
         res.status(200).json({ message: 'Comment deleted successfully!', result });
     } catch (error) {
         res.status(400).json({ message: getErrorMessage(error) });
