@@ -186,7 +186,7 @@ const ManageUsers = () => {
                     <Modal.Title>Make User Admin</Modal.Title>
                 </Modal.Header>
                 <Modal.Body className={styles.modalBody}>
-                    <p>Are you sure you want to make this user an administrator?</p>
+                    <p>Are you sure you want to change this user's role?</p>
                 </Modal.Body>
                 <div className={`d-grid ${styles.modalBtnContainer}`}>
                     <Button
