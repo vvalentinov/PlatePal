@@ -1,9 +1,9 @@
-const baseUrl = 'https://api.spoonacular.com';
+const baseUrl = 'https://api.spoonacular.com/recipes';
 
-const apiKey = import.meta.env.VITE_CLOUDINARY_API_KEY;
+const apiKey = import.meta.env.VITE_SPOONACULAR_API_KEY;
 
 export const searchForRecipes = async (query) => {
-    const response = await fetch(`${baseUrl}/recipes/complexSearch?apiKey=${apiKey}&query=${query}&number=18`);
+    const response = await fetch(`${baseUrl}/complexSearch?apiKey=${apiKey}&query=${query}&number=18`);
 
     // {
     //     "status": "failure",
@@ -24,13 +24,13 @@ export const searchForRecipes = async (query) => {
 };
 
 export const getRecipeDetails = async (recipeId) => {
-    const response = await fetch(`${baseUrl}/recipes/${recipeId}/information?apiKey=${apiKey}&includeNutrition=false`);
+    const response = await fetch(`${baseUrl}/${recipeId}/information?apiKey=${apiKey}&includeNutrition=false`);
 
     if (!response.ok) {
         throw new Error('There was an error!');
     }
 
-    const analyzedInstructionsResponse = await fetch(`${baseUrl}/recipes/${recipeId}/analyzedInstructions?apiKey=${apiKey}`);
+    const analyzedInstructionsResponse = await fetch(`${baseUrl}/${recipeId}/analyzedInstructions?apiKey=${apiKey}`);
     if (!analyzedInstructionsResponse.ok) {
         throw new Error('There was an error!');
     }
